@@ -1,6 +1,7 @@
 'use client';
 
 import { motion } from 'framer-motion';
+import Link from 'next/link';
 
 /* ── Figma assets ───────────────────────────────────────────── */
 const IMG_AVATAR   = 'https://www.figma.com/api/mcp/asset/3a1d14f2-2a44-4a96-8ea7-f86a2da53412';
@@ -188,9 +189,10 @@ export default function Footer() {
             {/* Links */}
             <motion.div variants={fadeUp} className="flex flex-col gap-5 items-center sm:flex-1 footer-link-col">
               <p className="t-body1 font-semibold text-fg">Links</p>
-              <a href="https://thatguyabhishek.notion.site/About-fb861d61100943ee9356e50d28be3f03" target="_blank" rel="noopener noreferrer" className="t-body2 text-fg-muted inline-block font-medium relative after:absolute after:left-0 after:-bottom-0.5 after:h-px after:w-0 after:bg-current after:transition-all after:duration-200 hover:after:w-full">☝ About</a>
-              <a href="https://thatguyabhishek.notion.site/Awards-7b1e321f25bf43e5875b73eb17ec3a9b" target="_blank" rel="noopener noreferrer" className="t-body2 text-fg-muted inline-block font-medium relative after:absolute after:left-0 after:-bottom-0.5 after:h-px after:w-0 after:bg-current after:transition-all after:duration-200 hover:after:w-full">🏆 Awards</a>
-              <a href="https://thatguyabhishek.notion.site/Work-372d8d3491624c4ebaa062d8bdb242dc" target="_blank" rel="noopener noreferrer" className="t-body2 text-fg-muted inline-block font-medium relative after:absolute after:left-0 after:-bottom-0.5 after:h-px after:w-0 after:bg-current after:transition-all after:duration-200 hover:after:w-full">🎨 Work</a>
+              <Link href="/about" className="t-body2 text-fg-muted inline-block font-medium relative after:absolute after:left-0 after:-bottom-0.5 after:h-px after:w-0 after:bg-current after:transition-all after:duration-200 hover:after:w-full">☝ About</Link>
+              <Link href="/work" className="t-body2 text-fg-muted inline-block font-medium relative after:absolute after:left-0 after:-bottom-0.5 after:h-px after:w-0 after:bg-current after:transition-all after:duration-200 hover:after:w-full">🎨 Work</Link>
+              <Link href="/awards" className="t-body2 text-fg-muted inline-block font-medium relative after:absolute after:left-0 after:-bottom-0.5 after:h-px after:w-0 after:bg-current after:transition-all after:duration-200 hover:after:w-full">🏆 Awards</Link>
+              <Link href="/contact" className="t-body2 text-fg-muted inline-block font-medium relative after:absolute after:left-0 after:-bottom-0.5 after:h-px after:w-0 after:bg-current after:transition-all after:duration-200 hover:after:w-full">✉ Contact</Link>
             </motion.div>
 
             {/* Contact */}
