@@ -1,4 +1,3 @@
-import GradientBackground from '../components/layout/GradientBackground';
 import { SECTION_STYLES } from '../components/sections/ProjectSections';
 import Card from '../components/ui/Card';
 import Button from '../components/ui/Button';
@@ -46,9 +45,7 @@ const SECTION_STYLE_NAMES = ['plain', 'surface', 'dark', 'split', 'spotlight'];
 
 export default function StyleGuide() {
   return (
-    <>
-      <GradientBackground />
-      <main className="relative min-h-screen" style={{ color: 'var(--fg)', zIndex: 1 }}>
+    <main className="min-h-screen" style={{ color: 'var(--fg)' }}>
         <div className="max-w-[1200px] mx-auto px-6 sm:px-10 lg:px-16">
 
           {/* ── Header ── */}
@@ -444,7 +441,6 @@ export default function StyleGuide() {
           <p className="t-caption text-fg-muted font-mono">thatguyabhishek · style guide · dev only</p>
         </div>
 
-      </main>
-    </>
+    </main>
   );
 }
