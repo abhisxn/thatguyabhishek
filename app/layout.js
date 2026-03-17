@@ -1,7 +1,7 @@
 import { Glory, Manrope } from 'next/font/google';
 import './globals.css';
 import Navbar from './components/layout/Navbar';
-import Footer from './components/layout/Footer';
+import ConditionalFooter from './components/layout/ConditionalFooter';
 import Providers from './components/providers/Providers';
 import SmoothScroll from './components/providers/SmoothScroll';
 
@@ -32,7 +32,7 @@ export default function RootLayout({ children }) {
           <SmoothScroll>
             <Navbar />
             {children}
-            <Footer />
+            <ConditionalFooter />
           </SmoothScroll>
         </Providers>
       </body>
