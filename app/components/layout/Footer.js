@@ -132,7 +132,7 @@ export default function Footer() {
                 <p className="font-extrabold leading-tight mb-7" style={{ fontSize: 'clamp(22px, 3vw, 36px)', color: '#ffffff' }}>
                   Let&apos;s work together.
                 </p>
-                <a href="mailto:abhisxn@gmail.com" className="btn-card-purple">
+                <a href="mailto:abhisxn@gmail.com" className="btn-card-dark">
                   Connect with me
                 </a>
               </div>
@@ -164,7 +164,7 @@ export default function Footer() {
                     href="https://www.linkedin.com/in/thatguyabhishek/"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="btn-card-linkedin"
+                    className="btn-card-light"
                   >
                     Know more
                   </a>

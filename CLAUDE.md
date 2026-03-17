@@ -76,8 +76,8 @@ Always use CSS variables for colors — never hardcode hex values in components:
 - `.btn-filled` — white bg, dark text, inverts on hover
 - `.btn-outline-brand` — `#4839ca` border/text, fills on hover
 - `.btn-filled-brand` — `#4839ca` bg, white text, inverts on hover
-- `.btn-card-purple` — for footer purple card CTA
-- `.btn-card-linkedin` — for footer LinkedIn card CTA
+- `.btn-card-dark` — for footer dark/purple card CTA (defined in `app/components/ui/card.css`)
+- `.btn-card-light` — for footer light card CTA (defined in `app/components/ui/card.css`)
 
 ---
 

@@ -183,12 +183,12 @@ export default function StyleGuide() {
                   className="flex flex-wrap gap-4 items-center p-8 rounded-2xl"
                   style={{ background: '#4a2d7f' }}
                 >
-                  <a href="#" className="btn-card-purple">btn-card-purple</a>
+                  <a href="#" className="btn-card-dark">btn-card-dark</a>
                 </div>
                 <div
                   className="flex flex-wrap gap-4 items-center p-8 rounded-2xl mt-3 bg-white"
                 >
-                  <a href="#" className="btn-card-linkedin">btn-card-linkedin</a>
+                  <a href="#" className="btn-card-light">btn-card-light</a>
                 </div>
               </div>
 

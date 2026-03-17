@@ -1,5 +1,6 @@
 'use client';
 
+import './card.css';
 import Tag from './Tag';
 export { CARD_SIZES, CARD_STYLES, styleForNotion } from './card-utils';
 import { CARD_SIZES, CARD_STYLES } from './card-utils';
