@@ -1,7 +1,7 @@
 import GradientBackground from '../components/layout/GradientBackground';
 import { SECTION_STYLES } from '../components/sections/ProjectSections';
 
-const STYLE_NAMES = ['plain', 'surface', 'dark', 'accent', 'spotlight'];
+const STYLE_NAMES = ['plain', 'surface', 'dark', 'split', 'spotlight'];
 
 const SAMPLE_BLOCKS = [
   {
@@ -18,10 +18,9 @@ const SAMPLE_BLOCKS = [
   },
 ];
 
-function SampleContent({ s }) {
+function BodyContent({ s }) {
   return (
     <div className="flex flex-col gap-4">
-      <p className="t-h4 font-bold" style={{ color: s.textClr }}>Section heading</p>
       <p className="t-body2 leading-relaxed" style={{ color: s.mutedClr }}>
         This is body text showing how paragraphs look inside this section style. The muted colour and background come from the section wrapper.
       </p>
@@ -50,6 +49,28 @@ function SampleContent({ s }) {
       >
         image / embed placeholder
       </div>
+    </div>
+  );
+}
+
+function SampleContent({ s }) {
+  if (s.split) {
+    return (
+      <div className="flex flex-col md:flex-row gap-8 md:gap-12">
+        <div className="md:w-[30%] shrink-0">
+          <p className="t-h4 font-bold leading-snug" style={{ color: s.textClr }}>Section heading</p>
+          <div className="mt-4 h-px w-8" style={{ background: '#4839ca' }} />
+        </div>
+        <div className="md:flex-1">
+          <BodyContent s={s} />
+        </div>
+      </div>
+    );
+  }
+  return (
+    <div className="flex flex-col gap-4">
+      <p className="t-h4 font-bold" style={{ color: s.textClr }}>Section heading</p>
+      <BodyContent s={s} />
     </div>
   );
 }

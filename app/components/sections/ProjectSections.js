@@ -9,7 +9,7 @@ import { RenderBlocks } from './NotionBlocks';
  * 0  plain      — transparent, standard layout
  * 1  surface    — var(--surface) band, subtle border top/bottom
  * 2  dark       — deep navy bg, inverted text
- * 3  accent     — brand-purple left-border strip + tinted bg
+ * 3  split      — 30/70 layout: first heading left, content right
  * 4  spotlight  — surface + radial purple gradient overlay
  * ──────────────────────────────────────────────────────────── */
 export const SECTION_STYLES = [
@@ -38,17 +38,18 @@ export const SECTION_STYLES = [
     textClr:  '#ffffff',
     mutedClr: 'rgba(255,255,255,0.6)',
   },
-  /* 3 — accent */
+  /* 3 — split  (30 : 70)
+   * First heading block → sticky left label
+   * Remaining blocks    → right content column            */
   {
     wrap: {
-      background:   'color-mix(in srgb, #4839ca 6%, var(--bg))',
-      borderTop:    '1px solid color-mix(in srgb, #4839ca 20%, transparent)',
-      borderBottom: '1px solid color-mix(in srgb, #4839ca 20%, transparent)',
-      borderLeft:   '4px solid #4839ca',
+      borderTop:    '1px solid var(--border)',
+      borderBottom: '1px solid var(--border)',
     },
     inner:    {},
     textClr:  'var(--fg)',
     mutedClr: 'var(--fg-muted)',
+    split:    true,
   },
   /* 4 — spotlight */
   {
@@ -85,8 +86,63 @@ export function splitSections(blocks) {
 /* ── Single section with visual style applied ────────────── */
 export function Section({ blocks, childrenMap, styleIndex, projects }) {
   const s = SECTION_STYLES[styleIndex % SECTION_STYLES.length];
+
+  /* ── Split layout ── */
+  if (s.split) {
+    const headingTypes = new Set(['heading_1', 'heading_2', 'heading_3']);
+    const firstHeadingIdx = blocks.findIndex((b) => headingTypes.has(b.type));
+    const labelBlock  = firstHeadingIdx !== -1 ? blocks[firstHeadingIdx] : null;
+    const bodyBlocks  = labelBlock
+      ? [...blocks.slice(0, firstHeadingIdx), ...blocks.slice(firstHeadingIdx + 1)]
+      : blocks;
+
+    /* Extract plain text from heading rich_text */
+    const headingText = labelBlock
+      ? (labelBlock[labelBlock.type]?.rich_text ?? []).map((t) => t.plain_text).join('')
+      : null;
+
+    return (
+      <section style={{ color: s.textClr, ...s.wrap }}>
+        <div className="max-w-[1200px] mx-auto px-6 sm:px-10 lg:px-16 py-12 sm:py-16">
+          <div className="flex flex-col md:flex-row gap-8 md:gap-12">
+            {/* Left — 30% label */}
+            <div className="md:w-[30%] shrink-0">
+              <div className="md:sticky md:top-28">
+                {headingText && (
+                  <p
+                    className="t-h4 font-bold leading-snug"
+                    style={{ color: s.textClr }}
+                  >
+                    {headingText}
+                  </p>
+                )}
+                {/* Decorative rule under the label */}
+                <div
+                  className="mt-4 h-px w-8"
+                  style={{ background: '#4839ca' }}
+                />
+              </div>
+            </div>
+
+            {/* Right — 70% content */}
+            <div className="md:flex-1 flex flex-col gap-5">
+              <RenderBlocks
+                blocks={bodyBlocks}
+                childrenMap={childrenMap}
+                projects={projects}
+                skipDatabase
+                skipDivider
+              />
+            </div>
+          </div>
+        </div>
+      </section>
+    );
+  }
+
+  /* ── Standard layout ── */
   return (
-    <section style={{ color: s.textClr, ...s.wrap }}>
+    <section style={{ color: s.textClr, position: s.blob ? 'relative' : undefined, overflow: s.blob ? 'hidden' : undefined, ...s.wrap }}>
       {s.blob && (
         <div
           aria-hidden="true"
