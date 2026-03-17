@@ -1,13 +1,14 @@
 import Card from '../ui/Card';
 import { styleForNotion } from '../ui/card-utils';
-import { getTitle, getDescription, getTags, getCoverUrl, getUrl } from '../../../lib/notion-work';
+import { getTitle, getDescription, getTags, getCoverUrl } from '../../../lib/notion-work';
 
 export function ProjectCard({ page, size: sizeProp, cardStyle: styleProp }) {
   const title   = getTitle(page);
   const desc    = getDescription(page);
   const tags    = getTags(page);
-  const url     = getUrl(page) ?? page.url;
   const coverUrl = getCoverUrl(page);
+  // Always route to the internal project page; external URL is shown on the project page itself
+  const url = `/work/${page.id}`;
 
   // Derive consistent size + style from Notion DB page data unless overridden
   const { size: inferredSize, cardStyle: inferredStyle } = styleForNotion(page, 'db');
