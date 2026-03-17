@@ -1,26 +1,503 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+/* ─── Design Tokens ─────────────────────────────────────────── */
+@theme {
+  /* Brand colors */
+  --color-navy:       #19223d;
+  --color-brand:      #4839ca;
+  --color-coral:      #ea8575;
+  --color-purple-card: #4a2d7f;
+  --color-dark-blue:  #0b2261;
+  --color-dark-teal:  #163846;
+  --color-lavender:   #e5d7e8;
+
+  /* Typography — font families */
+  --font-glory:   var(--font-glory-var);
+  --font-manrope: var(--font-manrope-var);
+
+  /* Typography — font sizes */
+  --text-h1:      4.5rem;    /* 72px */
+  --text-h2:      3.5rem;    /* 56px */
+  --text-h3:      3rem;      /* 48px */
+  --text-h4:      2rem;      /* 32px */
+  --text-h5:      1.75rem;   /* 28px */
+  --text-body1:   1.25rem;   /* 20px */
+  --text-body2:   1rem;      /* 16px */
+  --text-body3:   0.875rem;  /* 14px */
+  --text-caption: 0.75rem;   /* 12px */
+  --text-btn1:    1.25rem;   /* 20px */
+  --text-btn2:    1rem;      /* 16px */
+
+  /* Typography — line heights */
+  --leading-h1:      1;      /* 100% */
+  --leading-h2:      1.2;    /* 120% */
+  --leading-h3:      1.2;
+  --leading-h4:      1.2;
+  --leading-h5:      1.2;
+  --leading-body:    1.2;    /* 120% */
+  --leading-caption: 1.2;
+
+  /* Border radius */
+  --radius-card:   1.5rem;   /* 24px */
+  --radius-pill:   6.25rem;  /* 100px */
+  --radius-btn:    0.5rem;   /* 8px  */
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+/* ─── Theme CSS variables ────────────────────────────────────── */
+/* Dark theme is default */
+:root,
+[data-theme="dark"] {
+  --bg:          transparent;        /* gradient bg handles the dark canvas */
+  --bg-solid:    #161B2A;
+  --fg:          #ffffff;
+  --fg-muted:    #ffffff;
+  --surface:     rgba(255, 255, 255, 0.06);
+  --border:      rgba(255, 255, 255, 0.10);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+[data-theme="light"] {
+  --bg:          #f5f4f0;
+  --bg-solid:    #f5f4f0;
+  --fg:          #313138;
+  --fg-muted:    #313138;
+  --surface:     rgba(25, 34, 61, 0.05);
+  --border:      rgba(25, 34, 61, 0.10);
+}
+
+/* ─── Base ───────────────────────────────────────────────────── */
+html {
+  scroll-behavior: auto; /* Lenis handles smooth scroll */
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background-color: #161B2A; /* fallback — overridden per-page as needed */
+  color: var(--fg);
+  font-family: var(--font-glory-var, 'Glory', sans-serif);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+[data-theme="light"] body {
+  background-color: #f5f4f0;
+}
+
+/* ─── Navbar / shared dark:light compat ─────────────────────── */
+/* Light-mode navbar and footer adaptations */
+[data-theme="light"] header {
+  --navbar-bg-scrolled: rgba(245, 244, 240, 0.85);
+}
+
+/* ─── Scrollbar ──────────────────────────────────────────────── */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.15); border-radius: 3px; }
+[data-theme="light"] ::-webkit-scrollbar-thumb { background: rgba(25,34,61,0.15); }
+
+/* ─── Ticker animation ───────────────────────────────────────── */
+@keyframes footerTicker {
+  0%   { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+/* ─── Button variants — with hover inversion ─────────────────── */
+@layer components {
+  .btn-outline {
+    border: 2px solid rgba(255,255,255,0.7) !important;
+    color: #ffffff !important;
+    background: transparent !important;
+    transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+  }
+  .btn-outline:hover {
+    background: #ffffff !important;
+    color: #313138 !important;
+    border-color: #ffffff !important;
+  }
+
+  .btn-filled {
+    background: #ffffff !important;
+    color: #313138 !important;
+    border: 2px solid #ffffff !important;
+    transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+  }
+  .btn-filled:hover {
+    background: transparent !important;
+    color: #ffffff !important;
+    border-color: rgba(255,255,255,0.7) !important;
+  }
+
+  .btn-outline-brand {
+    border: 2px solid #4839ca !important;
+    color: #4839ca !important;
+    background: transparent !important;
+    transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+  }
+  .btn-outline-brand:hover {
+    background: #4839ca !important;
+    color: #ffffff !important;
+    border-color: #4839ca !important;
+  }
+
+  .btn-filled-brand {
+    background: #4839ca !important;
+    color: #ffffff !important;
+    border: 2px solid #4839ca !important;
+    transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+  }
+  .btn-filled-brand:hover {
+    background: transparent !important;
+    color: #4839ca !important;
+    border-color: #4839ca !important;
+  }
+
+  /* ─── Light theme button overrides ─────────────────────────── */
+  [data-theme="light"] .btn-outline {
+    border-color: rgba(49, 49, 56, 0.65) !important;
+    color: #313138 !important;
+  }
+  [data-theme="light"] .btn-outline:hover {
+    background: #313138 !important;
+    color: #ffffff !important;
+    border-color: #313138 !important;
+  }
+
+  [data-theme="light"] .btn-filled {
+    background: #313138 !important;
+    color: #ffffff !important;
+    border-color: #313138 !important;
+  }
+  [data-theme="light"] .btn-filled:hover {
+    background: transparent !important;
+    color: #313138 !important;
+    border-color: rgba(49, 49, 56, 0.65) !important;
+  }
+
+  /* ─── Footer card buttons ─────────────────────────────────── */
+  .btn-card-purple {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid #ffffff;
+    border-radius: 40px;
+    padding: 10px 20px;
+    color: #ffffff;
+    font-size: 20px;
+    font-weight: 500;
+    text-decoration: none;
+    white-space: nowrap;
+    transition: background 0.2s ease, color 0.2s ease;
+  }
+  .btn-card-purple:hover {
+    background: #ffffff;
+    color: #4a2d7f;
+  }
+
+  .btn-card-linkedin {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    align-self: flex-start;
+    border: 2px solid #0a66c2;
+    border-radius: 40px;
+    padding: 10px 20px;
+    color: #0a66c2;
+    font-size: 20px;
+    font-weight: 500;
+    text-decoration: none;
+    white-space: nowrap;
+    transition: background 0.2s ease, color 0.2s ease;
+  }
+  .btn-card-linkedin:hover {
+    background: #0a66c2;
+    color: #ffffff;
+  }
+}
+
+/* ─── More Work card ────────────────────────────────────────── */
+@keyframes gradientShift {
+  0%   { background-position: 0% 50%; }
+  50%  { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+.more-work-card {
+  position: relative;
+  text-decoration: none;
+  /* Default: colorful gradient, static */
+  background-image: linear-gradient(140deg, #3c37c9, #7b2ff7, #00c8c0, #3c37c9);
+  background-size: 300% 300%;
+  background-position: 0% 50%;
+}
+.more-work-card:hover {
+  animation: gradientShift 4s ease infinite;
+}
+
+/* bg span — not needed, hidden */
+.more-work-bg { display: none; }
+
+/* Text: always white */
+.more-work-text {
+  color: #ffffff;
+}
+
+/* Arrow circle */
+.more-work-arrow {
+  background: rgba(255, 255, 255, 0.15);
+  border: 1.5px solid rgba(255, 255, 255, 0.35);
+  transition: background 0.3s ease, border-color 0.3s ease;
+}
+.more-work-card:hover .more-work-arrow {
+  background: rgba(255, 255, 255, 0.3);
+  border-color: rgba(255, 255, 255, 0.6);
+}
+
+/* ─── Avatar circle — light theme ─────────────────────────────── */
+[data-theme="light"] .avatar-circle {
+  background: #E5D7E8 !important;
+  box-shadow: 0 8px 39px rgba(229,215,232,0.4), 0 0 65px rgba(229,215,232,0.25) !important;
+}
+
+/* ─── Avatar ticker text — light theme ────────────────────────── */
+[data-theme="light"] .avatar-ticker-text {
+  fill: rgba(49, 49, 56, 0.55) !important;
+}
+
+/* ─── Footer link columns ────────────────────────────────────── */
+.footer-link-col {
+  background: linear-gradient(160deg, #14344B, #13444A);
+  border-radius: 16px;
+  padding: 28px 24px;
+  --col-heading: #ffffff;
+  --col-link: rgba(255,255,255,0.75);
+}
+[data-theme="light"] .footer-link-col {
+  background: linear-gradient(160deg, #C8DDE8, #C5DDD8);
+  --col-heading: #313138;
+  --col-link: #313138;
+}
+@media (min-width: 640px) {
+  .footer-link-col {
+    background: none !important;
+    border-radius: 0;
+    padding: 0;
+  }
+}
+
+/* ─── Notion prose wrapper ───────────────────────────────────── */
+/* Wrap <RenderBlocks> output in .notion-prose for vertical rhythm */
+.notion-prose {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+.notion-prose details + details { margin-top: 0.25rem; }
+.notion-prose pre { tab-size: 2; }
+
+/* ─── Timeline button hover ─────────────────────────────────── */
+.timeline-btn {
+  border-radius: 10px;
+  padding: 5px 8px;
+  margin: -5px -8px;
+  transition: background 0.18s ease;
+}
+.timeline-btn:hover {
+  background: rgba(255, 255, 255, 0.07);
+}
+
+/* ─── Theme-aware color utilities ───────────────────────────── */
+@layer utilities {
+  .text-fg        { color: var(--fg); }
+  .text-fg-muted  { color: var(--fg-muted); }
+  .bg-surface     { background: var(--surface); }
+  .border-theme   { border-color: var(--border); }
+}
+
+/* ─── Semantic HTML defaults ─────────────────────────────────── */
+@layer base {
+  h1, h2, h3, h4, h5, h6 { color: var(--fg); }
+
+  h1 { @apply text-4xl sm:text-6xl lg:text-h1 leading-none    font-bold   tracking-tight  font-glory; }
+  h2 { @apply text-3xl sm:text-5xl lg:text-h2 leading-tight   font-bold   tracking-tight  font-glory; }
+  h3 { @apply text-2xl sm:text-4xl lg:text-h3 leading-snug    font-bold                   font-glory; }
+  h4 { @apply text-xl  sm:text-3xl lg:text-h4 leading-snug    font-semibold               font-glory; }
+  h5 { @apply text-lg  sm:text-2xl lg:text-h5 leading-snug    font-semibold               font-glory; }
+  h6 { @apply text-base sm:text-xl             leading-snug   font-semibold               font-glory; }
+
+  p  { @apply text-body2 leading-relaxed font-normal; }
+
+  blockquote {
+    @apply border-l-2 pl-4 italic text-body3 leading-relaxed;
+    border-color: var(--border);
+    color: var(--fg-muted);
+  }
+
+  strong, b { @apply font-semibold; }
+  em, i     { @apply italic; }
+  small     { @apply text-xs leading-tight; }
+  code      { @apply text-[13px] font-mono; }
+
+  ul { @apply list-disc   list-outside pl-5 space-y-1 text-body3 leading-relaxed; }
+  ol { @apply list-decimal list-outside pl-5 space-y-1 text-body3 leading-relaxed; }
+}
+
+/* ─── Typography utility classes ─────────────────────────────── */
+@layer components {
+
+  /* ─ Display — largest; hero banners ─ */
+  .t-display {
+    @apply text-5xl sm:text-7xl lg:text-[6rem] leading-none font-bold tracking-tight font-glory;
+  }
+
+  /* ─ Headings ─ */
+  .t-h1 { @apply text-4xl sm:text-6xl lg:text-h1 leading-none  font-bold    tracking-tight font-glory; }
+  .t-h2 { @apply text-3xl sm:text-5xl lg:text-h2 leading-tight font-bold    tracking-tight font-glory; }
+  .t-h3 { @apply text-2xl sm:text-4xl lg:text-h3 leading-snug  font-bold                   font-glory; }
+  .t-h4 { @apply text-xl  sm:text-3xl lg:text-h4 leading-snug  font-semibold               font-glory; }
+  .t-h5 { @apply text-lg  sm:text-2xl lg:text-h5 leading-snug  font-semibold               font-glory; }
+  .t-h6 { @apply text-base sm:text-xl             leading-snug font-semibold               font-glory; }
+
+  /* ─ Body ─ */
+  .t-lead  { @apply text-xl  sm:text-2xl leading-relaxed font-normal; }   /* intro / lede */
+  .t-body  { @apply text-body2 leading-relaxed font-normal; }             /* 16px — default prose */
+  .t-body1 { @apply text-body1 leading-relaxed font-normal; }             /* 20px */
+  .t-body2 { @apply text-body2 leading-relaxed font-medium; }             /* 16px */
+  .t-body3 { @apply text-body3 leading-relaxed font-normal; }             /* 14px */
+
+  /* ─ Utility ─ */
+  .t-caption  { @apply text-caption leading-tight  font-bold; }           /* 12px */
+  .t-overline { @apply text-caption leading-tight  font-bold uppercase tracking-widest; }
+  .t-label    { @apply text-body3   leading-normal font-semibold uppercase tracking-wide; }
+  .t-small    { @apply text-xs      leading-tight  font-normal; }
+  .t-mono     { @apply text-[13px]  leading-snug   font-mono; }
+
+  /* ─ Links ─ */
+  .t-link {
+    @apply underline underline-offset-2 transition-opacity duration-200 hover:opacity-60;
+  }
+
+  /* ─ Button text ─ */
+  .t-btn1 { @apply text-btn1 leading-none font-semibold; }               /* 20px */
+  .t-btn2 { @apply text-btn2 leading-none font-semibold; }               /* 16px */
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   UI KIT
+   ═══════════════════════════════════════════════════════════════ */
+
+/* ─── Tag pill ─────────────────────────────────────────────────── */
+.ui-tag {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 10px 4px;
+  border-radius: 9999px;
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 1.2;
+  white-space: nowrap;
+}
+
+/* ─── Badge ────────────────────────────────────────────────────── */
+.ui-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 3px 10px 4px;
+  border-radius: 9999px;
+  font-size: 12px;
+  font-weight: 600;
+  border: 1px solid var(--border);
+  white-space: nowrap;
+}
+.ui-badge--default { background: var(--surface);              color: var(--fg-muted); }
+.ui-badge--success { background: rgba(68,131,97,0.12);        color: #448361; border-color: rgba(68,131,97,0.35); }
+.ui-badge--warning { background: rgba(203,145,47,0.12);       color: #CB912F; border-color: rgba(203,145,47,0.35); }
+.ui-badge--error   { background: rgba(196,85,77,0.12);        color: #C4554D; border-color: rgba(196,85,77,0.35); }
+.ui-badge--info    { background: rgba(46,125,174,0.12);       color: #2E7DAE; border-color: rgba(46,125,174,0.35); }
+.ui-badge--brand   { background: rgba(72,57,202,0.12);        color: #4839ca; border-color: rgba(72,57,202,0.35); }
+
+/* ─── Surface (theme-aware card wrapper) ──────────────────────── */
+.ui-surface {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  overflow: hidden;
+}
+[data-theme="light"] .ui-surface {
+  background: #ffffff;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+  border-color: transparent;
+}
+/* Size modifiers */
+.ui-surface--sm { border-radius: 10px; }
+.ui-surface--md { border-radius: 16px; }
+.ui-surface--lg { border-radius: 24px; }
+
+/* ─── Input / Textarea / Select ───────────────────────────────── */
+.ui-input {
+  width: 100%;
+  padding: 10px 14px;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--fg);
+  font-family: var(--font-glory-var, Glory, sans-serif);
+  font-size: var(--text-body2);   /* 16px */
+  line-height: var(--leading-body);
+  transition: border-color 0.18s ease, box-shadow 0.18s ease;
+  outline: none;
+}
+.ui-input:focus {
+  border-color: #4839ca;
+  box-shadow: 0 0 0 3px rgba(72,57,202,0.15);
+}
+.ui-input::placeholder {
+  color: var(--fg-muted);
+  opacity: 0.45;
+}
+.ui-select {
+  -webkit-appearance: none;
+  appearance: none;
+  padding-right: 2.5rem;
+  cursor: pointer;
+}
+/* Native select option background */
+.ui-select option {
+  background: var(--bg-solid);
+  color: var(--fg);
+}
+
+/* ─── Table ────────────────────────────────────────────────────── */
+.ui-table-wrap {
+  width: 100%;
+  overflow-x: auto;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+}
+.ui-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+  color: var(--fg);
+}
+.ui-table th,
+.ui-table td {
+  padding: 8px 14px;
+  border-bottom: 1px solid var(--border);
+  border-right: 1px solid var(--border);
+  text-align: left;
+  vertical-align: top;
+}
+.ui-table th:last-child,
+.ui-table td:last-child  { border-right: none; }
+.ui-table tr:last-child td { border-bottom: none; }
+.ui-table thead th {
+  background: var(--surface);
+  font-weight: 700;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  color: var(--fg-muted);
+}
+.ui-table tbody tr:hover { background: var(--surface); }
+.ui-table--row-header tbody td:first-child {
+  font-weight: 600;
+  background: var(--surface);
 }
