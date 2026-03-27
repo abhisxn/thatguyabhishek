@@ -1,6 +1,6 @@
 /* ─── SVG coordinate system ─── */
 export const VW = 560, VH = 320;
-export const ML = 28, MR = 20, MT = 52, MB = 62;
+export const ML = 28, MR = 20, MT = 52, MB = 36;
 export const IW = VW - ML - MR, IH = VH - MT - MB;
 
 const K = 2.5;

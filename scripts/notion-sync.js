@@ -23,6 +23,11 @@ if (!NOTION_KEY) {
 
 const notion = new Client({ auth: NOTION_KEY });
 
+/* ── Slug ────────────────────────────────────────────────── */
+function slugify(title) {
+  return title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
+}
+
 /* ── Property helpers ────────────────────────────────────── */
 function getText(prop) {
   if (!prop) return '';
@@ -43,15 +48,14 @@ function getUrl(prop) {
   return prop?.url ?? '';
 }
 
-function getFiles(prop) {
-  if (!prop?.files?.length) return '';
-  const f = prop.files[0];
-  return f.type === 'external' ? f.external.url : f.file?.url ?? '';
-}
-
 function getCheckbox(prop) {
   return prop?.checkbox ?? false;
 }
+
+function getNumber(prop) {
+  return prop?.number ?? null;
+}
+
 
 /* ── Main ────────────────────────────────────────────────── */
 async function sync() {
@@ -71,24 +75,35 @@ async function sync() {
 
   console.log(`✅  Got ${results.length} pages from Notion`);
 
-  const projects = results.map(page => {
+  const projects = await Promise.all(results.map(async page => {
     const p = page.properties;
+    const title = getText(p['Name'] ?? p['Title'] ?? p['Project']);
+
+    // Cover: always use the API proxy so signed S3 URLs never go stale
+    const cover = `/api/notion-image?id=${page.id}`;
+
     return {
       id:          page.id,
-      title:       getText(p['Name'] ?? p['Title'] ?? p['Project']),
-      desc:        getText(p['Description'] ?? p['Summary'] ?? p['Desc']),
+      title,
+      slug:        slugify(title),
+      desc:        getText(p['Description'] ?? p['Desc']),
+      summary:     getText(p['Summary'] ?? p['Tagline'] ?? p['Excerpt']),
       status:      getSelect(p['Status']),
       tags:        getMultiSelect(p['Tags'] ?? p['Type']),
-      cover:       getFiles(p['Cover'] ?? p['Image'] ?? p['Thumbnail']),
+      cover,
       url:         getUrl(p['URL'] ?? p['Link'] ?? p['Notion URL']),
       featured:    getCheckbox(p['Featured']),
+      order:       getNumber(p['Order'] ?? p['Sort'] ?? p['Priority']),
       notionUrl:   page.url,
       lastEdited:  page.last_edited_time,
     };
-  });
+  }));
 
-  /* Sort: featured first, then by last edited */
+  /* Sort: by Order asc (nulls last), then featured first, then by last edited */
   projects.sort((a, b) => {
+    const aOrder = a.order ?? Infinity;
+    const bOrder = b.order ?? Infinity;
+    if (aOrder !== bOrder) return aOrder - bOrder;
     if (a.featured !== b.featured) return a.featured ? -1 : 1;
     return new Date(b.lastEdited) - new Date(a.lastEdited);
   });

@@ -1,56 +1,71 @@
-'use client';
+// ISR: revalidate every hour — Notion signed image URLs expire after ~1 hour
+export const revalidate = 3600;
 
-import { motion } from 'framer-motion';
 import GradientBackground from './components/layout/GradientBackground';
-import Button from './components/ui/Button';
-import CareerTimeline from './components/sections/CareerTimeline';
 import HomeHero from './components/sections/HomeHero';
-import RecentWork from './components/sections/RecentWork';
 import AboutSection from './components/sections/AboutSection';
+import JourneySoFar from './components/sections/JourneySoFar';
 import HelpSection from './components/sections/HelpSection';
+import FadeSection from './components/ui/FadeSection';
+import CalloutBlock from './components/sections/CalloutBlock';
+import MoreWorkCard from './components/sections/MoreWorkCard';
+import { getHomePageData } from '../lib/notion-work';
+import { getCalloutType } from './components/ui/card-utils';
 
-const fadeUp = {
-  hidden: { opacity: 0, y: 32 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: [0.22, 1, 0.36, 1] } },
-};
-const stagger = { hidden: {}, visible: { transition: { staggerChildren: 0.1 } } };
-const vp = { once: true, margin: '-80px' };
-
-function W({ children, className = '' }) {
-  return (
-    <div className={`max-w-[1200px] mx-auto px-6 sm:px-10 lg:px-16 ${className}`}>
-      {children}
-    </div>
-  );
+function collectCardCallouts(blocks, childrenMap) {
+  const cards = [];
+  for (const block of blocks) {
+    if (block.type === 'callout' && getCalloutType(block) === 'card') {
+      cards.push(block);
+    } else if (block.type === 'column_list') {
+      const columns = childrenMap[block.id] ?? [];
+      for (const col of columns) {
+        for (const b of (childrenMap[col.id] ?? [])) {
+          if (b.type === 'callout' && getCalloutType(b) === 'card') {
+            cards.push(b);
+          }
+        }
+      }
+    }
+  }
+  return cards;
 }
 
-export default function Home() {
+export default async function Home() {
+  let cardBlocks = [];
+  let childrenMap = {};
+
+  try {
+    const data = await getHomePageData();
+    childrenMap = data.childrenMap;
+    cardBlocks = collectCardCallouts(data.blocks, data.childrenMap);
+  } catch {
+    // fail silently — page renders without Notion content
+  }
+
   return (
     <>
       <GradientBackground />
       <main className="relative min-h-screen text-fg z-[1]">
 
         <HomeHero />
-        <RecentWork />
+
+        {cardBlocks.length > 0 && (
+          <FadeSection>
+            <div className="max-w-[1200px] mx-auto px-6 sm:px-10 lg:px-16 py-20">
+              <h2 className="mb-12">🎨 Work</h2>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-12">
+                {cardBlocks.map((b) => (
+                  <CalloutBlock key={b.id} block={b} childrenMap={childrenMap} />
+                ))}
+                <MoreWorkCard />
+              </div>
+            </div>
+          </FadeSection>
+        )}
+
         <AboutSection />
-
-        {/* Journey So Far */}
-        <div className="border-t border-theme">
-          <W className="py-20">
-            <motion.div variants={stagger} initial="hidden" whileInView="visible" viewport={vp}>
-              <motion.div variants={fadeUp} className="flex items-center justify-between mb-10">
-                <h2>🎢 Journey So Far</h2>
-                <Button href="https://thatguyabhishek.notion.site/About-fb861d61100943ee9356e50d28be3f03" external variant="outline">
-                  Know more
-                </Button>
-              </motion.div>
-              <motion.div variants={fadeUp}>
-                <CareerTimeline />
-              </motion.div>
-            </motion.div>
-          </W>
-        </div>
-
+        <JourneySoFar />
         <HelpSection />
 
       </main>

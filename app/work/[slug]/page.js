@@ -1,10 +1,65 @@
 import Link from 'next/link';
+import { notFound } from 'next/navigation';
+import projectsJson from '../../../data/projects.json';
 import GradientBackground from '../../components/layout/GradientBackground';
 import { SectionedBlocks } from '../../components/sections/ProjectSections';
+import ProjectsExpandableGrid from '../../components/sections/ProjectsExpandableGrid';
 import { getProjectPageData } from '../../../lib/notion-project';
+import { findProjectBySlug } from '../../../lib/notion-work';
+import W from '../../components/ui/W';
+import DevBlockMap from '../../components/dev/DevBlockMap';
 
-/* Always fetch fresh — Notion signed URLs expire in ~1 hour */
-export const dynamic = 'force-dynamic';
+// ISR: revalidate every hour — Notion signed image URLs expire after ~1 hour
+export const revalidate = 3600;
+
+const BASE_URL = 'https://thatguyabhishek.com';
+
+// Pre-render all known project pages at build time
+export function generateStaticParams() {
+  return projectsJson.map((p) => ({ slug: p.slug }));
+}
+
+export async function generateMetadata({ params }) {
+  const { slug } = await params;
+  const project = projectsJson.find((p) => p.slug === slug);
+  if (!project) return {};
+
+  const title = project.title;
+  const description = project.desc || `A product design case study by Abhishek Saxena.`;
+  const url = `${BASE_URL}/work/${slug}`;
+  const image = project.cover || `${BASE_URL}/og-default.jpg`;
+
+  return {
+    title,
+    description,
+    alternates: { canonical: url },
+    openGraph: {
+      type: 'article',
+      url,
+      title,
+      description,
+      images: [{ url: image, width: 1200, height: 630, alt: title }],
+      authors: ['Abhishek Saxena'],
+      tags: project.tags,
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title,
+      description,
+      images: [image],
+    },
+  };
+}
+
+async function resolveNotionId(slug) {
+  // Fast path: static JSON
+  const match = projectsJson.find((p) => p.slug === slug);
+  if (match) return match.id;
+
+  // Fallback: live Notion query (new projects not yet synced to JSON)
+  const page = await findProjectBySlug(slug);
+  return page?.id ?? null;
+}
 
 function BackArrow() {
   return (
@@ -33,22 +88,17 @@ function Tag({ label }) {
   );
 }
 
-function W({ children, className = '' }) {
-  return (
-    <div className={`max-w-[1200px] mx-auto px-6 sm:px-10 lg:px-16 ${className}`}>
-      {children}
-    </div>
-  );
-}
-
 export default async function ProjectPage({ params }) {
-  const { id } = await params;
+  const { slug } = await params;
+  const notionId = await resolveNotionId(slug);
+
+  if (!notionId) notFound();
 
   let data  = null;
   let error = null;
 
   try {
-    data = await getProjectPageData(id);
+    data = await getProjectPageData(notionId);
   } catch (err) {
     error = err.message;
   }
@@ -80,8 +130,28 @@ export default async function ProjectPage({ params }) {
         : heroImageBlock.image?.file?.url)
     : meta.cover;
 
+  const projectJsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'CreativeWork',
+    name: meta.title,
+    description: meta.desc || undefined,
+    url: `${BASE_URL}/work/${slug}`,
+    image: heroBannerUrl || undefined,
+    author: {
+      '@type': 'Person',
+      name: 'Abhishek Saxena',
+      url: BASE_URL,
+    },
+    keywords: meta.tags?.join(', ') || undefined,
+    dateModified: meta.lastEdited || undefined,
+  };
+
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(projectJsonLd) }}
+      />
       <GradientBackground />
       <main className="relative min-h-screen" style={{ color: 'var(--fg)', zIndex: 1 }}>
 
@@ -100,12 +170,12 @@ export default async function ProjectPage({ params }) {
             </div>
           )}
 
-          <h1 className="t-h1 mb-5" style={{ textWrap: 'balance', maxWidth: '18ch' }}>
+          <h1 className="t-display mb-5">
             {meta.title}
           </h1>
 
           {meta.desc && (
-            <p className="t-body1 text-fg-muted leading-relaxed mb-8" style={{ maxWidth: '60ch' }}>
+            <p className="t-body1 text-fg-muted leading-relaxed mb-8">
               {meta.desc}
             </p>
           )}
@@ -138,6 +208,7 @@ export default async function ProjectPage({ params }) {
         )}
 
         {/* ── Sectioned content ── */}
+        <DevBlockMap blocks={blocks} childrenMap={childrenMap} />
         {contentBlocks.length > 0 ? (
           <SectionedBlocks blocks={contentBlocks} childrenMap={childrenMap} />
         ) : (
@@ -160,6 +231,18 @@ export default async function ProjectPage({ params }) {
           </W>
         )}
 
+        {/* ── More projects grid ── */}
+        {projectsJson.filter((p) => p.slug !== slug).length > 0 && (
+          <W className="py-16 mt-4">
+            <ProjectsExpandableGrid
+              projects={projectsJson}
+              excludeSlug={slug}
+              heading="More Projects"
+              viewAllLabel="View All Projects"
+            />
+          </W>
+        )}
+
         {/* ── Footer CTA ── */}
         <W className="py-16 border-t border-theme mt-4">
           <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6">
@@ -173,8 +256,7 @@ export default async function ProjectPage({ params }) {
               </Link>
               <a
                 href="mailto:abhisxn@gmail.com"
-                className="inline-flex items-center gap-2 t-body3 font-semibold px-5 py-2.5 rounded-full transition-colors duration-200"
-                style={{ background: '#4839ca', color: '#ffffff' }}
+                className="inline-flex items-center gap-2 t-body3 font-semibold px-5 py-2.5 rounded-full btn-filled-brand"
               >
                 Get in touch
               </a>

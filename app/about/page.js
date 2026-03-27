@@ -6,130 +6,16 @@ import GradientBackground from '../components/layout/GradientBackground';
 import Button from '../components/ui/Button';
 import { ArrowIcon } from '../components/ui/icons';
 
+import { WORK_ITEMS, SKILL_GROUPS, ARTICLES, ABOUT_SECTIONS } from '../../data/about';
+import { fadeUp, stagger, vp } from '../../lib/motion';
+import W from '../components/ui/W';
+
 /* ── Constants ──────────────────────────────────────────────────────── */
 const RESUME_URL   = 'https://drive.google.com/file/d/1QuxjEMB-PyVbgwsjjPpacY3xJ3j8eXMU/view?usp=drive_link';
 const NOTION_ABOUT = 'https://thatguyabhishek.notion.site/About-fb861d61100943ee9356e50d28be3f03';
 const LINKEDIN_URL = 'https://www.linkedin.com/in/thatguyabhishek/';
 
-// About me DB: 93d4d551-25f7-491d-8778-7961daefeab0 (dataSources.query)
 const IMG_PORTRAIT = '/portrait.jpg';
-
-/* ── Animation ──────────────────────────────────────────────────────── */
-const fadeUp = {
-  hidden:  { opacity: 0, y: 32 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: [0.22, 1, 0.36, 1] } },
-};
-const stagger = { hidden: {}, visible: { transition: { staggerChildren: 0.1 } } };
-const vp = { once: true, margin: '-80px' };
-
-function W({ children, className = '' }) {
-  return (
-    <div className={`max-w-[1200px] mx-auto px-6 sm:px-10 lg:px-16 ${className}`}>
-      {children}
-    </div>
-  );
-}
-
-/* ── How I Work bullets — exact Notion text ─────────────────────────── */
-const WORK_ITEMS = [
-  {
-    label: 'Systems first',
-    desc: 'I look for the underlying pattern before designing the individual interaction. A good system makes 100 future decisions faster.',
-  },
-  {
-    label: 'Outcomes over outputs',
-    desc: "I care more about the metric that moved than the screen that shipped. Pretty work that doesn't change behaviour is expensive decoration.",
-  },
-  {
-    label: 'Research is not a phase',
-    desc: 'Talking to users is something I do continuously, not as a gate before design starts. The best insights come when you\'re not looking for them.',
-  },
-  {
-    label: 'I disagree constructively',
-    desc: "I push back on briefs when I think the problem is wrong. I've been proven right sometimes and wrong plenty of others. Both are useful.",
-  },
-  {
-    label: 'AI is a tool, not a trend',
-    desc: "I'm actively building AI-native workflows — not just using AI to make faster mockups, but rethinking what's possible when intelligence is embedded in the product itself.",
-  },
-];
-
-/* ── Skills — from Notion Experience section ────────────────────────── */
-const SKILL_GROUPS = [
-  {
-    label: 'Design Craft',
-    icon: '✏️',
-    skills: ['Product Design', 'UX Research', 'Design Systems', 'Prototyping', 'Figma', 'Design Thinking', 'Frontend Design'],
-  },
-  {
-    label: 'Product & Strategy',
-    icon: '📈',
-    skills: ['0→1 Products', 'Scale (100M+ users)', 'Data-Driven Design', 'Growth Strategy', 'Agile & Lean', 'Roadmapping', 'Competitive Analysis'],
-  },
-  {
-    label: 'AI & Innovation',
-    icon: '🤖',
-    skills: ['Agentic AI Applications', 'LLM UX', 'SaaS', 'D2C & B2B', 'Startups', 'Advertising', 'Content Creation'],
-  },
-  {
-    label: 'Leadership',
-    icon: '🧑‍🤝‍🧑',
-    skills: ['Team Management', 'UX Leadership', 'Stakeholder Management', 'Cross-Functional Collab', 'Mentoring', 'Exec Comms', 'Documentation'],
-  },
-];
-
-/* ── Compact sidebar article cards ──────────────────────────────── */
-const ARTICLES = [
-  {
-    emoji: '🎯',
-    title: 'Why I chose generalism over specialisation',
-    desc: 'On the deliberate choice to stay broad when every signal says to go deep.',
-    href: NOTION_ABOUT,
-  },
-  {
-    emoji: '🤖',
-    title: 'Designing for AI: what the field still gets wrong',
-    desc: "The interaction model has changed. Most design processes haven't.",
-    href: NOTION_ABOUT,
-  },
-  {
-    emoji: '📐',
-    title: "Systems thinking isn't a design skill — it's a survival skill",
-    desc: 'How thinking in systems changes the questions you ask before touching Figma.',
-    href: NOTION_ABOUT,
-  },
-  {
-    emoji: '🔥',
-    title: 'What 12 years taught me about shipping under pressure',
-    desc: 'From zero-marketing startups to 400M-user enterprise features.',
-    href: NOTION_ABOUT,
-  },
-];
-
-/* ── About me DB sections (93d4d551-25f7-491d-8778-7961daefeab0) ── */
-const ABOUT_SECTIONS = [
-  {
-    emoji: '🏄‍♂️',
-    title: 'My Experience',
-    lead: 'Twelve years. Eight organisations. Two startups. One through-line.',
-    body: "Every role I've taken has been a deliberate upgrade in one of three dimensions: scale, complexity, or skin-in-the-game. The arc goes: agency creative → enterprise design leader → startup founder (twice) → AI product at one of the world's most used software applications.\n\nI didn't drift into any of these. I chose them because they would make me better at the thing that matters most: designing products that change how real people work and live.",
-    href: 'https://thatguyabhishek.notion.site/My-Experience-05872802d7624f4daa8a8785ba02b5b3',
-  },
-  {
-    emoji: '🙋‍♂️',
-    title: 'What I Bring',
-    lead: 'Most designers can show you their screens. Fewer can tell you what moved because of them.',
-    body: "Fewer still can tell you how they built the team, set the strategy, and made the decisions that led to those screens being built correctly the first time. I can do all three.",
-    href: 'https://thatguyabhishek.notion.site/What-I-Bring-26af6091ff9a469eadcde9b42a80a678',
-  },
-  {
-    emoji: '🏓',
-    title: 'Recent Reads',
-    lead: 'What I\'m reading, and why it matters.',
-    body: 'A running list of books, essays, and ideas that are actively shaping how I think about design, AI, and leadership. Updated as I read.',
-    href: NOTION_ABOUT,
-  },
-];
 
 /* ─────────────────────────────────────────────────────────────────── */
 const CAROUSEL_INTERVAL = 3500;
@@ -168,13 +54,7 @@ export default function AboutPage() {
             <motion.div variants={stagger} initial="hidden" animate="visible">
               <motion.p variants={fadeUp} className="t-overline text-fg-muted mb-8">About</motion.p>
 
-              <div
-                className="grid gap-8 items-start"
-                style={{ gridTemplateColumns: '1fr' }}
-              >
-                {/* 30/70 only on large screens */}
-                <style>{`@media (min-width: 1024px) { .about-hero-grid { grid-template-columns: 3fr 7fr !important; } }`}</style>
-                <div className="about-hero-grid grid gap-8 items-start">
+              <div className="grid gap-8 items-start lg:grid-cols-[3fr_7fr]">
 
                   {/* LEFT 30% — portrait + currently callout card + article cards */}
                   <div className="flex flex-col gap-4">
@@ -303,7 +183,6 @@ export default function AboutPage() {
                     </motion.div>
 
                   </motion.div>
-                </div>
               </div>
             </motion.div>
           </W>
@@ -332,11 +211,7 @@ export default function AboutPage() {
                 </motion.a>
               </div>
 
-              <style>{`@media (max-width: 1023px) { .writing-grid { grid-template-columns: repeat(2, 1fr) !important; } } @media (max-width: 599px) { .writing-grid { grid-template-columns: 1fr !important; } }`}</style>
-              <div
-                className="writing-grid grid gap-4"
-                style={{ gridTemplateColumns: 'repeat(4, 1fr)' }}
-              >
+              <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
                 {ARTICLES.map((article) => (
                   <motion.a
                     key={article.title}
@@ -637,9 +512,7 @@ export default function AboutPage() {
                   </motion.p>
                 )}
 
-                <div className="grid gap-12 items-start" style={{ gridTemplateColumns: '1fr' }}>
-                  <style>{`@media (min-width: 1024px) { .about-section-grid-${i} { grid-template-columns: 3fr 7fr !important; } }`}</style>
-                  <div className={`about-section-grid-${i} grid gap-12 items-start`}>
+                <div className="grid gap-12 items-start lg:grid-cols-[3fr_7fr]">
 
                     {/* Left — emoji + title */}
                     <motion.div variants={fadeUp} className="flex flex-col gap-3 lg:pt-1">
@@ -689,7 +562,6 @@ export default function AboutPage() {
                       </motion.div>
                     </motion.div>
 
-                  </div>
                 </div>
               </motion.div>
             </W>

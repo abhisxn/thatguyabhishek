@@ -1,20 +1,8 @@
 'use client';
 
 import { motion } from 'framer-motion';
-
-const fadeUp = {
-  hidden: { opacity: 0, y: 32 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: [0.22, 1, 0.36, 1] } },
-};
-const stagger = { hidden: {}, visible: { transition: { staggerChildren: 0.1 } } };
-
-function W({ children, className = '' }) {
-  return (
-    <div className={`max-w-[1200px] mx-auto px-6 sm:px-10 lg:px-16 ${className}`}>
-      {children}
-    </div>
-  );
-}
+import { fadeUp, stagger } from '../../../lib/motion';
+import W from '../ui/W';
 
 export default function HomeHero() {
   return (
@@ -24,7 +12,7 @@ export default function HomeHero() {
           variants={fadeUp}
           initial="hidden"
           animate="visible"
-          className="t-h1 mb-10 w-full"
+          className="t-display mb-10 w-full"
         >
           Hey there, I&apos;m Abhishek Saxena, a product designer enabling growth led design for 12+ years
         </motion.h1>
@@ -71,20 +59,20 @@ export default function HomeHero() {
             <motion.div
               animate={{ y: [0, -16, 0] }}
               transition={{ duration: 5.5, repeat: Infinity, ease: 'easeInOut' }}
-              style={{ position: 'relative', width: 293, height: 293 }}
+              className="hero-avatar-float"
             >
-              <div style={{ position: 'absolute', inset: -26, borderRadius: '50%', background: 'radial-gradient(circle, rgba(229,215,232,0.45) 0%, rgba(72,57,202,0.2) 55%, transparent 80%)', filter: 'blur(18px)', pointerEvents: 'none' }} />
+              <div className="hero-avatar-glow" />
 
               <motion.div
                 animate={{ rotate: 360 }}
                 transition={{ duration: 22, repeat: Infinity, ease: 'linear' }}
-                style={{ position: 'absolute', width: 420, height: 420, left: -63.5, top: -60, zIndex: 20, pointerEvents: 'none' }}
+                className="hero-avatar-ticker-ring"
               >
                 <svg width="420" height="420" viewBox="0 0 420 420" xmlns="http://www.w3.org/2000/svg" overflow="visible">
                   <defs>
                     <path id="hero-ticker-path" d="M 210,7 A 203,203 0 1,1 209.999,7" />
                   </defs>
-                  <text className="avatar-ticker-text" style={{ fill: 'rgba(255,255,255,0.52)', fontSize: '13px', fontWeight: 600, letterSpacing: '3px', fontFamily: 'var(--font-glory-var, Glory, sans-serif)' }}>
+                  <text className="avatar-ticker-text">
                     <textPath href="#hero-ticker-path" startOffset="0%">
                       AVAILABLE FOR WORK ✦ AVAILABLE FOR WORK ✦ AVAILABLE FOR WORK ✦ AVAILABLE FOR WORK ✦ AVAILABLE FOR WORK ✦ AVAILABLE FOR WORK ✦ AVAILABLE FOR WORK ✦
                     </textPath>
@@ -92,13 +80,9 @@ export default function HomeHero() {
                 </svg>
               </motion.div>
 
-              <div className="avatar-circle" style={{ position: 'absolute', top: -40, left: '50%', transform: 'translateX(-50%)', width: 380, height: 380, borderRadius: '50%', background: 'linear-gradient(140deg, #e5d7e8 0%, #c8b0e0 45%, #a8c8f0 100%)', boxShadow: '0 8px 39px rgba(229,215,232,0.3), 0 0 65px rgba(72,57,202,0.2)', zIndex: 10, overflow: 'hidden' }}>
+              <div className="avatar-circle">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img
-                  src="/avatar.gif"
-                  alt="Abhishek Saxena"
-                  style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', width: 240, height: 240, objectFit: 'contain', zIndex: 11 }}
-                />
+                <img src="/avatar.gif" alt="Abhishek Saxena" className="hero-avatar-img" />
               </div>
             </motion.div>
           </motion.div>

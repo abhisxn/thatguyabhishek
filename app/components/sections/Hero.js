@@ -20,14 +20,7 @@
  *   className     string
  */
 
-/* ── Shared wrapper ── */
-function W({ children, className = '' }) {
-  return (
-    <div className={`max-w-[1200px] mx-auto px-6 sm:px-10 lg:px-16 ${className}`}>
-      {children}
-    </div>
-  );
-}
+import W from '../ui/W';
 
 /* ── Eyebrow label ── */
 function Eyebrow({ text, light = false }) {
@@ -48,7 +41,7 @@ function HeroCentered({ eyebrow, title, description, actions }) {
       <W className="w-full py-32 text-center">
         <Eyebrow text={eyebrow} />
         {title && (
-          <h1 className="mb-6 mx-auto max-w-[900px]">{title}</h1>
+          <h1 className="t-display mb-6 mx-auto max-w-[900px]">{title}</h1>
         )}
         {description && (
           <p className="t-body1 text-fg-muted leading-relaxed mb-10 mx-auto max-w-[600px]">
@@ -74,7 +67,7 @@ function HeroSplit({ eyebrow, title, description, actions, media }) {
           <div className="flex flex-col">
             <Eyebrow text={eyebrow} />
             {title && (
-              <h1 className="mb-6">{title}</h1>
+              <h1 className="t-display mb-6">{title}</h1>
             )}
             {description && (
               <p className="t-body1 text-fg-muted leading-relaxed mb-10">{description}</p>
@@ -103,7 +96,7 @@ function HeroMinimal({ eyebrow, title, description, actions }) {
       <W className="w-full pt-32 pb-20">
         <Eyebrow text={eyebrow} />
         {title && (
-          <h1 className="mb-6 max-w-[900px]">{title}</h1>
+          <h1 className="t-display mb-6 max-w-[900px]">{title}</h1>
         )}
         {description && (
           <p className="t-body1 text-fg-muted leading-relaxed mb-10 max-w-[620px]">
@@ -136,7 +129,7 @@ function HeroBannerFull({ eyebrow, title, description, actions, media, overlay =
         <div className="absolute inset-x-0 bottom-0">
           <W className="pb-10 pt-20">
             <Eyebrow text={eyebrow} light />
-            {title && <h1 className="text-white mb-4">{title}</h1>}
+            {title && <h1 className="t-display text-white mb-4">{title}</h1>}
             {description && (
               <p className="t-body1 text-white/75 leading-relaxed mb-8 max-w-[620px]">{description}</p>
             )}
@@ -153,7 +146,7 @@ function HeroBannerFull({ eyebrow, title, description, actions, media, overlay =
       {(title || description || actions) && (
         <W className="pt-10 pb-16">
           <Eyebrow text={eyebrow} />
-          {title && <h1 className="mb-4">{title}</h1>}
+          {title && <h1 className="t-display mb-4">{title}</h1>}
           {description && (
             <p className="t-body1 text-fg-muted leading-relaxed mb-8 max-w-[620px]">{description}</p>
           )}
@@ -183,7 +176,7 @@ function HeroBannerBoxed({ eyebrow, title, description, actions, media, overlay 
             />
             <div className="absolute inset-x-0 bottom-0 p-8 lg:p-12">
               <Eyebrow text={eyebrow} light />
-              {title && <h1 className="text-white mb-3">{title}</h1>}
+              {title && <h1 className="t-display text-white mb-3">{title}</h1>}
               {description && (
                 <p className="t-body1 text-white/75 leading-relaxed mb-6 max-w-[560px]">{description}</p>
               )}
@@ -199,7 +192,7 @@ function HeroBannerBoxed({ eyebrow, title, description, actions, media, overlay 
     <section className="relative">
       <W className="pt-28 pb-10">
         <Eyebrow text={eyebrow} />
-        {title && <h1 className="mb-4 max-w-[900px]">{title}</h1>}
+        {title && <h1 className="t-display mb-4 max-w-[900px]">{title}</h1>}
         {description && (
           <p className="t-body1 text-fg-muted leading-relaxed mb-8 max-w-[620px]">{description}</p>
         )}

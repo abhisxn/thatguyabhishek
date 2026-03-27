@@ -1,68 +1,231 @@
 @import "tailwindcss";
 
-/* ─── Design Tokens ─────────────────────────────────────────── */
-@theme {
-  /* Brand colors */
-  --color-navy:       #19223d;
-  --color-brand:      #4839ca;
-  --color-coral:      #ea8575;
-  --color-purple-card: #4a2d7f;
-  --color-dark-blue:  #0b2261;
-  --color-dark-teal:  #163846;
-  --color-lavender:   #e5d7e8;
+/* ═══════════════════════════════════════════════════════════════
+ * TYPOGRAPHY SCALE — SOURCE OF TRUTH
+ *
+ * All type styles live here. Components reference these classes
+ * only — never define size, weight, or leading elsewhere.
+ *
+ * Headings use fluid clamp() — smooth scale from min → max.
+ * No breakpoint variants needed; size is set once in @theme.
+ *
+ * CLASS        MIN     MAX     SIZE                                 WEIGHT      LEADING
+ * ────────────────────────────────────────────────────────────────────────────────────
+ * .t-display   48px    84px    clamp(3rem, 5vw + 1rem, 5.25rem)     semibold    none    ← page titles / hero banners
+ * .t-h1        36px    72px    clamp(2.25rem, 4vw + 1rem, 4.5rem)  semibold    none
+ * .t-h2        30px    60px    clamp(1.875rem, 3vw + 1rem, 3.75rem) semibold   tight
+ * .t-h3        24px    48px    clamp(1.5rem, 2.5vw + .75rem, 3rem) semibold    snug
+ * .t-h4        20px    32px    clamp(1.25rem, 1.5vw + .625rem, 2rem) semibold  snug
+ * .t-h5        18px    28px    clamp(1.125rem, 1vw + .75rem, 1.75rem) semibold snug
+ * .t-h6        16px    16px    text-base (fixed)                   semibold    snug
+ * ────────────────────────────────────────────────────────────────────────────────────
+ *
+ * Notion block → style map:
+ *   page title  → t-display   heading_1 → t-h2   heading_2 → t-h3   heading_3 → t-h4
+ * ────────────────────────────────────────────────────────────────────────────────────
+ * .t-body1   22px    fixed   —                                   medium      relaxed
+ * .t-body2   18px    fixed   —                                   medium      relaxed
+ * .t-body3   14px    fixed   —                                   medium      relaxed
+ * .t-caption 12px    fixed   —                                   bold        tight
+ * ══════════════════════════════════════════════════════════════ */
 
-  /* Typography — font families */
+
+/* ═══════════════════════════════════════════════════════════════
+ * LAYER 1 — PRIMITIVES
+ * Raw values. No semantics. Never reference these in components.
+ * Use the semantic tokens in :root / [data-theme] below.
+ * ══════════════════════════════════════════════════════════════ */
+@theme {
+  /* ── Accent ── */
+  --color-brand:        #4839ca;
+  --color-coral:        #ea8575;
+
+  /* ── Brand ── */
+  --color-lavender:     #e5d7e8;
+
+  /* ── Neutrals ── */
+  --color-canvas:       #161b2a;   /* darkest page bg */
+  --color-navy:         #19223d;
+  --color-card-dark:    #3a405d;   /* dark section / callout surface */
+  --color-dark-blue:    #0b2261;
+  --color-dark-teal:    #163846;
+  --color-ink:          #313138;   /* near-black text */
+  --color-parchment:    #f5f4f0;   /* light page bg */
+  --color-purple-card:  #4a2d7f;
+
+  /* ── Typography — font families ── */
   --font-glory:   var(--font-glory-var);
   --font-manrope: var(--font-manrope-var);
 
-  /* Typography — font sizes */
-  --text-h1:      4.5rem;    /* 72px */
-  --text-h2:      3.5rem;    /* 56px */
-  --text-h3:      3rem;      /* 48px */
-  --text-h4:      2rem;      /* 32px */
-  --text-h5:      1.75rem;   /* 28px */
-  --text-body1:   1.25rem;   /* 20px */
-  --text-body2:   1rem;      /* 16px */
+  /* ── Typography — font sizes (fluid via clamp) ── */
+  --text-display: clamp(3rem, 5vw + 1rem, 5.25rem);        /* 48px → 84px */
+  --text-h1:      clamp(2.25rem, 4vw + 1rem, 4.5rem);      /* 36px → 72px */
+  --text-h2:      clamp(1.875rem, 3vw + 1rem, 3.75rem);    /* 30px → 60px */
+  --text-h3:      clamp(1.5rem, 2.5vw + 0.75rem, 3rem);    /* 24px → 48px */
+  --text-h4:      clamp(1.25rem, 1.5vw + 0.625rem, 2rem);  /* 20px → 32px */
+  --text-h5:      clamp(1.125rem, 1vw + 0.75rem, 1.75rem); /* 18px → 28px */
+  --text-body1:   1.375rem;  /* 22px */
+  --text-body2:   1.125rem;  /* 18px */
   --text-body3:   0.875rem;  /* 14px */
   --text-caption: 0.75rem;   /* 12px */
   --text-btn1:    1.25rem;   /* 20px */
   --text-btn2:    1rem;      /* 16px */
 
-  /* Typography — line heights */
-  --leading-h1:      1;      /* 100% */
-  --leading-h2:      1.2;    /* 120% */
+  /* ── Typography — line heights ── */
+  --leading-h1:      1;
+  --leading-h2:      1.2;
   --leading-h3:      1.2;
   --leading-h4:      1.2;
   --leading-h5:      1.2;
-  --leading-body:    1.2;    /* 120% */
+  --leading-body:    1.2;
   --leading-caption: 1.2;
 
-  /* Border radius */
+  /* ── Border radius ── */
   --radius-card:   1.5rem;   /* 24px */
   --radius-pill:   6.25rem;  /* 100px */
   --radius-btn:    0.5rem;   /* 8px  */
 }
 
-/* ─── Theme CSS variables ────────────────────────────────────── */
-/* Dark theme is default */
+
+/* ═══════════════════════════════════════════════════════════════
+ * LAYER 2 — SEMANTIC TOKENS
+ * Theme-aware. Components and utilities reference only these.
+ * Switching theme = changing these values. Nothing else changes.
+ *
+ * GROUPS
+ *   Text      --fg  --fg-muted  --fg-disabled
+ *   BG        --bg  --bg-solid  --bg-inverse
+ *   Surface   --surface-{0|1|2}  --surface-inverse  --surface (alias → 1)
+ *   Border    --border  --border-strong
+ *   Brand     --brand  --brand-muted  --brand-border
+ *   Section   --section-{solid|frosted|blank}-{bg|fg|border}
+ *             --section-col-{bg|border}  --section-table-border
+ *   Status    --color-{success|warning|error|info}[-bg]
+ * ══════════════════════════════════════════════════════════════ */
+
+/* ── Dark theme (default) ─────────────────────────────────── */
 :root,
 [data-theme="dark"] {
-  --bg:          transparent;        /* gradient bg handles the dark canvas */
-  --bg-solid:    #161B2A;
-  --fg:          #ffffff;
-  --fg-muted:    #ffffff;
-  --surface:     rgba(255, 255, 255, 0.06);
-  --border:      rgba(255, 255, 255, 0.10);
+  /* Text */
+  --fg:               #ffffff;
+  --fg-muted:         rgba(255, 255, 255, 0.70);
+  --fg-disabled:      rgba(255, 255, 255, 0.30);
+
+  /* Background */
+  --bg:               transparent;          /* gradient blob canvas */
+  --bg-solid:         #161b2a;
+  --bg-inverse:       #f5f4f0;
+
+  /* Surfaces — elevation scale */
+  --surface-0:        rgba(255, 255, 255, 0.03);  /* hover / zebra row */
+  --surface-1:        rgba(255, 255, 255, 0.06);  /* cards, inputs */
+  --surface-2:        rgba(255, 255, 255, 0.10);  /* dropdowns, tooltips */
+  --surface-inverse:  #ffffff;                    /* white card on dark page */
+  --surface:          var(--surface-1);           /* backwards-compat alias */
+
+  /* Borders */
+  --border:           rgba(255, 255, 255, 0.10);
+  --border-strong:    rgba(255, 255, 255, 0.22);
+
+  /* Brand */
+  --brand:            #4839ca;
+  --brand-muted:      rgba(72, 57, 202, 0.15);
+  --brand-border:     rgba(72, 57, 202, 0.40);
+
+  /* Section callout surfaces */
+  --section-solid-bg:        #161b2a;
+  --section-solid-fg:        #ffffff;
+  --section-solid-border:    transparent;
+  --section-frosted-bg:      rgba(255, 255, 255, 0.05);
+  --section-frosted-fg:      #ffffff;
+  --section-frosted-border:  rgba(255, 255, 255, 0.16);
+  --section-blank-bg:        transparent;
+  --section-blank-fg:        var(--fg);
+  --section-blank-border:    var(--border);
+  --section-col-bg:          rgba(255, 255, 255, 0.05);
+  --section-col-border:      rgba(255, 255, 255, 0.16);
+  --section-table-border:    #676767;
+
+  /* Callout solid token — navy bg in dark, white bg in light */
+  --callout-solid-bg:  #161b2a;
+  --callout-solid-fg:  #ffffff;
+
+  /* Dual-theme gradient — dark: blue-purple / light: pink-green pastel */
+  --gradient-dual-from: #4a2d7f;
+  --gradient-dual-to:   #0b1f3a;
+
+  /* Status */
+  --color-success:     #448361;
+  --color-success-bg:  rgba(68, 131, 97, 0.12);
+  --color-warning:     #cb912f;
+  --color-warning-bg:  rgba(203, 145, 47, 0.12);
+  --color-error:       #c4554d;
+  --color-error-bg:    rgba(196, 85, 77, 0.12);
+  --color-info:        #2e7dae;
+  --color-info-bg:     rgba(46, 125, 174, 0.12);
 }
 
+/* ── Light theme ──────────────────────────────────────────── */
 [data-theme="light"] {
-  --bg:          #f5f4f0;
-  --bg-solid:    #f5f4f0;
-  --fg:          #313138;
-  --fg-muted:    #313138;
-  --surface:     rgba(25, 34, 61, 0.05);
-  --border:      rgba(25, 34, 61, 0.10);
+  /* Text */
+  --fg:               #313138;
+  --fg-muted:         rgba(49, 49, 56, 0.70);
+  --fg-disabled:      rgba(49, 49, 56, 0.30);
+
+  /* Background */
+  --bg:               #f5f4f0;
+  --bg-solid:         #f5f4f0;
+  --bg-inverse:       #161b2a;
+
+  /* Surfaces */
+  --surface-0:        rgba(25, 34, 61, 0.03);
+  --surface-1:        rgba(25, 34, 61, 0.05);
+  --surface-2:        rgba(25, 34, 61, 0.09);
+  --surface-inverse:  #ffffff;
+  --surface:          var(--surface-1);
+
+  /* Borders */
+  --border:           rgba(25, 34, 61, 0.10);
+  --border-strong:    rgba(25, 34, 61, 0.22);
+
+  /* Brand — same in both themes */
+  --brand:            #4839ca;
+  --brand-muted:      rgba(72, 57, 202, 0.12);
+  --brand-border:     rgba(72, 57, 202, 0.35);
+
+  /* Section callout surfaces */
+  --section-solid-bg:        #ffffff;
+  --section-solid-fg:        #313138;
+  --section-solid-border:    transparent;
+  --section-frosted-bg:      rgba(58, 64, 93, 0.05);
+  --section-frosted-fg:      #313138;
+  --section-frosted-border:  rgba(58, 64, 93, 0.16);
+  --section-blank-bg:        transparent;
+  --section-blank-fg:        var(--fg);
+  --section-blank-border:    var(--border);
+  --section-col-bg:          rgba(58, 64, 93, 0.05);
+  --section-col-border:      rgba(58, 64, 93, 0.16);
+  --section-table-border:    #c9c9c9;
+
+  /* Callout solid token — white bg in light, navy bg in dark */
+  --callout-solid-bg:  #ffffff;
+  --callout-solid-fg:  #313138;
+
+  /* Dual-theme gradient — dark: blue-purple / light: pink-green pastel */
+  --gradient-dual-from: #fce7f3;
+  --gradient-dual-to:   #d1fae5;
+
+  /* Status — same hues, work on both themes */
+  --color-success:     #448361;
+  --color-success-bg:  rgba(68, 131, 97, 0.12);
+  --color-warning:     #cb912f;
+  --color-warning-bg:  rgba(203, 145, 47, 0.12);
+  --color-error:       #c4554d;
+  --color-error-bg:    rgba(196, 85, 77, 0.12);
+  --color-info:        #2e7dae;
+  --color-info-bg:     rgba(46, 125, 174, 0.12);
 }
+
 
 /* ─── Base ───────────────────────────────────────────────────── */
 html {
@@ -70,19 +233,14 @@ html {
 }
 
 body {
-  background-color: #161B2A; /* fallback — overridden per-page as needed */
+  background-color: var(--bg-solid);
   color: var(--fg);
   font-family: var(--font-glory-var, 'Glory', sans-serif);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-[data-theme="light"] body {
-  background-color: #f5f4f0;
-}
-
 /* ─── Navbar / shared dark:light compat ─────────────────────── */
-/* Light-mode navbar and footer adaptations */
 [data-theme="light"] header {
   --navbar-bg-scrolled: rgba(245, 244, 240, 0.85);
 }
@@ -90,8 +248,7 @@ body {
 /* ─── Scrollbar ──────────────────────────────────────────────── */
 ::-webkit-scrollbar { width: 6px; }
 ::-webkit-scrollbar-track { background: transparent; }
-::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.15); border-radius: 3px; }
-[data-theme="light"] ::-webkit-scrollbar-thumb { background: rgba(25,34,61,0.15); }
+::-webkit-scrollbar-thumb { background: var(--border-strong); border-radius: 3px; }
 
 /* ─── Ticker animation ───────────────────────────────────────── */
 @keyframes footerTicker {
@@ -99,116 +256,130 @@ body {
   100% { transform: translateX(-50%); }
 }
 
-/* ─── Button variants — with hover inversion ─────────────────── */
+
+/* ═══════════════════════════════════════════════════════════════
+ * LAYER 3 — COMPONENTS
+ * All values reference semantic tokens. No raw hex.
+ * ══════════════════════════════════════════════════════════════ */
+
+/* ─── Button variants ────────────────────────────────────────── */
+/*
+ * Four button styles, two flavors each (outline / filled).
+ * Token-driven: changing --fg, --bg-solid, or --brand automatically
+ * updates all buttons. No per-theme overrides needed.
+ *
+ * btn-outline       fg-colored border/text  → inverts to fg-bg on hover
+ * btn-filled        fg-colored bg/text      → inverts to outline on hover
+ * btn-outline-brand brand border/text       → fills brand on hover
+ * btn-filled-brand  brand bg                → inverts to outline on hover
+ */
 @layer components {
+
   .btn-outline {
-    border: 2px solid rgba(255,255,255,0.7) !important;
-    color: #ffffff !important;
+    border: 2px solid color-mix(in srgb, var(--fg) 70%, transparent) !important;
+    color: var(--fg) !important;
     background: transparent !important;
     transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
   }
   .btn-outline:hover {
-    background: #ffffff !important;
-    color: #313138 !important;
-    border-color: #ffffff !important;
+    background: var(--fg) !important;
+    color: var(--bg-solid) !important;
+    border-color: var(--fg) !important;
   }
 
   .btn-filled {
-    background: #ffffff !important;
-    color: #313138 !important;
-    border: 2px solid #ffffff !important;
+    background: var(--fg) !important;
+    color: var(--bg-solid) !important;
+    border: 2px solid var(--fg) !important;
     transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
   }
   .btn-filled:hover {
     background: transparent !important;
-    color: #ffffff !important;
-    border-color: rgba(255,255,255,0.7) !important;
+    color: var(--fg) !important;
+    border-color: color-mix(in srgb, var(--fg) 70%, transparent) !important;
   }
 
   .btn-outline-brand {
-    border: 2px solid #4839ca !important;
-    color: #4839ca !important;
+    border: 2px solid var(--brand) !important;
+    color: var(--brand) !important;
     background: transparent !important;
     transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
   }
   .btn-outline-brand:hover {
-    background: #4839ca !important;
+    background: var(--brand) !important;
     color: #ffffff !important;
-    border-color: #4839ca !important;
+    border-color: var(--brand) !important;
   }
 
   .btn-filled-brand {
-    background: #4839ca !important;
+    background: var(--brand) !important;
     color: #ffffff !important;
-    border: 2px solid #4839ca !important;
+    border: 2px solid var(--brand) !important;
     transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
   }
   .btn-filled-brand:hover {
     background: transparent !important;
-    color: #4839ca !important;
-    border-color: #4839ca !important;
-  }
-
-  /* ─── Light theme button overrides ─────────────────────────── */
-  [data-theme="light"] .btn-outline {
-    border-color: rgba(49, 49, 56, 0.65) !important;
-    color: #313138 !important;
-  }
-  [data-theme="light"] .btn-outline:hover {
-    background: #313138 !important;
-    color: #ffffff !important;
-    border-color: #313138 !important;
-  }
-
-  [data-theme="light"] .btn-filled {
-    background: #313138 !important;
-    color: #ffffff !important;
-    border-color: #313138 !important;
-  }
-  [data-theme="light"] .btn-filled:hover {
-    background: transparent !important;
-    color: #313138 !important;
-    border-color: rgba(49, 49, 56, 0.65) !important;
+    color: var(--brand) !important;
+    border-color: var(--brand) !important;
   }
 
 }
 
-/* ─── More Work card ────────────────────────────────────────── */
-@keyframes gradientShift {
-  0%   { background-position: 0% 50%; }
-  50%  { background-position: 100% 50%; }
-  100% { background-position: 0% 50%; }
-}
 
-.more-work-card {
+/* ─── More Work card ─────────────────────────────────────────── */
+
+/* ─── Hero avatar ────────────────────────────────────────────── */
+.hero-avatar-float {
   position: relative;
-  text-decoration: none;
-  /* Default: colorful gradient, static */
-  background-image: linear-gradient(140deg, #3c37c9, #7b2ff7, #00c8c0, #3c37c9);
-  background-size: 300% 300%;
-  background-position: 0% 50%;
+  width: 293px;
+  height: 293px;
 }
-.more-work-card:hover {
-  animation: gradientShift 4s ease infinite;
+.hero-avatar-glow {
+  position: absolute;
+  inset: -26px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(229,215,232,0.45) 0%, rgba(72,57,202,0.2) 55%, transparent 80%);
+  filter: blur(18px);
+  pointer-events: none;
 }
-
-/* bg span — not needed, hidden */
-.more-work-bg { display: none; }
-
-/* Text: always white */
-.more-work-text {
-  color: #ffffff;
+.hero-avatar-ticker-ring {
+  position: absolute;
+  width: 420px;
+  height: 420px;
+  left: -63.5px;
+  top: -60px;
+  z-index: 20;
+  pointer-events: none;
 }
-
-/* Arrow circle */
-.more-work-arrow {
-  background: rgba(255, 255, 255, 0.15);
-  border: 1.5px solid rgba(255, 255, 255, 0.35);
-  transition: background 0.3s ease, border-color 0.3s ease;
+.avatar-ticker-text {
+  fill: rgba(255,255,255,0.52);
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 3px;
+  font-family: var(--font-glory-var, Glory, sans-serif);
 }
-.more-work-card:hover .more-work-arrow {
-  background: rgba(255, 255, 255, 0.3);
-  border-color: rgba(255, 255, 255, 0.6);
+.avatar-circle {
+  position: absolute;
+  top: -40px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 380px;
+  height: 380px;
+  border-radius: 50%;
+  background: linear-gradient(140deg, #e5d7e8 0%, #c8b0e0 45%, #a8c8f0 100%);
+  box-shadow: 0 8px 39px rgba(229,215,232,0.3), 0 0 65px rgba(72,57,202,0.2);
+  z-index: 10;
+  overflow: hidden;
+}
+.hero-avatar-img {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 240px;
+  height: 240px;
+  object-fit: contain;
+  z-index: 11;
 }
 
 /* ─── Avatar circle — light theme ─────────────────────────────── */
@@ -219,8 +390,167 @@ body {
 
 /* ─── Avatar ticker text — light theme ────────────────────────── */
 [data-theme="light"] .avatar-ticker-text {
-  fill: rgba(49, 49, 56, 0.55) !important;
+  fill: var(--fg-muted) !important;
 }
+
+/* ─── Career Timeline ────────────────────────────────────────── */
+.ct-chart-card {
+  background: var(--color-dark-teal);
+  border-radius: var(--radius-card);
+  padding: 20px 16px 16px;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+}
+.ct-chart-inner {
+  position: relative;
+  flex: 1;
+  min-height: 240px;
+}
+.ct-chart-label {
+  color: rgba(255,255,255,0.45);
+  padding-left: 12px;
+  position: absolute;
+  top: 12px;
+  left: 0;
+  z-index: 10;
+  margin: 0;
+}
+.ct-svg {
+  display: block;
+  overflow: visible;
+  position: absolute;
+  inset: 0;
+}
+.ct-year-label-pos {
+  position: absolute;
+  transform: translateX(-50%);
+  pointer-events: none;
+  z-index: 2;
+}
+.ct-year-label {
+  font-size: 13px;
+  font-weight: 500;
+  color: rgba(255,255,255,0.55);
+  font-family: var(--font-glory-var, sans-serif);
+  line-height: 1;
+  white-space: nowrap;
+}
+.ct-dot-hit {
+  position: relative;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.ct-dot-ring-wrap {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+}
+.ct-dot-ring  { width: 18px; height: 18px; border-radius: 50%; background: #8b5cf6; }
+.ct-dot-core  { width: 18px; height: 18px; border-radius: 50%; background: white; border: 3px solid #8b5cf6; position: relative; z-index: 1; flex-shrink: 0; }
+.ct-role-popup {
+  background: rgba(10,20,40,0.88);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255,255,255,0.16);
+  border-radius: 8px;
+  padding: 7px 11px;
+  white-space: nowrap;
+}
+.ct-word-lines {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  font-size: 13px;
+  font-weight: 700;
+  color: rgba(255,255,255,0.92);
+  letter-spacing: 0.02em;
+}
+.ct-word-lines span { display: block; line-height: 1.2; }
+
+/* ─── Career list card ───────────────────────────────────────── */
+.ct-list-card {
+  background: var(--color-dark-blue);
+  border-radius: var(--radius-card);
+  padding: 20px 22px;
+  display: flex;
+  align-items: center;
+}
+.ct-list-inner {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+}
+.ct-period-pill {
+  flex-shrink: 0;
+  display: inline-block;
+  font-size: 11px;
+  padding: 3px 8px;
+  border-radius: 7px;
+  border: 1px solid rgba(255,255,255,0.18);
+  min-width: 82px;
+  text-align: center;
+  font-weight: 600;
+  font-family: var(--font-glory-var, sans-serif);
+}
+.ct-role-text { transition: color 0.2s; }
+
+/* ─── Footer CTA cards ───────────────────────────────────────── */
+.footer-cta-purple  { background: var(--color-purple-card); min-height: 280px; }
+.footer-cta-blob-purple {
+  position: absolute;
+  left: -60px; top: 60%;
+  width: 80%; height: 130%;
+  background: radial-gradient(ellipse at 30% 60%, rgba(139,92,246,0.55) 0%, rgba(72,57,202,0.25) 45%, transparent 70%);
+  mix-blend-mode: hard-light;
+  pointer-events: none;
+}
+.footer-cta-blob-pink {
+  position: absolute;
+  right: -40px; top: -50px;
+  width: 65%; height: 90%;
+  background: radial-gradient(ellipse at 65% 25%, rgba(255,100,160,0.55) 0%, rgba(236,72,153,0.2) 40%, transparent 68%);
+  filter: blur(28px);
+  mix-blend-mode: screen;
+  pointer-events: none;
+}
+.footer-cta-avatar {
+  position: absolute;
+  bottom: 0; right: 0;
+  width: clamp(169px, 26vw, 289px);
+  height: clamp(169px, 26vw, 289px);
+  object-fit: contain;
+  pointer-events: none;
+  z-index: 0;
+}
+.footer-cta-content {
+  position: relative;
+  z-index: 1;
+  padding: 32px 32px 24px;
+}
+.footer-cta-heading        { font-size: clamp(22px, 3vw, 36px); font-weight: 800; line-height: 1.2; }
+.footer-cta-heading--muted { color: rgba(255,255,255,0.65); margin-bottom: 0.375rem; }
+.footer-cta-heading--white { color: #ffffff; margin-bottom: 1.75rem; }
+.footer-li-card      { box-shadow: 0 0 2.3px rgba(0,0,0,0.15); }
+.footer-li-icon-wrap { background: var(--color-purple-card); }
+.footer-li-logo      { height: 23px; width: 95px; object-fit: contain; }
+.footer-li-name      { font-size: clamp(18px, 2vw, 23px); font-weight: 800; color: #000; }
+
+/* ─── Footer ticker ──────────────────────────────────────────── */
+.footer-ticker-inner { animation: footerTicker 38s linear infinite; }
+.footer-ticker-text  { letter-spacing: 0.04em; opacity: 0.45; padding-right: 2rem; }
+
+/* ─── Notion code blocks ─────────────────────────────────────── */
+.notion-code-lang { background: var(--surface); border-bottom: 1px solid var(--border); color: var(--fg-muted); opacity: 0.7; }
+.notion-code-pre  { background: var(--surface); border: 1px solid var(--border); }
+.notion-code-pre--lang { border-top: none; }
 
 /* ─── Footer link columns ────────────────────────────────────── */
 .footer-link-col {
@@ -232,8 +562,8 @@ body {
 }
 [data-theme="light"] .footer-link-col {
   background: linear-gradient(160deg, #C8DDE8, #C5DDD8);
-  --col-heading: #313138;
-  --col-link: #313138;
+  --col-heading: var(--fg);
+  --col-link: var(--fg-muted);
 }
 @media (min-width: 640px) {
   .footer-link-col {
@@ -244,7 +574,6 @@ body {
 }
 
 /* ─── Notion prose wrapper ───────────────────────────────────── */
-/* Wrap <RenderBlocks> output in .notion-prose for vertical rhythm */
 .notion-prose {
   display: flex;
   flex-direction: column;
@@ -255,33 +584,64 @@ body {
 
 /* ─── Timeline button hover ─────────────────────────────────── */
 .timeline-btn {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  width: 100%;
+  text-align: left;
   border-radius: 10px;
   padding: 5px 8px;
   margin: -5px -8px;
   transition: background 0.18s ease;
 }
 .timeline-btn:hover {
-  background: rgba(255, 255, 255, 0.07);
+  background: rgba(255,255,255,0.06);
 }
 
-/* ─── Theme-aware color utilities ───────────────────────────── */
+
+/* ═══════════════════════════════════════════════════════════════
+ * UTILITIES
+ * ══════════════════════════════════════════════════════════════ */
 @layer utilities {
-  .text-fg        { color: var(--fg); }
-  .text-fg-muted  { color: var(--fg-muted); }
-  .bg-surface     { background: var(--surface); }
-  .border-theme   { border-color: var(--border); }
+  /* Text */
+  .text-fg          { color: var(--fg); }
+  .text-fg-muted    { color: var(--fg-muted); }
+  .text-fg-disabled { color: var(--fg-disabled); }
+
+  /* Background */
+  .bg-surface       { background: var(--surface); }
+  .bg-surface-0     { background: var(--surface-0); }
+  .bg-surface-1     { background: var(--surface-1); }
+  .bg-surface-2     { background: var(--surface-2); }
+  .bg-surface-inv   { background: var(--surface-inverse); }
+
+  /* Border */
+  .border-theme     { border-color: var(--border); }
+  .border-strong    { border-color: var(--border-strong); }
+
+  /* Brand */
+  .text-brand       { color: var(--brand); }
+  .bg-brand         { background: var(--brand); }
+  .bg-brand-muted   { background: var(--brand-muted); }
+  .border-brand     { border-color: var(--brand-border); }
 }
 
-/* ─── Semantic HTML defaults ─────────────────────────────────── */
+
+/* ═══════════════════════════════════════════════════════════════
+ * BASE — Semantic HTML defaults
+ * ══════════════════════════════════════════════════════════════ */
 @layer base {
   h1, h2, h3, h4, h5, h6 { color: var(--fg); }
 
-  h1 { @apply text-4xl sm:text-6xl lg:text-h1 leading-none    font-bold   tracking-tight  font-glory; }
-  h2 { @apply text-3xl sm:text-5xl lg:text-h2 leading-tight   font-bold   tracking-tight  font-glory; }
-  h3 { @apply text-2xl sm:text-4xl lg:text-h3 leading-snug    font-bold                   font-glory; }
-  h4 { @apply text-xl  sm:text-3xl lg:text-h4 leading-snug    font-semibold               font-glory; }
-  h5 { @apply text-lg  sm:text-2xl lg:text-h5 leading-snug    font-semibold               font-glory; }
-  h6 { @apply text-base sm:text-xl             leading-snug   font-semibold               font-glory; }
+  h1 { @apply text-h1 leading-none  font-semibold tracking-tight font-glory; }
+  h2 { @apply text-h2 leading-tight font-semibold tracking-tight font-glory; }
+  h3 { @apply text-h3 leading-snug  font-semibold               font-glory; }
+  h4 { @apply text-h4 leading-snug  font-semibold               font-glory; }
+  h5 { @apply text-h5 leading-snug  font-semibold               font-glory; }
+  h6 { @apply text-base             leading-snug  font-semibold font-glory; }
 
   p  { @apply text-body2 leading-relaxed font-normal; }
 
@@ -300,31 +660,34 @@ body {
   ol { @apply list-decimal list-outside pl-5 space-y-1 text-body3 leading-relaxed; }
 }
 
-/* ─── Typography utility classes ─────────────────────────────── */
+
+/* ═══════════════════════════════════════════════════════════════
+ * TYPOGRAPHY — Utility classes
+ * ══════════════════════════════════════════════════════════════ */
 @layer components {
 
   /* ─ Display — largest; hero banners ─ */
   .t-display {
-    @apply text-5xl sm:text-7xl lg:text-[6rem] leading-none font-bold tracking-tight font-glory;
+    @apply text-display leading-none font-semibold tracking-tight font-glory;
   }
 
   /* ─ Headings ─ */
-  .t-h1 { @apply text-4xl sm:text-6xl lg:text-h1 leading-none  font-bold    tracking-tight font-glory; }
-  .t-h2 { @apply text-3xl sm:text-5xl lg:text-h2 leading-tight font-bold    tracking-tight font-glory; }
-  .t-h3 { @apply text-2xl sm:text-4xl lg:text-h3 leading-snug  font-bold                   font-glory; }
-  .t-h4 { @apply text-xl  sm:text-3xl lg:text-h4 leading-snug  font-semibold               font-glory; }
-  .t-h5 { @apply text-lg  sm:text-2xl lg:text-h5 leading-snug  font-semibold               font-glory; }
-  .t-h6 { @apply text-base sm:text-xl             leading-snug font-semibold               font-glory; }
+  .t-h1 { @apply text-h1 leading-none  font-semibold tracking-tight font-glory; }
+  .t-h2 { @apply text-h2 leading-tight font-semibold tracking-tight font-glory; }
+  .t-h3 { @apply text-h3 leading-snug  font-semibold               font-glory; }
+  .t-h4 { @apply text-h4 leading-snug  font-semibold               font-glory; }
+  .t-h5 { @apply text-h5 leading-snug  font-semibold               font-glory; }
+  .t-h6 { @apply text-base             leading-snug  font-semibold font-glory; }
 
   /* ─ Body ─ */
-  .t-lead  { @apply text-xl  sm:text-2xl leading-relaxed font-normal; }   /* intro / lede */
-  .t-body  { @apply text-body2 leading-relaxed font-normal; }             /* 16px — default prose */
-  .t-body1 { @apply text-body1 leading-relaxed font-normal; }             /* 20px */
-  .t-body2 { @apply text-body2 leading-relaxed font-medium; }             /* 16px */
-  .t-body3 { @apply text-body3 leading-relaxed font-normal; }             /* 14px */
+  .t-lead  { @apply text-xl  sm:text-2xl leading-relaxed font-normal; }
+  .t-body  { @apply text-body2 leading-relaxed font-normal; }
+  .t-body1 { @apply text-body1 leading-relaxed font-medium; }
+  .t-body2 { @apply text-body2 leading-relaxed font-medium; }
+  .t-body3 { @apply text-body3 leading-relaxed font-medium; }
 
   /* ─ Utility ─ */
-  .t-caption  { @apply text-caption leading-tight  font-bold; }           /* 12px */
+  .t-caption  { @apply text-caption leading-tight  font-bold; }
   .t-overline { @apply text-caption leading-tight  font-bold uppercase tracking-widest; }
   .t-label    { @apply text-body3   leading-normal font-semibold uppercase tracking-wide; }
   .t-small    { @apply text-xs      leading-tight  font-normal; }
@@ -336,13 +699,15 @@ body {
   }
 
   /* ─ Button text ─ */
-  .t-btn1 { @apply text-btn1 leading-none font-semibold; }               /* 20px */
-  .t-btn2 { @apply text-btn2 leading-none font-semibold; }               /* 16px */
+  .t-btn1 { @apply text-btn1 leading-none font-semibold; }
+  .t-btn2 { @apply text-btn2 leading-none font-semibold; }
 }
 
+
 /* ═══════════════════════════════════════════════════════════════
-   UI KIT
-   ═══════════════════════════════════════════════════════════════ */
+ * UI KIT
+ * All components use semantic tokens. No raw hex.
+ * ══════════════════════════════════════════════════════════════ */
 
 /* ─── Tag pill ─────────────────────────────────────────────────── */
 .ui-tag {
@@ -368,25 +733,24 @@ body {
   border: 1px solid var(--border);
   white-space: nowrap;
 }
-.ui-badge--default { background: var(--surface);              color: var(--fg-muted); }
-.ui-badge--success { background: rgba(68,131,97,0.12);        color: #448361; border-color: rgba(68,131,97,0.35); }
-.ui-badge--warning { background: rgba(203,145,47,0.12);       color: #CB912F; border-color: rgba(203,145,47,0.35); }
-.ui-badge--error   { background: rgba(196,85,77,0.12);        color: #C4554D; border-color: rgba(196,85,77,0.35); }
-.ui-badge--info    { background: rgba(46,125,174,0.12);       color: #2E7DAE; border-color: rgba(46,125,174,0.35); }
-.ui-badge--brand   { background: rgba(72,57,202,0.12);        color: #4839ca; border-color: rgba(72,57,202,0.35); }
+.ui-badge--default { background: var(--surface-1);         color: var(--fg-muted);        border-color: var(--border); }
+.ui-badge--success { background: var(--color-success-bg);  color: var(--color-success);   border-color: color-mix(in srgb, var(--color-success) 35%, transparent); }
+.ui-badge--warning { background: var(--color-warning-bg);  color: var(--color-warning);   border-color: color-mix(in srgb, var(--color-warning) 35%, transparent); }
+.ui-badge--error   { background: var(--color-error-bg);    color: var(--color-error);     border-color: color-mix(in srgb, var(--color-error) 35%, transparent); }
+.ui-badge--info    { background: var(--color-info-bg);     color: var(--color-info);      border-color: color-mix(in srgb, var(--color-info) 35%, transparent); }
+.ui-badge--brand   { background: var(--brand-muted);       color: var(--brand);           border-color: var(--brand-border); }
 
 /* ─── Surface (theme-aware card wrapper) ──────────────────────── */
 .ui-surface {
-  background: var(--surface);
+  background: var(--surface-1);
   border: 1px solid var(--border);
   overflow: hidden;
 }
 [data-theme="light"] .ui-surface {
-  background: #ffffff;
-  box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+  background: var(--surface-inverse);
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.08);
   border-color: transparent;
 }
-/* Size modifiers */
 .ui-surface--sm { border-radius: 10px; }
 .ui-surface--md { border-radius: 16px; }
 .ui-surface--lg { border-radius: 24px; }
@@ -397,21 +761,20 @@ body {
   padding: 10px 14px;
   border-radius: 10px;
   border: 1px solid var(--border);
-  background: var(--surface);
+  background: var(--surface-1);
   color: var(--fg);
   font-family: var(--font-glory-var, Glory, sans-serif);
-  font-size: var(--text-body2);   /* 16px */
+  font-size: var(--text-body2);
   line-height: var(--leading-body);
   transition: border-color 0.18s ease, box-shadow 0.18s ease;
   outline: none;
 }
 .ui-input:focus {
-  border-color: #4839ca;
-  box-shadow: 0 0 0 3px rgba(72,57,202,0.15);
+  border-color: var(--brand);
+  box-shadow: 0 0 0 3px var(--brand-muted);
 }
 .ui-input::placeholder {
-  color: var(--fg-muted);
-  opacity: 0.45;
+  color: var(--fg-disabled);
 }
 .ui-select {
   -webkit-appearance: none;
@@ -419,7 +782,6 @@ body {
   padding-right: 2.5rem;
   cursor: pointer;
 }
-/* Native select option background */
 .ui-select option {
   background: var(--bg-solid);
   color: var(--fg);
@@ -450,15 +812,15 @@ body {
 .ui-table td:last-child  { border-right: none; }
 .ui-table tr:last-child td { border-bottom: none; }
 .ui-table thead th {
-  background: var(--surface);
+  background: var(--surface-1);
   font-weight: 700;
   font-size: 11px;
   text-transform: uppercase;
   letter-spacing: 0.07em;
   color: var(--fg-muted);
 }
-.ui-table tbody tr:hover { background: var(--surface); }
+.ui-table tbody tr:hover { background: var(--surface-0); }
 .ui-table--row-header tbody td:first-child {
   font-weight: 600;
-  background: var(--surface);
+  background: var(--surface-1);
 }

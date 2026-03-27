@@ -1,56 +1,83 @@
+// ISR: revalidate every hour — Notion signed image URLs expire after ~1 hour
+export const revalidate = 3600;
+
 import GradientBackground from '../components/layout/GradientBackground';
-import Hero from '../components/sections/Hero';
+import CalloutBlock from '../components/sections/CalloutBlock';
+import FadeSection from '../components/ui/FadeSection';
 import { getWorkPageData } from '../../lib/notion-work';
-import { getImageUrl } from '../components/sections/CalloutBlock';
 import { RenderBlocks } from '../components/sections/NotionBlocks';
-import { ProjectsGrid } from '../components/sections/ProjectCard';
+import ProjectsExpandableGrid from '../components/sections/ProjectsExpandableGrid';
+import { getCalloutType } from '../components/ui/card-utils';
+import projectsJson from '../../data/projects.json';
 
 export default async function WorkPage() {
-  let blocks = [];
-  let projects = [];
+  let proseBlocks = [];
+  let cardBlocks  = [];
   let childrenMap = {};
   let error = null;
 
   try {
     const data = await getWorkPageData();
-    blocks = data.blocks;
-    projects = data.projects;
     childrenMap = data.childrenMap;
+
+    const raw = data.blocks;
+    const all = raw[0]?.type === 'image' ? raw.slice(1) : raw;
+
+    for (const b of all) {
+      if (b.type === 'callout' && getCalloutType(b) === 'card') {
+        cardBlocks.push(b);
+      } else {
+        proseBlocks.push(b);
+      }
+    }
   } catch (err) {
     error = err.message;
   }
-
-  const heroBlock = blocks[0]?.type === 'image' ? blocks[0] : null;
-  const contentBlocks = heroBlock ? blocks.slice(1) : blocks;
-  const hasDbBlock = blocks.some((b) => b.type === 'child_database' || b.type === 'child_data_source');
 
   return (
     <>
       <GradientBackground />
       <main className="relative min-h-screen pt-16" style={{ color: 'var(--fg)', zIndex: 1 }}>
-        {heroBlock && (
-          <Hero
-            variant="banner-boxed"
-            eyebrow="Portfolio"
-            title="Work & Projects"
-            description="A collection of product design work spanning AI features, consumer apps, enterprise systems, and design leadership."
-            media={
-              /* eslint-disable-next-line @next/next/no-img-element */
-              <img src={getImageUrl(heroBlock.image)} alt="Work hero" className="w-full h-full object-cover" />
-            }
-          />
-        )}
 
-        <div className="px-6 sm:px-10 lg:px-16 py-16 max-w-[1200px] mx-auto">
-          {error ? (
+        {error ? (
+          <div className="px-6 sm:px-10 lg:px-16 py-16 max-w-[1200px] mx-auto">
             <p className="text-sm text-black/40 dark:text-white/40">Could not load page: {error}</p>
-          ) : (
-            <div className="flex flex-col gap-6">
-              <RenderBlocks blocks={contentBlocks} projects={projects} childrenMap={childrenMap} />
-              {!hasDbBlock && <ProjectsGrid projects={projects} />}
-            </div>
-          )}
-        </div>
+          </div>
+        ) : (
+          <>
+            {/* Prose content — description, intro text */}
+            {proseBlocks.length > 0 && (
+              <div className="px-6 sm:px-10 lg:px-16 pt-16 pb-4 max-w-[1200px] mx-auto flex flex-col gap-4">
+                <RenderBlocks blocks={proseBlocks} childrenMap={childrenMap} skipDatabase />
+              </div>
+            )}
+
+            {/* Featured project cards grid */}
+            {cardBlocks.length > 0 && (
+              <FadeSection className="border-t border-theme">
+                <div className="max-w-[1200px] mx-auto px-6 sm:px-10 lg:px-16 py-20">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-12">
+                    {cardBlocks.map((b) => {
+                      const children = childrenMap[b.id] ?? [];
+                      const heading  = children.find((c) => c.type === 'heading_1' || c.type === 'heading_2' || c.type === 'heading_3');
+                      const headingText = heading ? (heading[heading.type]?.rich_text ?? []).map((t) => t.plain_text).join('').toLowerCase() : '';
+                      const hrefOverride = headingText.includes('excited') ? 'https://www.behance.net/thatguyabhishek' : undefined;
+                      return <CalloutBlock key={b.id} block={b} childrenMap={childrenMap} hrefOverride={hrefOverride} />;
+                    })}
+                  </div>
+                </div>
+              </FadeSection>
+            )}
+
+            {/* All projects grid */}
+            <section className="border-t border-theme px-6 sm:px-10 lg:px-16 py-20 max-w-[1200px] mx-auto">
+              <ProjectsExpandableGrid
+                projects={projectsJson}
+                heading="All Projects"
+              />
+            </section>
+          </>
+        )}
       </main>
     </>
   );

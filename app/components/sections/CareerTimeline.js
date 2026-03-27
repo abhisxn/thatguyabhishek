@@ -3,18 +3,18 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
 import CareerChart from './CareerChart';
-import { TIMELINE } from './careerData';
+import { TIMELINE } from '../../../data/careerData';
 
 export default function CareerTimeline() {
   const [activeIdx, setActiveIdx] = useState(0);
 
   return (
-    <div className="grid lg:grid-cols-2 gap-5">
+    <div className="grid lg:grid-cols-2 gap-5 items-stretch">
       <CareerChart activeIdx={activeIdx} setActiveIdx={setActiveIdx} />
 
       {/* Timeline list */}
-      <div style={{ background: '#0b2261', borderRadius: 24, padding: '20px 22px', display: 'flex', alignItems: 'center' }}>
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 10, width: '100%' }}>
+      <div className="ct-list-card">
+        <div className="ct-list-inner">
           {TIMELINE.map((item, i) => {
             const isActive = activeIdx === i;
             return (
@@ -22,12 +22,12 @@ export default function CareerTimeline() {
                 key={i}
                 onClick={() => setActiveIdx(i)}
                 className="timeline-btn"
-                style={{ display: 'flex', alignItems: 'center', gap: 10, background: 'none', border: 'none', cursor: 'pointer', width: '100%', textAlign: 'left' }}
               >
                 <motion.span
+                  className="ct-period-pill"
                   animate={{
                     background: isActive ? 'rgba(255,255,255,0.95)' : 'rgba(255,255,255,0.04)',
-                    color: isActive ? '#0b2261' : 'rgba(255,255,255,0.55)',
+                    color: isActive ? 'var(--color-dark-blue)' : 'rgba(255,255,255,0.55)',
                     borderColor: isActive ? 'transparent' : 'rgba(255,255,255,0.18)',
                   }}
                   whileHover={{
@@ -36,13 +36,12 @@ export default function CareerTimeline() {
                     scale: 1.05,
                   }}
                   transition={{ duration: 0.15 }}
-                  style={{ flexShrink: 0, display: 'inline-block', fontSize: 11, padding: '3px 8px', borderRadius: 7, border: '1px solid rgba(255,255,255,0.18)', minWidth: 82, textAlign: 'center', fontWeight: 600, fontFamily: 'var(--font-glory-var, sans-serif)' }}
                 >
                   {item.period}
                 </motion.span>
                 <span
-                  className="t-body1"
-                  style={{ color: isActive ? 'rgba(255,255,255,1)' : 'rgba(255,255,255,0.7)', transition: 'color 0.2s' }}
+                  className="t-body1 ct-role-text"
+                  style={{ color: isActive ? 'rgba(255,255,255,1)' : 'rgba(255,255,255,0.7)' }}
                 >
                   <span className="font-semibold">{item.role}</span>
                   <span className="font-normal" style={{ color: isActive ? 'rgba(255,255,255,0.45)' : 'rgba(255,255,255,0.4)' }}>
@@ -57,3 +56,4 @@ export default function CareerTimeline() {
     </div>
   );
 }
+

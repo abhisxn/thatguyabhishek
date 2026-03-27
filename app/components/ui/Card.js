@@ -1,5 +1,6 @@
 'use client';
 
+import Link from 'next/link';
 import './card.css';
 import Tag from './Tag';
 export { CARD_SIZES, CARD_STYLES, styleForNotion } from './card-utils';
@@ -20,6 +21,7 @@ import { CARD_SIZES, CARD_STYLES } from './card-utils';
  *   loading    "lazy" | "eager"                                       default "lazy"
  *   altText    string — img alt override when title is a ReactNode
  *   emoji      string — optional emoji displayed above title
+ *   showDesc   boolean — override size config to force show/hide description
  * ──────────────────────────────────────────────────────────────────────────── */
 export default function Card({
   size      = 'l',
@@ -33,20 +35,28 @@ export default function Card({
   loading   = 'lazy',
   altText,
   emoji,
+  showDesc: showDescProp,
 }) {
   const sz  = CARD_SIZES[size]       ?? CARD_SIZES.l;
   const sty = CARD_STYLES[cardStyle] ?? CARD_STYLES.default;
+  const showDesc = showDescProp !== undefined ? showDescProp : sz.showDesc;
   const ease = 'ease-[cubic-bezier(0.22,1,0.36,1)]';
 
   const imgAlt = typeof title === 'string' ? title : (altText ?? '');
+  const isExternal = href && (href.startsWith('http://') || href.startsWith('https://'));
+
+  // Use Next.js Link for internal routes (client-side nav), plain <a> for external
+  const Wrapper = isExternal ? 'a' : Link;
+  const wrapperExtra = isExternal
+    ? { target: '_blank', rel: 'noopener noreferrer' }
+    : {};
 
   return (
-    <a
-      href={href}
-      target="_blank"
-      rel="noopener noreferrer"
+    <Wrapper
+      href={href ?? '#'}
+      {...wrapperExtra}
       className={[
-        'group block no-underline flex flex-col overflow-hidden',
+        'group block no-underline flex flex-col overflow-hidden h-full',
         'transition-transform duration-300 hover:-translate-y-1',
         sz.radius,
         sty.wrapper,
@@ -60,18 +70,26 @@ export default function Card({
           sz.hoverPad,
           `transition-[padding] duration-[400ms] ${ease}`,
         ].join(' ')}>
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            src={img}
-            alt={imgAlt}
-            loading={loading}
-            className={[
-              'w-full object-cover block',
-              sz.imgHeight,
-              sz.imgRadius,
-              `transition-[border-radius] duration-[400ms] ${ease}`,
-            ].join(' ')}
-          />
+          {/* Inner wrapper — clips scale animation */}
+          <div className={[
+            'relative overflow-hidden w-full',
+            sz.imgHeight,
+            sz.imgRadius,
+            `transition-[border-radius] duration-[400ms] ${ease}`,
+          ].join(' ')}>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src={img}
+              alt={imgAlt}
+              loading={loading}
+              className={[
+                'absolute inset-0 w-full h-full object-cover',
+                `transition-transform duration-[350ms] ${ease}`,
+                'group-hover:scale-[1.08]',
+              ].join(' ')}
+            />
+
+          </div>
         </div>
       )}
 
@@ -87,13 +105,13 @@ export default function Card({
         {/* Title + description block */}
         {title && (
           <div className={`flex flex-col w-full ${sz.innerGap}`}>
-            <p className={`leading-tight w-full ${sz.titleCls} ${sty.titleClr}`}>
+            <p className={`w-full ${sz.titleCls} ${sty.titleClr}`}>
               {title}
             </p>
-            {sz.showDesc && desc && (
-              <p className={`t-body1 font-medium leading-relaxed w-full ${sty.descClr}`}>
+            {showDesc && desc && (
+              <div className={`leading-relaxed w-full ${sz.descCls ?? 't-body2'} ${sty.descClr}`}>
                 {desc}
-              </p>
+              </div>
             )}
           </div>
         )}
@@ -105,8 +123,8 @@ export default function Card({
           </div>
         )}
 
-        {/* CTA button — pinned to bottom with mt-auto */}
-        {sz.showBtn && (
+        {/* CTA button — span inside the wrapper link, click bubbles up */}
+        {sz.showBtn && href && (
           <span className={[
             'mt-auto inline-flex items-center justify-center',
             'px-5 py-2.5 rounded-full t-btn1 font-semibold border-2',
@@ -117,6 +135,6 @@ export default function Card({
           </span>
         )}
       </div>
-    </a>
+    </Wrapper>
   );
 }

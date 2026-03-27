@@ -4,21 +4,8 @@ import { motion } from 'framer-motion';
 import GradientBackground from '../components/layout/GradientBackground';
 import Button from '../components/ui/Button';
 import { ArrowIcon } from '../components/ui/icons';
-
-const fadeUp = {
-  hidden: { opacity: 0, y: 32 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: [0.22, 1, 0.36, 1] } },
-};
-const stagger = { hidden: {}, visible: { transition: { staggerChildren: 0.1 } } };
-const vp = { once: true, margin: '-80px' };
-
-function W({ children, className = '' }) {
-  return (
-    <div className={`max-w-[1200px] mx-auto px-6 sm:px-10 lg:px-16 ${className}`}>
-      {children}
-    </div>
-  );
-}
+import { fadeUp, stagger, vp } from '../../lib/motion';
+import W from '../components/ui/W';
 
 const CONTACTS = [
   {

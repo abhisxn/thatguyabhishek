@@ -45,11 +45,15 @@ Use the Figma MCP server to read design context before building any component or
 | Layer | Technology |
 |---|---|
 | **Framework** | Next.js 16 (App Router) |
-| **Styling** | Tailwind CSS v4 |
+| **Styling** | Tailwind CSS |
 | **Themes** | next-themes |
 | **Animations** | Framer Motion |
-| **Font** | Glory (primary) |
+| **3D** | @splinetool/react-spline |
+| **Smooth Scroll** | Lenis |
+| **CMS** | Notion API (@notionhq/client) |
+| **Font** | Glorie (primary) |
 | **Icons** | Lucide React |
+| **Charts** | Recharts |
 | **Linting** | ESLint |
 | **Language** | JavaScript (no TypeScript) |
 
@@ -57,27 +61,113 @@ Use the Figma MCP server to read design context before building any component or
 
 ## DESIGN SYSTEM
 
-### Typography scale (globals.css classes)
-- `.t-h1` — hero headings
-- `.t-h2` / `.t-h3` / `.t-h4` / `.t-h5`
-- `.t-body1` / `.t-body2` / `.t-body3`
-- `.t-caption`
+### Typography
+- **Primary Font:** Glorie — loaded via `next/font/local` in `app/layout.js`
+- **Scale:** Use Tailwind typography scale strictly
+  - Display: `text-6xl` / `text-7xl` — hero headings only
+  - H1: `text-4xl font-semibold`
+  - H2: `text-2xl font-semibold`
+  - H3: `text-xl font-medium`
+  - Body: `text-base` / `text-sm`
+  - Caption: `text-xs`
 
-### CSS Variables (globals.css)
-Always use CSS variables for colors — never hardcode hex values in components:
-- `var(--bg)` — page background
-- `var(--fg)` — primary text
-- `var(--fg-muted)` — secondary text
-- `var(--border)` — dividers and borders
-- `var(--surface)` — card backgrounds
+### Design Tokens — globals.css
+Always use CSS variables for all colors, never hardcode hex values in components:
 
-### Button classes (globals.css @layer components)
-- `.btn-outline` — white border, white text, inverts on hover
-- `.btn-filled` — white bg, dark text, inverts on hover
-- `.btn-outline-brand` — `#4839ca` border/text, fills on hover
-- `.btn-filled-brand` — `#4839ca` bg, white text, inverts on hover
-- `.btn-card-dark` — for footer dark/purple card CTA (defined in `app/components/ui/card.css`)
-- `.btn-card-light` — for footer light card CTA (defined in `app/components/ui/card.css`)
+```css
+:root {
+  /* Background */
+  --background: #ffffff;
+  --background-secondary: #f5f5f5;
+  --background-tertiary: #ebebeb;
+
+  /* Foreground */
+  --foreground: #0a0a0a;
+  --foreground-secondary: #525252;
+  --foreground-tertiary: #a3a3a3;
+
+  /* Brand */
+  --accent: #6366f1;
+  --accent-hover: #4f46e5;
+  --accent-subtle: #eef2ff;
+
+  /* Border */
+  --border: rgba(0, 0, 0, 0.08);
+  --border-hover: rgba(0, 0, 0, 0.16);
+
+  /* Surface */
+  --surface: #ffffff;
+  --surface-hover: #fafafa;
+
+  /* Shadow */
+  --shadow-sm: 0 1px 2px rgba(0,0,0,0.04);
+  --shadow-md: 0 4px 16px rgba(0,0,0,0.06);
+  --shadow-lg: 0 16px 48px rgba(0,0,0,0.08);
+
+  /* Radius */
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --radius-xl: 24px;
+  --radius-full: 9999px;
+}
+
+.dark {
+  --background: #0a0a0f;
+  --background-secondary: #111118;
+  --background-tertiary: #1a1a24;
+
+  --foreground: #fafafa;
+  --foreground-secondary: #a3a3a3;
+  --foreground-tertiary: #525252;
+
+  --accent: #818cf8;
+  --accent-hover: #6366f1;
+  --accent-subtle: #1e1b4b;
+
+  --border: rgba(255, 255, 255, 0.08);
+  --border-hover: rgba(255, 255, 255, 0.16);
+
+  --surface: #111118;
+  --surface-hover: #1a1a24;
+
+  --shadow-sm: 0 1px 2px rgba(0,0,0,0.4);
+  --shadow-md: 0 4px 16px rgba(0,0,0,0.4);
+  --shadow-lg: 0 16px 48px rgba(0,0,0,0.6);
+}
+```
+
+### Tailwind Config
+Extend tailwind.config.js to map all CSS variables:
+```js
+theme: {
+  extend: {
+    colors: {
+      background: 'var(--background)',
+      'background-secondary': 'var(--background-secondary)',
+      foreground: 'var(--foreground)',
+      'foreground-secondary': 'var(--foreground-secondary)',
+      accent: 'var(--accent)',
+      surface: 'var(--surface)',
+      border: 'var(--border)',
+    },
+    borderRadius: {
+      sm: 'var(--radius-sm)',
+      md: 'var(--radius-md)',
+      lg: 'var(--radius-lg)',
+      xl: 'var(--radius-xl)',
+    },
+    fontFamily: {
+      sans: ['Glorie', 'system-ui', 'sans-serif'],
+    },
+    boxShadow: {
+      sm: 'var(--shadow-sm)',
+      md: 'var(--shadow-md)',
+      lg: 'var(--shadow-lg)',
+    }
+  }
+}
+```
 
 ---
 
@@ -85,186 +175,281 @@ Always use CSS variables for colors — never hardcode hex values in components:
 
 ```
 app/
-├── layout.js          # Root layout — font, themes, Navbar, Footer (global)
+├── layout.js          # Root layout — font, themes, navbar, footer, Lenis
 ├── page.js            # Homepage
 ├── work/
-│   └── page.js        # Work listing
+│   └── page.js        # Work listing — fetches from Notion
 ├── about/
-│   └── page.js        # About page
+│   └── page.js        # About — fetches from Notion
 ├── awards/
-│   └── page.js        # Awards page
-└── contact/
-    └── page.js        # Contact page
+│   └── page.js        # Awards — fetches from Notion
+├── contact/
+│   └── page.js        # Contact — fetches from Notion
+└── [project]/
+    └── page.js        # Dynamic project pages — fetches from Notion
 
-app/components/
-├── Card.js            # Big/small card with hover floating-image effect
-├── Button.js          # Shared button component
-├── Navbar.js          # Top nav with theme toggle
-├── Footer.js          # Global footer (rendered in layout.js)
-├── GradientBackground.js  # Animated gradient blobs (fixed, z-index 0)
-├── CareerTimeline.js  # Timeline component
-└── icons.js           # SVG icon exports
+lib/
+├── notion.js          # Notion client
+└── blocks.js          # Notion block renderer
 
-scripts/
-└── notion-sync.js     # Sync Notion projects → data/projects.json
+components/
+├── ui/                # Primitives: Button, Badge, Card, Tag
+├── layout/            # Navbar, Footer, ThemeSwitcher
+├── sections/          # Homepage sections: Hero, Journey, Work, etc.
+├── notion/            # NotionBlock renderer components
+└── spline/            # Spline 3D scene wrappers
 
 public/
 ├── logo.svg
-└── avatar.gif
+├── logo-dark.svg
+└── fonts/
+    └── Glorie/
+
 ```
-
----
-
-## LAYOUT RULES
-
-- `GradientBackground` is `position: fixed; z-index: 0` — all page content needs `position: relative; z-index: 1` to sit above it.
-- `<main>` on every page already has `position: relative; zIndex: 1`.
-- `<Footer>` has `position: relative; zIndex: 1` — this is critical, do not remove it.
-- Footer is rendered globally in `layout.js` — never import or render Footer inside individual pages.
-- Max content width: `max-w-[1200px] mx-auto px-6 sm:px-10 lg:px-16` (use the `W` wrapper pattern).
 
 ---
 
 ## NOTION CMS
 
-### Notion API v5 — key differences
-- `databases.query` is GONE in v5. Use `dataSources.query({ data_source_id })` instead.
-- A database and its linked view have DIFFERENT IDs — always use the data_source ID for querying.
+### API Setup
+- Client initialized in `lib/notion.js`
+- API key stored in `.env.local` as `NOTION_API_KEY`
+- Never expose API key client-side — all Notion fetches are server components
 
-### Page / Database IDs
+### Page IDs
 ```
-Work page:        372d8d3491624c4ebaa062d8bdb242dc
-About page:       fb861d61100943ee9356e50d28be3f03
-Awards page:      7b1e321f25bf43e5875b73eb17ec3a9b
-Contact page:     7846bf0322c34e66b00c1b5ca961f401
-
-Projects DB:      eb8cd7fc3faf4cb58c491c89860d3f7d  (databases.retrieve)
-Projects source:  f10273fc0bd24a09bcba022726aa63ad  (dataSources.query)
-```
-
-### Working query pattern
-```js
-const response = await notion.dataSources.query({
-  data_source_id: 'f10273fc0bd24a09bcba022726aa63ad'
-});
+Work page:     372d8d3491624c4ebaa062d8bdb242dc
+About page:    fb861d61100943ee9356e50d28be3f03
+Awards page:   7b1e321f25bf43e5875b73eb17ec3a9b
+Contact page:  7846bf0322c34e66b00c1b5ca961f401
+What I Bring:  26af6091ff9a469eadcde9b42a80a678
+My Experience: 05872802d7624f4daa8a8785ba02b5b3
 ```
 
-### Sync script
+### Project Page IDs
 ```
-NOTION_KEY=ntn_... node scripts/notion-sync.js
+Excel Data Visualisation:     306848f13d3480e8825bda5a6536e891
+Excel Chart Design Recs:      2c6848f13d348081a2dddb89cb8103da
+Excel Chart Insights:         2c6848f13d3480668d7ee8b2e7112910
+Smarter Chart Defaults:       2c6848f13d3480baa3b8db6bc3ecef5c
+Microsoft Wiki Agent:         25a848f13d3480b99b39cb86d9d4c2e5
+Airtel Thanks 2.0:            ccd66a9923484b8cbc560b8943b272ed
+Watchlyst App:                c7e9f615209e40f6a75c3296fe25b471
+ThinkPlanty.com:              89c5d9fbc65c48b6ac6f9ae4f9979f76
+GoodWorker Design System:     9b46c73c33a84f4e96cc4100cb4036f6
+GrowthX Capstone:             7f8e052e914545ce84d2855eeaf95d9e
+GrowthX Bootcamp:             4849631f71ee45049533c55bd315ab65
 ```
-Writes to `data/projects.json`.
+
+### Block Rendering Rules
+- Always fetch children for: `column_list`, `synced_block`, `toggle`, `callout`
+- Render `child_database` by querying the database separately
+- Handle `synced_block` by fetching from `synced_from.block_id`
+- Images from Notion expire — always re-fetch or proxy them
+- Unsupported blocks: render nothing, never throw errors
 
 ---
 
 ## ANIMATION SYSTEM
 
-### Standard variants (used across all pages)
+### Framer Motion — Standard Variants
+Always use these consistent variants across the site:
+
 ```js
-const fadeUp = {
-  hidden:  { opacity: 0, y: 32 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: [0.22, 1, 0.36, 1] } },
-};
-const stagger = { hidden: {}, visible: { transition: { staggerChildren: 0.1 } } };
-const vp = { once: true, margin: '-80px' };
+// Fade up — for most content entries
+export const fadeUp = {
+  initial: { opacity: 0, y: 24 },
+  animate: { opacity: 1, y: 0 },
+  transition: { duration: 0.5, ease: [0.25, 0.46, 0.45, 0.94] }
+}
+
+// Stagger container — for lists and grids
+export const staggerContainer = {
+  animate: { transition: { staggerChildren: 0.08 } }
+}
+
+// Scale in — for cards and modals
+export const scaleIn = {
+  initial: { opacity: 0, scale: 0.96 },
+  animate: { opacity: 1, scale: 1 },
+  transition: { duration: 0.4, ease: [0.25, 0.46, 0.45, 0.94] }
+}
+
+// Page transition — for route changes
+export const pageTransition = {
+  initial: { opacity: 0, y: 8 },
+  animate: { opacity: 1, y: 0 },
+  exit: { opacity: 0, y: -8 },
+  transition: { duration: 0.35, ease: 'easeInOut' }
+}
 ```
 
 ### Rules
-- Use `whileInView="visible"` + `viewport={vp}` for scroll-triggered animations
-- `once: true` — never re-animate on scroll back
-- No animation exceeds 600ms
-- Never use `linear` easing — always cubic bezier `[0.22, 1, 0.36, 1]`
+- Never use `linear` easing — always use custom cubic bezier
+- Page transitions on every route change
+- Scroll-triggered animations use `whileInView` with `viewport={{ once: true }}`
+- Hover states on all interactive elements
+- No animation should exceed 600ms
 
 ---
 
-## COMPONENT PATTERNS
+## SPLINE 3D
 
-### Card component (`app/components/Card.js`)
-- `size="big"` — 312px image, title + desc + "Know more" button, `rounded-3xl`
-- `size="small"` — 150px image, title + tags, `rounded-xl`
-- Hover: image wrapper gains padding → image floats inset. Pure CSS via Tailwind `group-hover:`.
-- All card content is `color: #313138` (light bg cards — always white bg)
+- Use Spline for homepage hero background or accent elements only
+- Import with dynamic import and `ssr: false` — Spline is client-only
+- Always wrap in a sized container — never let Spline control layout
+- Provide a static fallback for slow connections
 
-### Navbar underline animation
+```js
+import dynamic from 'next/dynamic'
+const Spline = dynamic(() => import('@splinetool/react-spline'), {
+  ssr: false,
+  loading: () => <div className="w-full h-full bg-background-secondary" />
+})
 ```
-relative after:absolute after:left-0 after:-bottom-0.5 after:h-px after:w-0
-after:bg-current after:transition-all after:duration-200 hover:after:w-full
-```
-Use `inline-block` (not `block`) so the underline hugs text width.
 
-### Footer ticker (`@keyframes footerTicker`)
-```css
-@keyframes footerTicker {
-  0%   { transform: translateX(0); }
-  100% { transform: translateX(-50%); }
+---
+
+## THEME SYSTEM
+
+- Use `next-themes` with `attribute="class"` and `defaultTheme="dark"`
+- ThemeSwitcher component lives in `components/layout/ThemeSwitcher.js`
+- Toggle between `light` and `dark` only — no system default displayed
+- All colors must respond to theme via CSS variables
+- Test every component in both themes before considering it done
+
+---
+
+## LENIS SMOOTH SCROLL
+
+Initialize Lenis in root layout as a client component wrapper:
+```js
+// components/layout/SmoothScroll.js
+'use client'
+import { useEffect } from 'react'
+import Lenis from 'lenis'
+
+export default function SmoothScroll({ children }) {
+  useEffect(() => {
+    const lenis = new Lenis()
+    function raf(time) {
+      lenis.raf(time)
+      requestAnimationFrame(raf)
+    }
+    requestAnimationFrame(raf)
+    return () => lenis.destroy()
+  }, [])
+  return children
 }
 ```
-Two identical `<span>` children inside `inline-flex` — seamless loop.
 
 ---
 
-## HTML & CSS STANDARDS
+## CODE STANDARDS
 
-Use the latest HTML and CSS features available in 2026. Prefer native platform capabilities over polyfills or JS workarounds.
+### General Rules
+- All components are functional — no class components ever
+- Server components by default — add `'use client'` only when needed
+- Never use inline styles — Tailwind classes only
+- Never hardcode colors — always use CSS variables via Tailwind tokens
+- All images use `next/image` — never `<img>` tags
+- All internal links use `next/link` — never `<a>` tags for internal routes
+- No `any` workarounds — write clean, intentional code
 
-### CSS
-- `color-mix()` — for alpha/tint variants of CSS variables instead of hardcoding rgba
-- `@layer` — for cascade management (already used for button variants)
-- Container queries (`@container`) — for component-level responsive design
-- CSS nesting — native nesting without preprocessors
-- `clamp()` — for fluid typography and spacing (already in use)
-- `text-wrap: balance` / `text-wrap: pretty` — for better heading/paragraph line breaks
-- `scroll-driven animations` — for scroll-linked effects where Framer Motion isn't needed
-- Logical properties (`margin-inline`, `padding-block`) — for layout direction independence
-- `@starting-style` — for enter animations on newly displayed elements
-- `:has()` — for parent-aware styling without JS
+### File Naming
+- Components: `PascalCase.js` — e.g. `ProjectCard.js`
+- Pages: `page.js` — Next.js App Router convention
+- Utilities: `camelCase.js` — e.g. `notion.js`
+- Constants: `SCREAMING_SNAKE_CASE`
 
-### HTML
-- Semantic elements: `<search>`, `<dialog>`, `<details>`, `<summary>` where appropriate
-- `popover` API — for tooltips/overlays instead of JS-managed visibility
-- `inert` attribute — for disabling interaction on hidden content
-- `loading="lazy"` + `fetchpriority="high"` on images — already enforced
+### Component Structure
+```js
+// 1. Imports — external first, internal second
+// 2. Constants and variants
+// 3. Sub-components if needed
+// 4. Main component
+// 5. Default export
 
-**Rule:** When a CSS feature can replace a JS behavior cleanly, prefer CSS. When a layout or typography problem can be solved natively, don't reach for a utility class or JS.
+'use client' // only if needed
+
+import { motion } from 'framer-motion'
+import { fadeUp } from '@/lib/animations'
+
+export default function ComponentName({ prop1, prop2 }) {
+  return (
+    <motion.div {...fadeUp}>
+      {/* content */}
+    </motion.div>
+  )
+}
+```
+
+### ESLint
+- Follow all ESLint rules — fix warnings, never suppress them
+- No unused variables or imports
+- No console.log in production code — use only during debug, remove after
 
 ---
 
-## PERFORMANCE
+## PERFORMANCE RULES
 
-- `loading="lazy"` on all below-fold images
-- Above-fold hero images: `loading="eager"`
-- Figma asset URLs expire in 7 days — replace with `/public/images/` before launch
 - All Notion data fetched server-side — never client-side
+- Dynamic imports for heavy components (Spline, charts)
+- `next/image` for all images with proper `width`, `height`, `alt`
+- Fonts loaded with `next/font` — never from CDN
+- No layout shift — always define dimensions for images and Spline containers
 
 ---
 
 ## ACCESSIBILITY
 
-- All interactive elements have visible focus states
-- Images always have descriptive `alt` text (or `alt=""` + `aria-hidden="true"` for decorative)
-- Semantic HTML: `<nav>`, `<main>`, `<section>`, `<footer>`
-- Color contrast minimum 4.5:1 in both themes
+- All interactive elements have `aria-label`
+- Color contrast ratio minimum 4.5:1 in both themes
+- Focus states visible on all interactive elements
+- Images always have descriptive `alt` text
+- Semantic HTML — `<nav>`, `<main>`, `<article>`, `<section>`, `<footer>`
 
 ---
 
 ## WHAT NOT TO DO
 
-- Never render `<Footer>` inside individual pages — it's global in `layout.js`
-- Never hardcode colors directly — use CSS variables
-- Never use `!important` outside the existing `@layer components` button overrides
+- Never use `<table>` for layout
+- Never use `position: absolute` for page layout
 - Never fetch Notion data client-side
-- Never skip testing in both light and dark theme
-- Never remove `position: relative; zIndex: 1` from `<footer>` — gradient will cover it
-- Never use `h-full` inside a container with only `minHeight` — use flex `justify-between` instead
+- Never use magic numbers for colors — always tokens
+- Never build a component without checking Figma first
+- Never skip hover and focus states
+- Never ship a component that only works in one theme
+- Never use `!important` in CSS
+- Never ignore ESLint errors
 
 ---
 
 ## DEPLOYMENT
 
 - **Hosting:** Vercel
-- **Branch:** `main` is production
-- **Environment variables:** `NOTION_KEY` (for scripts), `NEXT_PUBLIC_*` for any client vars
-- **Domain:** thatguyabhishek.com
+- **Repo:** github.com/abhisxn/thatguyabhishek
+- **Branch strategy:** `main` is production — never push broken code to main
+- **Environment variables on Vercel:**
+  - `NOTION_API_KEY`
+- **Domain:** thatguyabhishek.com (connect when site is ready — do not touch DNS until build is complete)
+- Auto-deploy on push to `main`
+
+---
+
+## STYLE GUIDE RULE
+
+`app/style-guide/page.js` is the live reference for every system in this codebase. **Any time you change a component, token, section style, callout treatment, block renderer, or design system rule — update the style guide immediately, without being asked.** The style guide must always reflect the current state of the system.
+
+---
+
+## BEFORE EVERY BUILD SESSION
+
+1. Check Figma MCP is connected — `claude mcp list`
+2. Check dev server is running — `npm run dev`
+3. Read relevant Figma frame before building
+4. Check both light and dark theme after building
+5. Check mobile responsiveness before committing
 
 ---
 

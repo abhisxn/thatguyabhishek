@@ -3,10 +3,10 @@
 import { motion } from 'framer-motion';
 import Link from 'next/link';
 
-/* ── Figma assets ───────────────────────────────────────────── */
-const IMG_AVATAR   = 'https://www.figma.com/api/mcp/asset/3a1d14f2-2a44-4a96-8ea7-f86a2da53412';
-const IMG_LI_ICON  = 'https://www.figma.com/api/mcp/asset/f1dc1cbd-7eb9-4d7d-b7ae-1cd089bb4aab';
-const IMG_LI_LOGO  = 'https://www.figma.com/api/mcp/asset/ab47688f-282a-4d19-8599-f89a1abe0e04';
+/* ── Local assets ───────────────────────────────────────────── */
+const IMG_AVATAR     = '/avatar-card.png';
+const IMG_AVATAR_ICON = '/avatar-icon.png';
+const IMG_LI_LOGO    = '/linkedin-logo.svg';
 
 /* ── Animation ─────────────────────────────────────────────── */
 const fadeUp = {
@@ -20,26 +20,18 @@ const vp = { once: true, margin: '-60px' };
 const TICKER_CHUNK =
   'YOU ARE CURRENTLY BROWSING PORTFOLIO WEBSITE OF PRODUCT DESIGNER THAT GUY ABHISHEK \u2756 THE CONCEPT, CONTENT AND MEDIA OF THIS WEBSITE IS COPYRIGHTED \u2756 MADE WITH LOVE \u2665 \u00A9 2026 THATGUYABHISHEK.COM \u2756 ';
 
-/* ── Wrapper ─────────────────────────────────────────────────  */
-function W({ children, className = '' }) {
-  return (
-    <div className={`max-w-[1200px] mx-auto px-6 sm:px-10 lg:px-16 ${className}`}>
-      {children}
-    </div>
-  );
-}
+import W from '../ui/W';
 
 /* ── Ticker strip ────────────────────────────────────────────── */
 function Ticker() {
   const text = TICKER_CHUNK.repeat(4);
   return (
     <div className="border-t border-theme overflow-hidden whitespace-nowrap py-2.5">
-      <div className="inline-flex" style={{ animation: 'footerTicker 38s linear infinite' }}>
+      <div className="inline-flex footer-ticker-inner">
         {[0, 1].map((i) => (
           <span
             key={i}
-            className="t-small font-medium text-fg-muted"
-            style={{ letterSpacing: '0.04em', opacity: 0.45, paddingRight: '2rem' }}
+            className="t-small font-medium text-fg-muted footer-ticker-text"
           >
             {text}
           </span>
@@ -70,7 +62,7 @@ export default function Footer() {
               with metrics, enable product scaling, infuse innovation and collaboration, and make a
               lasting impact?
             </p>
-            <h2 style={{ color: '#ea8575' }}>
+            <h2 style={{ color: 'var(--color-coral)' }}>
               Look no further. Get in touch.
             </h2>
           </motion.div>
@@ -81,55 +73,22 @@ export default function Footer() {
             {/* ── Purple card ── */}
             <motion.div
               variants={fadeUp}
-              className="relative overflow-hidden flex-[3] rounded-2xl"
-              style={{ background: '#4a2d7f', minHeight: 280 }}
+              className="relative overflow-hidden flex-[3] rounded-2xl footer-cta-purple"
             >
               {/* Gradient blob — lower-left, mix-blend-hard-light */}
-              <div
-                aria-hidden="true"
-                style={{
-                  position: 'absolute',
-                  left: -60, top: '60%',
-                  width: '80%', height: '130%',
-                  background: 'radial-gradient(ellipse at 30% 60%, rgba(139,92,246,0.55) 0%, rgba(72,57,202,0.25) 45%, transparent 70%)',
-                  mixBlendMode: 'hard-light',
-                  pointerEvents: 'none',
-                }}
-              />
+              <div aria-hidden="true" className="footer-cta-blob-purple" />
               {/* Pink blob — upper-right */}
-              <div
-                aria-hidden="true"
-                style={{
-                  position: 'absolute',
-                  right: -40, top: -50,
-                  width: '65%', height: '90%',
-                  background: 'radial-gradient(ellipse at 65% 25%, rgba(255,100,160,0.55) 0%, rgba(236,72,153,0.2) 40%, transparent 68%)',
-                  filter: 'blur(28px)',
-                  mixBlendMode: 'screen',
-                  pointerEvents: 'none',
-                }}
-              />
+              <div aria-hidden="true" className="footer-cta-blob-pink" />
 
               {/* Avatar — bottom-right */}
               {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src={IMG_AVATAR}
-                alt=""
-                aria-hidden="true"
-                loading="lazy"
-                style={{
-                  position: 'absolute', bottom: 0, right: 0,
-                  width: 'clamp(130px, 20vw, 222px)',
-                  height: 'clamp(130px, 20vw, 222px)',
-                  objectFit: 'contain', pointerEvents: 'none',
-                }}
-              />
+              <img src={IMG_AVATAR} alt="" aria-hidden="true" loading="lazy" className="footer-cta-avatar" />
               {/* Content — padding-based so it never overlaps on narrow screens */}
-              <div style={{ padding: '32px 32px 24px', paddingRight: 'clamp(32px, 22vw, 240px)' }}>
-                <p className="font-extrabold leading-tight mb-1.5" style={{ fontSize: 'clamp(22px, 3vw, 36px)', color: 'rgba(255,255,255,0.65)' }}>
+              <div className="footer-cta-content">
+                <p className="footer-cta-heading footer-cta-heading--muted">
                   Have an exciting project?
                 </p>
-                <p className="font-extrabold leading-tight mb-7" style={{ fontSize: 'clamp(22px, 3vw, 36px)', color: '#ffffff' }}>
+                <p className="footer-cta-heading footer-cta-heading--white">
                   Let&apos;s work together.
                 </p>
                 <a href="mailto:abhisxn@gmail.com" className="btn-card-dark">
@@ -141,21 +100,20 @@ export default function Footer() {
             {/* ── LinkedIn card ── */}
             <motion.div
               variants={fadeUp}
-              className="bg-white flex-[2] rounded-[10px] flex flex-col gap-4 p-6"
-              style={{ boxShadow: '0 0 2.3px rgba(0,0,0,0.15)' }}
+              className="bg-white flex-[2] rounded-[10px] flex flex-col gap-4 p-6 footer-li-card"
             >
-              {/* Top row: icon + logo */}
+              {/* Top row: avatar icon + LinkedIn logo */}
               <div className="flex items-start justify-between">
-                <div className="rounded-full p-3 flex items-center justify-center shrink-0" style={{ background: '#4a2d7f' }}>
+                <div className="rounded-full overflow-hidden shrink-0 footer-li-icon-wrap" style={{ width: 90, height: 90, padding: 10 }}>
                   {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img src={IMG_LI_ICON} alt="" aria-hidden="true" loading="lazy" className="w-[67px] h-[67px] object-contain" />
+                  <img src={IMG_AVATAR_ICON} alt="" aria-hidden="true" loading="lazy" className="w-full h-full object-cover" />
                 </div>
                 {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src={IMG_LI_LOGO} alt="LinkedIn" loading="lazy" style={{ height: 23, width: 95, objectFit: 'contain' }} />
+                <img src={IMG_LI_LOGO} alt="LinkedIn" loading="lazy" className="footer-li-logo" />
               </div>
               {/* Name + bio + button */}
               <div className="flex flex-col gap-3 flex-1">
-                <p className="font-extrabold text-black" style={{ fontSize: 'clamp(18px, 2vw, 23px)' }}>Abhishek Saxena</p>
+                <p className="footer-li-name">Abhishek Saxena</p>
                 <p className="t-body2 font-medium leading-relaxed text-black">
                   Design Guy, 12+ yrs of Product, UX &amp; Advertising, 35+ Awards, 2 GTM Startups. Senior Designer @ Microsoft
                 </p>
@@ -192,7 +150,6 @@ export default function Footer() {
               <Link href="/about" className="t-body2 text-fg-muted inline-block font-medium relative after:absolute after:left-0 after:-bottom-0.5 after:h-px after:w-0 after:bg-current after:transition-all after:duration-200 hover:after:w-full">☝ About</Link>
               <Link href="/work" className="t-body2 text-fg-muted inline-block font-medium relative after:absolute after:left-0 after:-bottom-0.5 after:h-px after:w-0 after:bg-current after:transition-all after:duration-200 hover:after:w-full">🎨 Work</Link>
               <Link href="/awards" className="t-body2 text-fg-muted inline-block font-medium relative after:absolute after:left-0 after:-bottom-0.5 after:h-px after:w-0 after:bg-current after:transition-all after:duration-200 hover:after:w-full">🏆 Awards</Link>
-              <Link href="/contact" className="t-body2 text-fg-muted inline-block font-medium relative after:absolute after:left-0 after:-bottom-0.5 after:h-px after:w-0 after:bg-current after:transition-all after:duration-200 hover:after:w-full">✉ Contact</Link>
             </motion.div>
 
             {/* Contact */}

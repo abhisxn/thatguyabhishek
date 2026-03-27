@@ -59,6 +59,12 @@ export default function RichText({ texts }) {
 
         const colorStyle = color && color !== 'default' ? COLOR_MAP[color] : undefined;
 
+        /* Split on Notion soft line breaks (\n) → <br /> */
+        const parts = content.split('\n');
+        const withBreaks = parts.flatMap((part, j) =>
+          j < parts.length - 1 ? [part, <br key={`br-${j}`} />] : [part]
+        );
+
         /* ── Inline link ── */
         if (item.href) {
           return (
@@ -70,7 +76,7 @@ export default function RichText({ texts }) {
               className={`underline underline-offset-2 hover:opacity-60 transition-opacity ${cls}`}
               style={colorStyle}
             >
-              {content}
+              {withBreaks}
             </a>
           );
         }
@@ -79,12 +85,12 @@ export default function RichText({ texts }) {
         if (cls || colorStyle) {
           return (
             <span key={i} className={cls || undefined} style={colorStyle}>
-              {content}
+              {withBreaks}
             </span>
           );
         }
 
-        return content;
+        return <span key={i}>{withBreaks}</span>;
       })}
     </>
   );

@@ -2,23 +2,10 @@
 
 import { motion } from 'framer-motion';
 import Button from '../ui/Button';
+import { fadeUp, stagger, vp } from '../../../lib/motion';
+import W from '../ui/W';
 
 const IMG_ABOUT = 'https://www.figma.com/api/mcp/asset/d989315b-c955-47c0-a71c-e226f71a8412';
-
-const fadeUp = {
-  hidden: { opacity: 0, y: 32 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: [0.22, 1, 0.36, 1] } },
-};
-const stagger = { hidden: {}, visible: { transition: { staggerChildren: 0.1 } } };
-const vp = { once: true, margin: '-80px' };
-
-function W({ children, className = '' }) {
-  return (
-    <div className={`max-w-[1200px] mx-auto px-6 sm:px-10 lg:px-16 ${className}`}>
-      {children}
-    </div>
-  );
-}
 
 export default function AboutSection() {
   return (
