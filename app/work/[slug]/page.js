@@ -1,3 +1,4 @@
+import { Suspense } from 'react';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import projectsJson from '../../../data/projects.json';
@@ -19,47 +20,60 @@ export const dynamicParams = true;
 
 const BASE_URL = 'https://thatguyabhishek.com';
 
+// ─── Metadata — reads from static JSON, always instant ───────────────────────
+
 export async function generateMetadata({ params }) {
   const { slug } = await params;
   const project = projectsJson.find((p) => p.slug === slug);
   if (!project) return {};
 
-  const title = project.title;
+  const title       = project.title;
   const description = project.desc || `A product design case study by Abhishek Saxena.`;
-  const url = `${BASE_URL}/work/${slug}`;
-  const image = project.cover || `${BASE_URL}/og-default.jpg`;
+  const url         = `${BASE_URL}/work/${slug}`;
+  const image       = project.cover || `${BASE_URL}/og-default.jpg`;
 
   return {
     title,
     description,
     alternates: { canonical: url },
     openGraph: {
-      type: 'article',
-      url,
-      title,
-      description,
+      type: 'article', url, title, description,
       images: [{ url: image, width: 1200, height: 630, alt: title }],
       authors: ['Abhishek Saxena'],
       tags: project.tags,
     },
-    twitter: {
-      card: 'summary_large_image',
-      title,
-      description,
-      images: [image],
-    },
+    twitter: { card: 'summary_large_image', title, description, images: [image] },
   };
 }
 
-async function resolveNotionId(slug) {
-  // Fast path: static JSON
-  const match = projectsJson.find((p) => p.slug === slug);
-  if (match) return match.id;
+// ─── Skeleton for the Suspense boundary ──────────────────────────────────────
 
-  // Fallback: live Notion query (new projects not yet synced to JSON)
-  const page = await findProjectBySlug(slug);
-  return page?.id ?? null;
+function ContentSkeleton() {
+  const pulse = 'animate-pulse rounded';
+  const bg    = { background: 'var(--surface)' };
+  return (
+    <>
+      {/* Banner placeholder */}
+      <W className="mb-0">
+        <div className={`${pulse} w-full rounded-2xl`} style={{ height: 420, ...bg }} />
+      </W>
+      {/* Content lines */}
+      <W className="py-16">
+        <div className="space-y-3">
+          {[100, 95, 88, 0, 100, 82, 91, 70, 0, 100, 78, 86].map((w, i) =>
+            w === 0 ? (
+              <div key={i} className="h-5" />
+            ) : (
+              <div key={i} className={`${pulse} h-4`} style={{ width: `${w}%`, ...bg }} />
+            )
+          )}
+        </div>
+      </W>
+    </>
+  );
 }
+
+// ─── Small UI atoms ──────────────────────────────────────────────────────────
 
 function BackArrow() {
   return (
@@ -88,15 +102,16 @@ function Tag({ label }) {
   );
 }
 
-export default async function ProjectPage({ params }) {
-  const { slug } = await params;
-  const notionId = await resolveNotionId(slug);
+// ─── ProjectContent — async, streams in via Suspense ─────────────────────────
+// Everything that requires a Notion API call lives here.
 
+async function ProjectContent({ slug, projectJson }) {
+  // Fast path: ID from static JSON. Fallback: live Notion query for new projects.
+  const notionId = projectJson?.id ?? (await findProjectBySlug(slug))?.id;
   if (!notionId) notFound();
 
   let data  = null;
   let error = null;
-
   try {
     data = await getProjectPageData(notionId);
   } catch (err) {
@@ -105,17 +120,9 @@ export default async function ProjectPage({ params }) {
 
   if (error) {
     return (
-      <>
-        <GradientBackground />
-        <main className="relative min-h-screen pt-32 pb-24" style={{ color: 'var(--fg)', zIndex: 1 }}>
-          <W className="pt-8">
-            <Link href="/work" className="inline-flex items-center gap-1.5 t-caption font-medium text-fg-muted hover:text-fg transition-colors mb-10">
-              <BackArrow /> Back to Work
-            </Link>
-            <p className="t-body2 text-fg-muted">Could not load project: {error}</p>
-          </W>
-        </main>
-      </>
+      <W className="py-20">
+        <p className="t-body2 text-fg-muted">Could not load project content: {error}</p>
+      </W>
     );
   }
 
@@ -124,115 +131,131 @@ export default async function ProjectPage({ params }) {
   const heroImageBlock = blocks[0]?.type === 'image' ? blocks[0] : null;
   const contentBlocks  = heroImageBlock ? blocks.slice(1) : blocks;
 
-  const heroBannerUrl = heroImageBlock
+  const bannerUrl = heroImageBlock
     ? (heroImageBlock.image?.type === 'external'
         ? heroImageBlock.image.external.url
         : heroImageBlock.image?.file?.url)
     : meta.cover;
 
-  const projectJsonLd = {
-    '@context': 'https://schema.org',
-    '@type': 'CreativeWork',
-    name: meta.title,
-    description: meta.desc || undefined,
-    url: `${BASE_URL}/work/${slug}`,
-    image: heroBannerUrl || undefined,
-    author: {
-      '@type': 'Person',
-      name: 'Abhishek Saxena',
-      url: BASE_URL,
-    },
-    keywords: meta.tags?.join(', ') || undefined,
-    dateModified: meta.lastEdited || undefined,
-  };
-
   return (
     <>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(projectJsonLd) }}
-      />
-      <GradientBackground />
-      <main className="relative min-h-screen" style={{ color: 'var(--fg)', zIndex: 1 }}>
-
-        {/* ── Back nav ── */}
-        <W className="pt-24 pb-0">
-          <Link href="/work" className="inline-flex items-center gap-1.5 t-caption font-medium text-fg-muted hover:text-fg transition-colors">
-            <BackArrow /> Back to Work
-          </Link>
+      {/* Banner image — authoritative from Notion */}
+      {bannerUrl && (
+        <W className="mb-0">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src={bannerUrl}
+            alt={projectJson?.title ?? meta.title}
+            className="w-full rounded-2xl object-cover"
+            style={{ maxHeight: 560 }}
+            loading="eager"
+          />
         </W>
+      )}
 
-        {/* ── Hero ── */}
-        <W className="pt-8 pb-12">
-          {meta.tags.length > 0 && (
-            <div className="flex flex-wrap gap-2 mb-5">
-              {meta.tags.map((tag) => <Tag key={tag} label={tag} />)}
-            </div>
-          )}
-
-          <h1 className="t-display mb-5">
-            {meta.title}
-          </h1>
-
-          {meta.desc && (
-            <p className="t-body1 text-fg-muted leading-relaxed mb-8">
-              {meta.desc}
-            </p>
-          )}
-
-          {meta.url && (
+      {/* Content blocks */}
+      <DevBlockMap blocks={blocks} childrenMap={childrenMap} />
+      {contentBlocks.length > 0 ? (
+        <SectionedBlocks blocks={contentBlocks} childrenMap={childrenMap} />
+      ) : (
+        <W className="py-20">
+          <div
+            className="flex flex-col items-center gap-5 py-20 text-center rounded-2xl"
+            style={{ background: 'var(--surface)', border: '1px solid var(--border)' }}
+          >
+            <p className="t-body1 text-fg-muted">Full case study lives on Notion.</p>
             <a
-              href={meta.url}
+              href={meta.notionUrl}
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center gap-2 t-body3 font-semibold px-5 py-2.5 rounded-full border-2 transition-colors duration-200 hover:bg-[#4839ca] hover:text-white"
               style={{ borderColor: '#4839ca', color: '#4839ca' }}
             >
-              View Live Project <ArrowRight />
+              Read on Notion <ArrowRight />
             </a>
-          )}
+          </div>
+        </W>
+      )}
+    </>
+  );
+}
+
+// ─── Page — renders hero instantly, streams content ───────────────────────────
+
+export default async function ProjectPage({ params }) {
+  const { slug }   = await params;
+  const project    = projectsJson.find((p) => p.slug === slug);
+  // Unknown slug? ProjectContent will try Notion and call notFound() if absent.
+
+  // JSON-LD from static data — no Notion needed
+  const projectJsonLd = project ? {
+    '@context': 'https://schema.org',
+    '@type':    'CreativeWork',
+    name:        project.title,
+    description: project.desc || undefined,
+    url:         `${BASE_URL}/work/${slug}`,
+    image:       project.cover || `${BASE_URL}/og-default.jpg`,
+    author:      { '@type': 'Person', name: 'Abhishek Saxena', url: BASE_URL },
+    keywords:    project.tags?.join(', ') || undefined,
+  } : null;
+
+  return (
+    <>
+      {projectJsonLd && (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(projectJsonLd) }}
+        />
+      )}
+      <GradientBackground />
+      <main className="relative min-h-screen" style={{ color: 'var(--fg)', zIndex: 1 }}>
+
+        {/* ── Back nav — instant ── */}
+        <W className="pt-24 pb-0">
+          <Link
+            href="/work"
+            className="inline-flex items-center gap-1.5 t-caption font-medium text-fg-muted hover:text-fg transition-colors"
+          >
+            <BackArrow /> Back to Work
+          </Link>
         </W>
 
-        {/* ── Hero banner ── */}
-        {heroBannerUrl && (
-          <W className="mb-0">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              src={heroBannerUrl}
-              alt={meta.title}
-              className="w-full rounded-2xl object-cover"
-              style={{ maxHeight: 560 }}
-              loading="eager"
-            />
-          </W>
-        )}
+        {/* ── Hero — instant, from static JSON ── */}
+        {project && (
+          <W className="pt-8 pb-12">
+            {project.tags?.length > 0 && (
+              <div className="flex flex-wrap gap-2 mb-5">
+                {project.tags.map((tag) => <Tag key={tag} label={tag} />)}
+              </div>
+            )}
 
-        {/* ── Sectioned content ── */}
-        <DevBlockMap blocks={blocks} childrenMap={childrenMap} />
-        {contentBlocks.length > 0 ? (
-          <SectionedBlocks blocks={contentBlocks} childrenMap={childrenMap} />
-        ) : (
-          <W className="py-20">
-            <div
-              className="flex flex-col items-center gap-5 py-20 text-center rounded-2xl"
-              style={{ background: 'var(--surface)', border: '1px solid var(--border)' }}
-            >
-              <p className="t-body1 text-fg-muted">Full case study lives on Notion.</p>
+            <h1 className="t-display mb-5">{project.title}</h1>
+
+            {project.desc && (
+              <p className="t-body1 text-fg-muted leading-relaxed mb-8">{project.desc}</p>
+            )}
+
+            {project.url && (
               <a
-                href={meta.notionUrl}
+                href={project.url}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center gap-2 t-body3 font-semibold px-5 py-2.5 rounded-full border-2 transition-colors duration-200 hover:bg-[#4839ca] hover:text-white"
                 style={{ borderColor: '#4839ca', color: '#4839ca' }}
               >
-                Read on Notion <ArrowRight />
+                View Live Project <ArrowRight />
               </a>
-            </div>
+            )}
           </W>
         )}
 
-        {/* ── More projects grid ── */}
-        {projectsJson.filter((p) => p.slug !== slug).length > 0 && (
+        {/* ── Banner + content — streams from Notion ── */}
+        <Suspense fallback={<ContentSkeleton />}>
+          <ProjectContent slug={slug} projectJson={project} />
+        </Suspense>
+
+        {/* ── More projects — instant, from static JSON ── */}
+        {project && projectsJson.filter((p) => p.slug !== slug).length > 0 && (
           <W className="py-16 mt-4">
             <ProjectsExpandableGrid
               projects={projectsJson}
@@ -243,7 +266,7 @@ export default async function ProjectPage({ params }) {
           </W>
         )}
 
-        {/* ── Footer CTA ── */}
+        {/* ── Footer CTA — instant ── */}
         <W className="py-16 border-t border-theme mt-4">
           <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6">
             <div>
