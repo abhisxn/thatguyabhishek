@@ -12,12 +12,12 @@ import DevBlockMap from '../../components/dev/DevBlockMap';
 // ISR: revalidate every hour — Notion signed image URLs expire after ~1 hour
 export const revalidate = 3600;
 
-const BASE_URL = 'https://thatguyabhishek.com';
+// Do not pre-render at build time — pages render on first request then cache.
+// generateStaticParams + recursive Notion fetches exceed Vercel's 60s build
+// per-page limit. ISR via unstable_cache handles caching after first visit.
+export const dynamicParams = true;
 
-// Pre-render all known project pages at build time
-export function generateStaticParams() {
-  return projectsJson.map((p) => ({ slug: p.slug }));
-}
+const BASE_URL = 'https://thatguyabhishek.com';
 
 export async function generateMetadata({ params }) {
   const { slug } = await params;
