@@ -5,7 +5,7 @@ import Button from '../ui/Button';
 import { fadeUp, stagger, vp } from '../../../lib/motion';
 import W from '../ui/W';
 
-const IMG_HELP = 'https://www.figma.com/api/mcp/asset/9135e33d-8392-4d59-bc28-3283a502d512';
+const IMG_HELP = '/help-photo.jpg';
 
 export default function HelpSection() {
   return (

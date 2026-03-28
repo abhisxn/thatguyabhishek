@@ -5,7 +5,7 @@ import Button from '../ui/Button';
 import { fadeUp, stagger, vp } from '../../../lib/motion';
 import W from '../ui/W';
 
-const IMG_ABOUT = 'https://www.figma.com/api/mcp/asset/d989315b-c955-47c0-a71c-e226f71a8412';
+const IMG_ABOUT = '/about-photo.jpg';
 
 export default function AboutSection() {
   return (
