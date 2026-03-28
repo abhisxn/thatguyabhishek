@@ -19,6 +19,12 @@ function findRichTextUrl(richText) {
   return richText?.find((t) => t.href)?.href ?? null;
 }
 
+/** Extracts a Notion page ID from a page-mention (@-link) in a rich_text array. */
+function findPageMentionId(richText) {
+  const item = richText?.find((t) => t.type === 'mention' && t.mention?.type === 'page');
+  return item?.mention?.page?.id?.replace(/-/g, '') ?? null;
+}
+
 /** Returns Wrapper component and props for an optional link. */
 function useLinkProps(linkUrl, isExternal) {
   if (!linkUrl) return { Wrapper: 'div', wrapperProps: {} };
@@ -40,7 +46,8 @@ function extractNotionPageId(url) {
  *  1. Inline hyperlink in the callout's own rich_text
  *  2. Button child block  (action.url → url → rich_text href)
  *  3. Bookmark / link_preview / embed child block
- *  4. Hyperlink inside a paragraph child block
+ *  4. Hyperlink inside a heading child block (common Notion card pattern)
+ *  5. Hyperlink inside a paragraph child block
  *
  * Used by feature, default, and card renderers to make the entire block clickable.
  */
@@ -55,6 +62,10 @@ function extractCalloutUrl(calloutTexts, children) {
     if (b.type === 'bookmark'     && b.bookmark?.url)     return b.bookmark.url;
     if (b.type === 'link_preview' && b.link_preview?.url) return b.link_preview.url;
     if (b.type === 'embed'        && b.embed?.url)        return b.embed.url;
+    if (b.type === 'heading_1' || b.type === 'heading_2' || b.type === 'heading_3') {
+      const url = findRichTextUrl(b[b.type]?.rich_text);
+      if (url) return url;
+    }
     if (b.type === 'paragraph') {
       const url = findRichTextUrl(b.paragraph?.rich_text);
       if (url) return url;
@@ -337,11 +348,16 @@ export default function CalloutBlock({ block, childrenMap, contentSlot, hrefOver
     const notionUrl        = linkUrl;
     const isInternalNotion = /^https?:\/\/(www\.)?notion\.so\//.test(notionUrl ?? '');
     const notionPageId     = isInternalNotion ? extractNotionPageId(notionUrl) : null;
+    // Page mention (@-link) fallback — covers cases where the heading or callout title
+    // uses a Notion page mention instead of a regular hyperlink (no href, only mention.page.id)
+    const mentionId        = findPageMentionId(texts) ?? findPageMentionId(headingTexts) ?? null;
     const matchedProject   = notionPageId
       ? projectsJson.find((p) => p.id.replace(/-/g, '') === notionPageId)
-      : calloutSlug
-        ? projectsJson.find((p) => p.slug === calloutSlug || (p.calloutSlugs ?? []).includes(calloutSlug))
-        : null;
+      : mentionId
+        ? projectsJson.find((p) => p.id.replace(/-/g, '') === mentionId)
+        : calloutSlug
+          ? projectsJson.find((p) => p.slug === calloutSlug || (p.calloutSlugs ?? []).includes(calloutSlug))
+          : null;
 
     let href = hrefOverride;
     if (!href && matchedProject)                 href = `/work/${matchedProject.slug}`;
