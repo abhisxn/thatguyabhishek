@@ -1,9 +1,29 @@
 [
   {
+    "id": "330848f1-3d34-813b-bb66-e61704fb86ba",
+    "title": "Watchlyst — Founder's Case Study",
+    "slug": "watchlyst-founder-s-case-study",
+    "desc": "A comprehensive case study covering 0-to-1 product design, CMS architecture, growth strategy, traction, and an honest postmortem of what went wrong. Built 2016–2018.",
+    "summary": "How I built India's first cross-platform entertainment discovery app, reached 50K users with zero paid marketing, secured $40K from Facebook Accelerator — and why we still failed. A founder's autopsy.",
+    "status": "",
+    "tags": [
+      "Startup",
+      "Strategy",
+      "UX",
+      "Product Design",
+      "Case Studies"
+    ],
+    "cover": "/api/notion-image?id=330848f1-3d34-813b-bb66-e61704fb86ba",
+    "url": "",
+    "featured": true,
+    "order": 1,
+    "notionUrl": "https://www.notion.so/Watchlyst-Founder-s-Case-Study-330848f13d34813bbb66e61704fb86ba",
+    "lastEdited": "2026-03-27T20:43:00.000Z"
+  },
+  {
     "id": "25a848f1-3d34-80b9-9b39-cb86d9d4c2e5",
     "title": "Microsoft: Copilot Excel Wiki Agent",
     "slug": "microsoft-copilot-excel-wiki-agent",
-    "calloutSlugs": ["microsoft-copilot-excel-wiki-agent"],
     "desc": "Built an AI knowledge agent on SharePoint giving Excel designers instant, cited answers on craft, process, accessibility, and handoffs. Cut onboarding by 40%, saved 3hrs/week per designer, and hit 87% query resolution with 90% team adoption in a 4-week pilot.",
     "summary": "AI knowledge assistant cutting designer onboarding by 40% and saving 3hrs/week per designer.",
     "status": "",
@@ -20,14 +40,13 @@
     "featured": true,
     "order": 1,
     "notionUrl": "https://www.notion.so/Microsoft-Copilot-Excel-Wiki-Agent-25a848f13d3480b99b39cb86d9d4c2e5",
-    "lastEdited": "2026-03-21T16:45:00.000Z"
+    "lastEdited": "2026-03-25T16:53:00.000Z"
   },
   {
     "id": "2c6848f1-3d34-8081-a2dd-db89cb8103da",
     "title": "Excel Charting : AI-Powered Chart Design Recommendations",
     "slug": "excel-charting-ai-powered-chart-design-recommendations",
-    "calloutSlugs": ["microsoft-ai-powered-chart-design-recommendations"],
-    "desc": "Designed a Copilot feature that analyzes data shape, infers user intent, and recommends optimal chart configs with story-first titles like \u201cQuarterly Trends.\u201d Collaborated with ML engineers on RAG model tuning, eliminating chart type decision fatigue and making great visualizations accessible to all.",
+    "desc": "Designed a Copilot feature that analyzes data shape, infers user intent, and recommends optimal chart configs with story-first titles like “Quarterly Trends.” Collaborated with ML engineers on RAG model tuning, eliminating chart type decision fatigue and making great visualizations accessible to all.",
     "summary": "LLM-powered chart suggestions auto-surfacing 4 story-first options on every chart insert.",
     "status": "",
     "tags": [
@@ -43,14 +62,13 @@
     "featured": true,
     "order": 2,
     "notionUrl": "https://www.notion.so/Excel-Charting-AI-Powered-Chart-Design-Recommendations-2c6848f13d348081a2dddb89cb8103da",
-    "lastEdited": "2026-03-21T16:45:00.000Z"
+    "lastEdited": "2026-03-25T18:35:00.000Z"
   },
   {
     "id": "2c6848f1-3d34-8066-8d7e-e8b2e7112910",
     "title": "Excel Charting : AI-Powered Chart Insights",
     "slug": "excel-charting-ai-powered-chart-insights",
-    "calloutSlugs": ["microsoft-ai-powered-insights-on-chart-insert"],
-    "desc": "Designed an AI system that surfaces trends, anomalies, and comparisons the moment a chart is inserted in Excel. Increased chart retention by 15%, validated Copilot\u2019s value for non-coders, and repositioned Excel as an analytical assistant\u2014not just a calculation tool\u2014with 65% positive sentiment.",
+    "desc": "Designed an AI system that surfaces trends, anomalies, and comparisons the moment a chart is inserted in Excel. Increased chart retention by 15%, validated Copilot’s value for non-coders, and repositioned Excel as an analytical assistant—not just a calculation tool—with 65% positive sentiment.",
     "summary": "Copilot feature surfacing auto-generated chart insights, boosting chart retention by 15%.",
     "status": "",
     "tags": [
@@ -66,14 +84,14 @@
     "featured": true,
     "order": 3,
     "notionUrl": "https://www.notion.so/Excel-Charting-AI-Powered-Chart-Insights-2c6848f13d3480668d7ee8b2e7112910",
-    "lastEdited": "2026-03-21T16:46:00.000Z"
+    "lastEdited": "2026-03-27T06:52:00.000Z"
   },
   {
     "id": "2c6848f1-3d34-80ba-a3b8-db6bc3ecef5c",
     "title": "Smarter Chart Defaults: The Modern Colors Revolution",
     "slug": "smarter-chart-defaults-the-modern-colors-revolution",
-    "desc": "40% of users immediately changed chart colors post-insert\u2014a clear signal defaults were broken. Championed a modernized palette shipped in 8 weeks that achieved 96% acceptance, eliminated first-touch friction, and became the visual foundation for all AI-powered charting features in FY25.",
-    "summary": "Modernized Excel\u2019s default chart palette\u201496% acceptance, highest design ROI in FY25.",
+    "desc": "40% of users immediately changed chart colors post-insert—a clear signal defaults were broken. Championed a modernized palette shipped in 8 weeks that achieved 96% acceptance, eliminated first-touch friction, and became the visual foundation for all AI-powered charting features in FY25.",
+    "summary": "Modernized Excel's default chart palette—96% acceptance, highest design ROI in FY25.",
     "status": "",
     "tags": [
       "UX",
@@ -86,14 +104,14 @@
     "featured": false,
     "order": 4,
     "notionUrl": "https://www.notion.so/Smarter-Chart-Defaults-The-Modern-Colors-Revolution-2c6848f13d3480baa3b8db6bc3ecef5c",
-    "lastEdited": "2026-03-21T16:48:00.000Z"
+    "lastEdited": "2026-03-27T06:44:00.000Z"
   },
   {
     "id": "306848f1-3d34-80e8-825b-da5a6536e891",
     "title": "Excel Data Visualisation: The Strategy Behind the Roadmap",
     "slug": "excel-data-visualisation-the-strategy-behind-the-roadmap",
-    "desc": "Led 4 parallel research tracks\u2014experience audit, 30+ app competitive study, user feedback synthesis, and telemetry analysis\u2014to build a prioritized roadmap. Reframed chart drop-off from UX issue to adoption crisis, forming the strategic foundation for every charting feature shipped.",
-    "summary": "Research-led strategy reframing Excel\u2019s 98% chart drop-off as a product adoption crisis.",
+    "desc": "Led 4 parallel research tracks—experience audit, 30+ app competitive study, user feedback synthesis, and telemetry analysis—to build a prioritized roadmap. Reframed chart drop-off from UX issue to adoption crisis, forming the strategic foundation for every charting feature shipped.",
+    "summary": "Research-led strategy reframing Excel's 98% chart drop-off as a product adoption crisis.",
     "status": "",
     "tags": [
       "Product Design",
@@ -107,15 +125,14 @@
     "featured": true,
     "order": 5,
     "notionUrl": "https://www.notion.so/Excel-Data-Visualisation-The-Strategy-Behind-the-Roadmap-306848f13d3480e8825bda5a6536e891",
-    "lastEdited": "2026-03-21T16:47:00.000Z"
+    "lastEdited": "2026-03-22T20:47:00.000Z"
   },
   {
     "id": "ccd66a99-2348-4b8c-bc56-0b8943b272ed",
     "title": "Airtel Thanks 2.0: Redesigning Airtel Thanks Program",
     "slug": "airtel-thanks-2-0-redesigning-airtel-thanks-program",
-    "calloutSlugs": ["airtel-thanks-2-0-redesigning-airtel-thanks-program"],
-    "desc": "Led UX of Airtel Thanks 2.0\u2014a complex rewards and tier program simplified into an intuitive super app. Navigated competing priorities across services and content, established a dedicated growth design function, and delivered a 6% MAU engagement lift across 100M+ active users post-launch.",
-    "summary": "Redesigned India\u2019s telecom loyalty super-app for 100M+ users. Zero critical incidents at launch.",
+    "desc": "Led UX of Airtel Thanks 2.0—a complex rewards and tier program simplified into an intuitive super app. Navigated competing priorities across services and content, established a dedicated growth design function, and delivered a 6% MAU engagement lift across 100M+ active users post-launch.",
+    "summary": "Redesigned India's telecom loyalty super-app for 100M+ users. Zero critical incidents at launch.",
     "status": "",
     "tags": [
       "UX",
@@ -127,15 +144,14 @@
     "featured": true,
     "order": 6,
     "notionUrl": "https://www.notion.so/Airtel-Thanks-2-0-Redesigning-Airtel-Thanks-Program-ccd66a9923484b8cbc560b8943b272ed",
-    "lastEdited": "2026-03-21T16:48:00.000Z"
+    "lastEdited": "2026-03-27T14:30:00.000Z"
   },
   {
     "id": "89c5d9fb-c65c-48b6-ac6f-9ae4f9979f76",
     "title": "ThinkPlanty.com: Idea, Product & Strategy",
     "slug": "thinkplanty-com-idea-product-strategy",
-    "calloutSlugs": ["planty-the-brand-product-and-strategy"],
-    "desc": "Built an end-to-end D2C plant e-commerce brand from idea to execution\u2014brand identity, UX, and automated fulfillment. Grew a traditionally offline category digitally, crossing 1000+ orders with 85% customer retention and 4% MoM growth through obsessive post-purchase experience design.",
-    "summary": "Online plant gifting startup\u20141000+ orders, 85% retention, 4% MoM growth from zero.",
+    "desc": "Built an end-to-end D2C plant e-commerce brand from idea to execution—brand identity, UX, and automated fulfillment. Grew a traditionally offline category digitally, crossing 1000+ orders with 85% customer retention and 4% MoM growth through obsessive post-purchase experience design.",
+    "summary": "Online plant gifting startup—1000+ orders, 85% retention, 4% MoM growth from zero.",
     "status": "",
     "tags": [
       "Startup",
@@ -148,36 +164,14 @@
     "featured": true,
     "order": 7,
     "notionUrl": "https://www.notion.so/ThinkPlanty-com-Idea-Product-Strategy-89c5d9fbc65c48b6ac6f9ae4f9979f76",
-    "lastEdited": "2026-03-21T16:48:00.000Z"
-  },
-  {
-    "id": "c7e9f615-209e-40f6-a75c-3296fe25b471",
-    "title": "Watchlyst App: Idea, Product & Strategy",
-    "slug": "watchlyst-app-idea-product-strategy",
-    "calloutSlugs": ["watchlyst-app"],
-    "desc": "Solved the paradox of choice in entertainment by aggregating OTT, TV, and live venues into one personalized watchlist app. Reached 50K downloads organically, secured $40K from Facebook Accelerator, achieved 2.5-min average sessions\u201410x industry standard\u2014and grew an 8K+ Instagram community.",
-    "summary": "Entertainment discovery app\u201450K downloads, $40K from Facebook Accelerator, zero paid marketing.",
-    "status": "",
-    "tags": [
-      "Startup",
-      "Strategy",
-      "UX",
-      "Product Design"
-    ],
-    "cover": "/api/notion-image?id=c7e9f615-209e-40f6-a75c-3296fe25b471",
-    "url": "",
-    "featured": true,
-    "order": 8,
-    "notionUrl": "https://www.notion.so/Watchlyst-App-Idea-Product-Strategy-c7e9f615209e40f6a75c3296fe25b471",
-    "lastEdited": "2026-03-21T16:48:00.000Z"
+    "lastEdited": "2026-03-27T15:00:00.000Z"
   },
   {
     "id": "7f8e052e-9145-45ce-84d2-855eeaf95d9e",
     "title": "GrowthX Capstone: Hotjar Case Study",
     "slug": "growthx-capstone-hotjar-case-study",
-    "calloutSlugs": ["growthx-hotjar-capstone-project"],
-    "desc": "GrowthX capstone applying growth frameworks to Hotjar\u2019s acquisition and retention funnel. Led a team of 7 to identify growth levers, structure experiments, and build a GTM hypothesis backed by user research, funnel analytics, and north star metric alignment over 8 intensive weeks.",
-    "summary": "8-week growth bootcamp capstone\u2014team of 7 solving Hotjar\u2019s real acquisition and retention gaps.",
+    "desc": "GrowthX capstone applying growth frameworks to Hotjar’s acquisition and retention funnel. Led a team of 7 to identify growth levers, structure experiments, and build a GTM hypothesis backed by user research, funnel analytics, and north star metric alignment over 8 intensive weeks.",
+    "summary": "8-week growth bootcamp capstone—team of 7 solving Hotjar's real acquisition and retention gaps.",
     "status": "",
     "tags": [
       "Bootcamp",
@@ -195,9 +189,8 @@
     "id": "9b46c73c-33a8-4f4e-96cc-4100cb4036f6",
     "title": "GoodWorker: Design System & Tokens",
     "slug": "goodworker-design-system-tokens",
-    "calloutSlugs": ["goodworker-design-guide-system-and-tokens"],
     "desc": "As Design Manager at GoodWorker (Temasek JV), established design coherence across Worker and Employer apps by building a token-based system from zero. Created shared components, documentation, and processes that reduced design inconsistency and cut time-to-hire by 25%.",
-    "summary": "Built a scalable token-based design system from scratch for India\u2019s blue-collar recruitment platform.",
+    "summary": "Built a scalable token-based design system from scratch for India's blue-collar recruitment platform.",
     "status": "",
     "tags": [
       "UX",
@@ -209,15 +202,14 @@
     "featured": false,
     "order": 10,
     "notionUrl": "https://www.notion.so/GoodWorker-Design-System-Tokens-9b46c73c33a84f4e96cc4100cb4036f6",
-    "lastEdited": "2026-03-21T16:49:00.000Z"
+    "lastEdited": "2026-03-27T18:45:00.000Z"
   },
   {
     "id": "4849631f-71ee-4504-9533-c55bd315ab65",
     "title": "GrowthX Bootcamp Case Studies",
     "slug": "growthx-bootcamp-case-studies",
-    "calloutSlugs": ["growthx-case-studies"],
-    "desc": "Weekly assignments from GrowthX\u2019s product growth program covering acquisition, activation, retention, and revenue levers. Practiced growth thinking across real Indian startups using data-driven frameworks, user segmentation, funnel design, and growth model construction throughout the cohort.",
-    "summary": "8-week product growth bootcamp\u2014applying acquisition, retention, and revenue frameworks hands-on.",
+    "desc": "Weekly assignments from GrowthX’s product growth program covering acquisition, activation, retention, and revenue levers. Practiced growth thinking across real Indian startups using data-driven frameworks, user segmentation, funnel design, and growth model construction throughout the cohort.",
+    "summary": "8-week product growth bootcamp—applying acquisition, retention, and revenue frameworks hands-on.",
     "status": "",
     "tags": [
       "Strategy",

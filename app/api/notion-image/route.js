@@ -34,16 +34,27 @@ async function getCoverUrl(pageId) {
   return null;
 }
 
+async function getBlockFileUrl(blockId) {
+  const block = await notion.blocks.retrieve({ block_id: blockId });
+  const type = block.type;
+  const data = block[type];
+  if (data?.type === 'file')     return data.file.url;
+  if (data?.type === 'external') return data.external.url;
+  return null;
+}
+
 export async function GET(request) {
   const { searchParams } = new URL(request.url);
-  const id = searchParams.get('id');
-  if (!id) return new Response('Missing id', { status: 400 });
+  const blockId = searchParams.get('block_id');
+  const id      = searchParams.get('id');
+
+  if (!blockId && !id) return new Response('Missing id or block_id', { status: 400 });
 
   try {
-    const url = await getCoverUrl(id);
-    if (!url) return new Response('No cover found', { status: 404 });
+    const url = blockId ? await getBlockFileUrl(blockId) : await getCoverUrl(id);
+    if (!url) return new Response('No image found', { status: 404 });
     return NextResponse.redirect(url, 307);
   } catch {
-    return new Response('Failed to fetch cover', { status: 500 });
+    return new Response('Failed to fetch image', { status: 500 });
   }
 }

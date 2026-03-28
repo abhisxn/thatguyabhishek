@@ -4,7 +4,8 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
+    "dev:sync": "node scripts/notion-sync.js",
+    "build": "node scripts/notion-sync.js && next build",
     "start": "next start",
     "lint": "eslint",
     "test": "vitest run",

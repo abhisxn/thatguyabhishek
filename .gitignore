@@ -33,6 +33,9 @@ yarn-error.log*
 # env files (can opt-in for committing if needed)
 .env*
 
+# Auto-generated at build time by notion-sync.js — do not commit
+data/pages.json
+
 # vercel
 .vercel
 
