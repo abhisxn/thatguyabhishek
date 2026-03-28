@@ -346,8 +346,10 @@ export default function CalloutBlock({ block, childrenMap, contentSlot, hrefOver
     const title        = texts.map((t) => t.plain_text).join('') || headingTexts.map((t) => t.plain_text).join('') || null;
     const calloutSlug      = title ? slugify(title) : null;
     const notionUrl        = linkUrl;
-    const isInternalNotion = /^https?:\/\/(www\.)?notion\.so\//.test(notionUrl ?? '');
-    const notionPageId     = isInternalNotion ? extractNotionPageId(notionUrl) : null;
+    // extractNotionPageId handles both absolute (https://notion.so/...) and
+    // relative (/abc123...) URLs — Notion returns relative paths for internal page links
+    const notionPageId     = extractNotionPageId(notionUrl);
+    const isInternalNotion = !!(notionPageId || /^https?:\/\/(www\.)?notion\.so\//.test(notionUrl ?? ''));
     // Page mention (@-link) fallback — covers cases where the heading or callout title
     // uses a Notion page mention instead of a regular hyperlink (no href, only mention.page.id)
     const mentionId        = findPageMentionId(texts) ?? findPageMentionId(headingTexts) ?? null;
