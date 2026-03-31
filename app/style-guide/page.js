@@ -1,8 +1,14 @@
+'use client';
+
+import { useState } from 'react';
+import { motion, useSpring } from 'framer-motion';
 import { SECTION_STYLES } from '@/lib/section-styles';
 import Card from '../components/ui/Card';
 import Button from '../components/ui/Button';
 import Badge from '../components/ui/Badge';
 import Tag, { TAG_PALETTE } from '../components/ui/Tag';
+import { Input, Textarea } from '../components/ui/Input';
+import Select from '../components/ui/Select';
 import { CARD_SIZES, CARD_STYLES } from '../components/ui/card-utils';
 import StyleNav from '../components/ui/StyleNav';
 
@@ -37,7 +43,7 @@ function Code({ children }) {
 /* ── Colour swatch ───────────────────────────────────────────── */
 function Swatch({ label, value, border }) {
   return (
-    <div className="flex flex-col gap-1.5">
+    <div className="flex flex-col gap-2">
       <div className="h-14 rounded-xl" style={{ background: value, border: border || '1px solid var(--border)' }} />
       <p className="t-caption font-mono" style={{ color: 'var(--fg)' }}>{label}</p>
       <p className="t-caption font-mono opacity-50" style={{ color: 'var(--fg-muted)' }}>{value}</p>
@@ -47,6 +53,71 @@ function Swatch({ label, value, border }) {
 
 const PLACEHOLDER_IMG = 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="600" height="400"><defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="%234839ca"/><stop offset="1" stop-color="%230b1f3a"/></linearGradient></defs><rect width="600" height="400" fill="url(%23g)"/><text x="50%25" y="50%25" text-anchor="middle" dominant-baseline="middle" fill="rgba(255,255,255,0.3)" font-size="18" font-family="sans-serif">cover image</text></svg>';
 
+/* ── Card hover interaction demos ────────────────────────────── */
+const STROKE_RING_STYLE = {
+  position: 'absolute', inset: 0, borderRadius: 'inherit',
+  border: '1px solid color-mix(in srgb, var(--fg) 50%, transparent)',
+  pointerEvents: 'none',
+};
+
+function StrokeDemoCard({ label, children }) {
+  const strokeOpacity = useSpring(0.2, { stiffness: 160, damping: 24 });
+  return (
+    <div className="flex flex-col gap-2">
+      <Label>{label}</Label>
+      <div
+        style={{ position: 'relative', borderRadius: 16, padding: '20px 22px', background: 'var(--surface)', cursor: 'default' }}
+        onMouseEnter={() => strokeOpacity.set(0.7)}
+        onMouseLeave={() => strokeOpacity.set(0.2)}
+      >
+        <motion.div style={{ ...STROKE_RING_STYLE, opacity: strokeOpacity }} />
+        {children}
+      </div>
+    </div>
+  );
+}
+
+function WritingDemoCard() {
+  const [isHov, setIsHov] = useState(false);
+  const strokeOpacity = useSpring(0.2, { stiffness: 160, damping: 24 });
+  return (
+    <div className="flex flex-col gap-2">
+      <Label>WritingCard — lift + emoji scale + spring stroke</Label>
+      <a
+        href="#"
+        onClick={e => e.preventDefault()}
+        className="no-underline flex flex-col gap-3"
+        style={{
+          position: 'relative', borderRadius: 16, padding: '20px 22px',
+          background: 'var(--surface)', display: 'flex',
+          transform: isHov ? 'translateY(-4px)' : 'translateY(0)',
+          boxShadow: isHov ? 'var(--shadow-md)' : 'none',
+          transition: 'transform 0.3s cubic-bezier(0.22,1,0.36,1), box-shadow 0.3s ease',
+          cursor: 'default',
+        }}
+        onMouseEnter={() => { setIsHov(true); strokeOpacity.set(0.7); }}
+        onMouseLeave={() => { setIsHov(false); strokeOpacity.set(0.2); }}
+      >
+        <motion.div style={{ ...STROKE_RING_STYLE, opacity: strokeOpacity }} />
+        <motion.span
+          animate={{ scale: isHov ? 1.15 : 1 }}
+          transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
+          style={{ fontSize: 24, lineHeight: 1, display: 'inline-block', transformOrigin: 'left center' }}
+        >✍️</motion.span>
+        <p className="t-body2 font-semibold text-fg" style={{ margin: 0, lineHeight: 1.4 }}>Why designers should learn to say no</p>
+        <p className="t-caption text-fg-muted" style={{ margin: 0, lineHeight: 1.55 }}>Short description of the article goes here in two lines max.</p>
+        <div className="flex items-center gap-1 t-caption font-semibold" style={{ color: isHov ? 'var(--color-coral)' : 'var(--fg-muted)', transition: 'color 0.2s ease' }}>
+          <span>Read</span>
+          <svg width="11" height="11" viewBox="0 0 12 12" fill="none"
+            style={{ opacity: isHov ? 1 : 0.45, transform: isHov ? 'translate(2px,-2px)' : 'translate(0,0)', transition: 'opacity 0.2s ease, transform 0.2s ease' }}>
+            <path d="M1 11L11 1M11 1H3M11 1V9" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+          </svg>
+        </div>
+      </a>
+    </div>
+  );
+}
+
 /* ── SpotlightBlob (mirrors ProjectSections) ─────────────────── */
 function SpotlightBlob() {
   return (
@@ -54,7 +125,7 @@ function SpotlightBlob() {
       aria-hidden="true"
       style={{
         position: 'absolute', inset: 0, pointerEvents: 'none',
-        background: 'radial-gradient(ellipse 60% 80% at 50% 50%, color-mix(in srgb, #4839ca 8%, transparent) 0%, transparent 70%)',
+        background: 'radial-gradient(ellipse 60% 80% at 50% 50%, color-mix(in srgb, var(--brand) 8%, transparent) 0%, transparent 70%)',
       }}
     />
   );
@@ -77,7 +148,7 @@ function NotionColorPill({ colorKey }) {
   const c = NOTION_COLORS[colorKey] ?? NOTION_COLORS.default;
   return (
     <span
-      className="inline-flex items-center px-2.5 py-1 rounded-lg t-caption font-mono font-semibold"
+      className="inline-flex items-center px-2 py-1 rounded-lg t-caption font-mono font-semibold"
       style={{ background: c.bg, color: c.color, border: `1px solid ${c.color}` }}
     >
       {c.label}
@@ -108,7 +179,7 @@ function SectionPreview({ style, isSplit }) {
               <p className="t-h4 font-bold leading-snug" style={{ color: s.textClr }}>
                 Section Label
               </p>
-              <div className="mt-4 h-px w-8" style={{ background: '#4839ca' }} />
+              <div className="mt-4 h-px w-8" style={{ background: 'var(--brand)' }} />
             </div>
             <div className="flex flex-col gap-4">
               <p className="t-body2 leading-relaxed" style={{ color: s.mutedClr }}>
@@ -282,13 +353,13 @@ export default function StyleGuide() {
                     {[
                       { name: 'gray',   color: 'var(--fg-muted)' },
                       { name: 'brown',  color: '#9e6b4f' },
-                      { name: 'orange', color: '#ea8575' },
-                      { name: 'yellow', color: '#cb912f' },
-                      { name: 'green',  color: '#448361' },
-                      { name: 'blue',   color: '#2e7dae' },
-                      { name: 'purple', color: '#4839ca' },
+                      { name: 'orange', color: 'var(--color-coral)' },
+                      { name: 'yellow', color: 'var(--color-warning)' },
+                      { name: 'green',  color: 'var(--color-success)' },
+                      { name: 'blue',   color: 'var(--color-info)' },
+                      { name: 'purple', color: 'var(--brand)' },
                       { name: 'pink',   color: '#e255a1' },
-                      { name: 'red',    color: '#c4554d' },
+                      { name: 'red',    color: 'var(--color-error)' },
                     ].map(({ name, color }) => (
                       <span key={name} className="t-body2 font-semibold" style={{ color }}>{name}</span>
                     ))}
@@ -297,13 +368,13 @@ export default function StyleGuide() {
                     {[
                       { name: 'gray_bg',   bg: 'rgba(206,205,202,0.25)' },
                       { name: 'brown_bg',  bg: 'rgba(158,107,79,0.15)' },
-                      { name: 'orange_bg', bg: 'rgba(234,133,117,0.15)' },
-                      { name: 'yellow_bg', bg: 'rgba(203,145,47,0.15)' },
-                      { name: 'green_bg',  bg: 'rgba(68,131,97,0.15)' },
-                      { name: 'blue_bg',   bg: 'rgba(46,125,174,0.15)' },
-                      { name: 'purple_bg', bg: 'rgba(72,57,202,0.15)' },
+                      { name: 'orange_bg', bg: 'var(--color-warning-bg)' },
+                      { name: 'yellow_bg', bg: 'var(--color-warning-bg)' },
+                      { name: 'green_bg',  bg: 'var(--color-success-bg)' },
+                      { name: 'blue_bg',   bg: 'var(--color-info-bg)' },
+                      { name: 'purple_bg', bg: 'var(--brand-muted)' },
                       { name: 'pink_bg',   bg: 'rgba(226,85,161,0.15)' },
-                      { name: 'red_bg',    bg: 'rgba(196,85,77,0.15)' },
+                      { name: 'red_bg',    bg: 'var(--color-error-bg)' },
                     ].map(({ name, bg }) => (
                       <span key={name} className="t-body2 font-medium px-1.5 rounded" style={{ background: bg }}>
                         {name}
@@ -451,7 +522,7 @@ export default function StyleGuide() {
             {/* ══════════════════════════════════════════════
                 07. CARD STYLES
             ══════════════════════════════════════════════ */}
-            <Section id="card-styles" title="Card Styles" subtitle="07 — All 5 Visual Styles (size=l)">
+            <Section id="card-styles" title="Card Styles" subtitle="07 — All 7 Visual Styles (size=l)">
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
                 {Object.keys(CARD_STYLES).map((cs) => (
                   <div key={cs}>
@@ -472,32 +543,58 @@ export default function StyleGuide() {
                 08. FORM ELEMENTS
             ══════════════════════════════════════════════ */}
             <Section id="forms" title="Form Elements" subtitle="08 — Inputs &amp; Controls">
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 max-w-2xl">
+              <div className="flex flex-col gap-10 max-w-2xl">
+
+                {/* Component API */}
                 <div>
-                  <Label>.ui-input — text</Label>
-                  <input className="ui-input" type="text" placeholder="Your name" />
+                  <p className="t-caption font-mono font-bold tracking-widest mb-5" style={{ color: 'var(--brand)' }}>COMPONENT API — Input / Textarea / Select wrappers</p>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                    <Input label="Your name" id="sg-name" placeholder="Abhishek" />
+                    <Input label="Email" id="sg-email" type="email" placeholder="your@email.com" />
+                    <Input label="With error" id="sg-error" placeholder="Required field" error="This field is required" />
+                    <Select
+                      label="Opportunity type"
+                      id="sg-select"
+                      placeholder="Pick one"
+                      options={[{ value: 'ft', label: 'Full-time' }, { value: 'fl', label: 'Freelance' }, { value: 'ad', label: 'Advisory' }]}
+                    />
+                    <div className="sm:col-span-2">
+                      <Textarea label="Message" id="sg-message" rows={3} placeholder="Your message…" />
+                    </div>
+                    <div className="sm:col-span-2">
+                      <Textarea label="With error" id="sg-msg-error" rows={2} error="Message is required" />
+                    </div>
+                  </div>
                 </div>
+
+                {/* Raw CSS classes */}
                 <div>
-                  <Label>.ui-input — email</Label>
-                  <input className="ui-input" type="email" placeholder="your@email.com" />
+                  <p className="t-caption font-mono font-bold tracking-widest mb-5" style={{ color: 'var(--brand)' }}>RAW CSS — .ui-input / .ui-select classes</p>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                    <div>
+                      <Label>.ui-input — text</Label>
+                      <input className="ui-input" type="text" placeholder="Your name" />
+                    </div>
+                    <div>
+                      <Label>.ui-input — focused state (click to see)</Label>
+                      <input className="ui-input" type="text" defaultValue="Click me to focus" />
+                    </div>
+                    <div className="sm:col-span-2">
+                      <Label>.ui-input — textarea</Label>
+                      <textarea className="ui-input" rows={3} placeholder="Your message…" />
+                    </div>
+                    <div>
+                      <Label>.ui-input .ui-select</Label>
+                      <select className="ui-input ui-select">
+                        <option>Select an option</option>
+                        <option>Full-time</option>
+                        <option>Freelance</option>
+                        <option>Advisory</option>
+                      </select>
+                    </div>
+                  </div>
                 </div>
-                <div className="sm:col-span-2">
-                  <Label>.ui-input — textarea</Label>
-                  <textarea className="ui-input" rows={3} placeholder="Your message…" />
-                </div>
-                <div>
-                  <Label>.ui-input .ui-select</Label>
-                  <select className="ui-input ui-select">
-                    <option>Select an option</option>
-                    <option>Full-time</option>
-                    <option>Freelance</option>
-                    <option>Advisory</option>
-                  </select>
-                </div>
-                <div>
-                  <Label>.ui-input — focused state (click to see)</Label>
-                  <input className="ui-input" type="text" defaultValue="Click me to focus" />
-                </div>
+
               </div>
             </Section>
 
@@ -538,12 +635,12 @@ export default function StyleGuide() {
                         className="grid grid-cols-1 sm:grid-cols-[auto_1fr_auto] items-center gap-3 px-4 py-3 rounded-xl"
                         style={{ background: 'var(--surface)', border: '1px solid var(--border)' }}
                       >
-                        <div className="flex flex-wrap gap-1.5">
+                        <div className="flex flex-wrap gap-2">
                           {colors.map((c) => <NotionColorPill key={c} colorKey={c} />)}
                         </div>
                         <p className="t-caption text-fg-muted font-mono">{note}</p>
                         <span
-                          className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full t-caption font-bold"
+                          className="inline-flex items-center gap-2 px-3 py-1 rounded-full t-caption font-bold"
                           style={{
                             background: styleIdx === 2 ? 'var(--bg-inverse)'
                                       : styleIdx === 3 ? 'linear-gradient(135deg, #4a2d7f 0%, #0b1f3a 100%)'
@@ -849,8 +946,8 @@ export default function StyleGuide() {
                       <Label>💡 insight — highlighted callout + optional child paragraphs</Label>
                       <div className="px-5 py-4 rounded-xl mt-2"
                         style={{ background: 'var(--surface-1)', border: '1px solid var(--border)' }}>
-                        <p className="text-xl mb-2.5">💡</p>
-                        <div className="flex flex-col gap-1.5">
+                        <p className="text-xl mb-3">💡</p>
+                        <div className="flex flex-col gap-2">
                           <p className="t-body2 font-semibold leading-snug">Insight callout title</p>
                           <p className="t-body3 leading-relaxed" style={{ color: 'var(--fg-muted)' }}>Optional child paragraph in muted text.</p>
                         </div>
@@ -884,7 +981,7 @@ export default function StyleGuide() {
                     <div>
                       <Label>📌 pin — emoji marker + optional child paragraphs</Label>
                       <div className="px-5 py-4 rounded-xl mt-2" style={{ background: 'var(--surface-1)', border: '1px solid var(--border)' }}>
-                        <p className="text-base mb-2.5">📌</p>
+                        <p className="text-base mb-3">📌</p>
                         <p className="t-body2 font-semibold leading-snug">Pinned callout title</p>
                         <p className="t-body3 leading-relaxed mt-2" style={{ color: 'var(--fg-muted)' }}>Optional child paragraph for announcements or top-of-page context.</p>
                       </div>
@@ -910,7 +1007,7 @@ export default function StyleGuide() {
                           <div className="w-full flex items-center justify-center t-caption font-medium" style={{ height: 160, background: 'var(--surface)', color: 'var(--fg-muted)' }}>cover image</div>
                           <div className="flex flex-col gap-5 px-6 pt-5 pb-8">
                             <p className="t-h4 font-bold" style={{ color: 'var(--color-ink)' }}>Project title</p>
-                            <span className="mt-auto inline-flex items-center justify-center px-5 py-2.5 rounded-full t-btn1 font-semibold border-2"
+                            <span className="mt-auto inline-flex items-center justify-center px-5 py-3 rounded-full t-btn1 font-semibold border-2"
                               style={{ borderColor: 'var(--brand)', color: 'var(--brand)' }}>Know more</span>
                           </div>
                         </div>
@@ -926,7 +1023,7 @@ export default function StyleGuide() {
                     {/* Emoji → type reference table */}
                     <div>
                       <Label>Emoji → type reference (CALLOUT_EMOJI_MAP in card-utils.js)</Label>
-                      <div className="flex flex-col gap-1.5 mt-2">
+                      <div className="flex flex-col gap-2 mt-2">
                         {[
                           { emoji: '💡',        type: 'insight',  rule: 'Highlighted callout. BG per Notion color.' },
                           { emoji: '🎯',        type: 'feature',  rule: 'Large block. URL child → whole block clickable.' },
@@ -940,7 +1037,7 @@ export default function StyleGuide() {
                           { emoji: '(none)',    type: 'default',  rule: 'Clean text. URL child → linkable.' },
                           { emoji: '(other)',   type: 'insight',  rule: 'Unknown emoji → insight fallback.' },
                         ].map(({ emoji, type, rule }) => (
-                          <div key={type + emoji} className="grid sm:grid-cols-[6rem_7rem_1fr] gap-3 items-center px-4 py-2.5 rounded-lg" style={{ background: 'var(--surface)', border: '1px solid var(--border)' }}>
+                          <div key={type + emoji} className="grid sm:grid-cols-[6rem_7rem_1fr] gap-3 items-center px-4 py-3 rounded-lg" style={{ background: 'var(--surface)', border: '1px solid var(--border)' }}>
                             <span className="font-mono t-caption">{emoji}</span>
                             <code className="t-caption font-mono font-semibold" style={{ color: 'var(--brand)' }}>{type}</code>
                             <p className="t-caption" style={{ color: 'var(--fg-muted)' }}>{rule}</p>
@@ -972,7 +1069,7 @@ export default function StyleGuide() {
                         ].map(({ token, notionColors, bg, border, textClr, mutedClr }) => (
                           <div key={token} className="px-5 py-4 rounded-xl"
                             style={{ background: bg, border, '--fg': textClr, '--fg-muted': mutedClr }}>
-                            <p className="text-xl mb-2.5">💡</p>
+                            <p className="text-xl mb-3">💡</p>
                             <div className="flex flex-col gap-1">
                               <div className="flex items-center gap-2 flex-wrap">
                                 <code className="t-caption font-mono font-bold" style={{ color: 'var(--brand)' }}>bg={token}</code>
@@ -991,7 +1088,7 @@ export default function StyleGuide() {
                     {/* Card: CARD_STYLES */}
                     <div>
                       <Label>⛔️ card — Notion callout color → CARD_STYLES key (6 options)</Label>
-                      <div className="flex flex-col gap-1.5 mt-2">
+                      <div className="flex flex-col gap-2 mt-2">
                         {[
                           { cardStyle: 'default',  notionColors: 'default (no color)',  note: 'Always-white bg, ink text, light shadow' },
                           { cardStyle: 'inverse',  notionColors: 'gray',                note: 'Navy bg (light) / parchment bg (dark), dark shadow' },
@@ -1048,7 +1145,7 @@ export default function StyleGuide() {
                       ))}
                     </div>
 
-                    <div className="flex flex-col gap-1.5">
+                    <div className="flex flex-col gap-2">
                       <Label>What changes between sizes</Label>
                       {[
                         { prop: 'radius',    l: 'rounded-[24px]',  m: 'rounded-[20px]' },
@@ -1112,6 +1209,78 @@ export default function StyleGuide() {
                     </table>
                   </div>
                 </div>
+              </div>
+            </Section>
+
+            {/* ══════════════════════════════════════════════
+                16. CARD HOVER INTERACTIONS
+            ══════════════════════════════════════════════ */}
+            <Section id="card-interactions" title="Card Hover Interactions" subtitle="16 — Option H Spring Stroke">
+              <div className="flex flex-col gap-8">
+
+                <div>
+                  <p className="t-caption font-mono font-bold tracking-widest mb-4" style={{ color: 'var(--brand)' }}>PATTERN — STROKE_RING</p>
+                  <p className="t-body3 text-fg-muted mb-6" style={{ lineHeight: 1.7 }}>
+                    Stroke ring lives <strong>inside</strong> the card div as a direct child — same parent as the background,
+                    so <code className="font-mono text-xs px-1 py-0.5 rounded" style={{ background: 'var(--surface)', border: '1px solid var(--border)' }}>borderRadius: inherit</code> always matches perfectly.
+                    Spring: <code className="font-mono text-xs px-1 py-0.5 rounded" style={{ background: 'var(--surface)', border: '1px solid var(--border)' }}>stiffness 160 · damping 24</code>.
+                    Resting opacity 0.2 → hover 0.7.
+                  </p>
+                  <div className="grid sm:grid-cols-3 gap-5">
+                    <StrokeDemoCard label="ThinkingCard / BeyondCard — static content">
+                      <p className="t-caption tabular-nums font-bold" style={{ color: 'var(--color-coral)', letterSpacing: '0.08em', margin: '0 0 12px' }}>01</p>
+                      <p className="t-body2 font-semibold text-fg" style={{ margin: '0 0 8px', lineHeight: 1.4 }}>Can designers own strategy?</p>
+                      <p className="t-body3 text-fg-muted" style={{ margin: 0, lineHeight: 1.7 }}>A short description of the thought or interest lives here, two to three lines.</p>
+                    </StrokeDemoCard>
+                    <StrokeDemoCard label="BeyondCard — num + heading + body">
+                      <p className="t-caption tabular-nums font-bold" style={{ color: 'var(--color-coral)', letterSpacing: '0.08em', margin: '0 0 12px' }}>02</p>
+                      <p className="t-body2 font-semibold text-fg" style={{ margin: '0 0 8px', lineHeight: 1.4 }}>I keep almost starting a business.</p>
+                      <p className="t-body3 text-fg-muted" style={{ margin: 0, lineHeight: 1.8 }}>A 3D print farm. An import operation. None of these are random.</p>
+                    </StrokeDemoCard>
+                    <WritingDemoCard />
+                  </div>
+                </div>
+
+                <div>
+                  <p className="t-caption font-mono font-bold tracking-widest mb-3" style={{ color: 'var(--brand)' }}>CODE REFERENCE</p>
+                  <pre className="t-caption font-mono rounded-xl p-5 overflow-x-auto" style={{ background: 'var(--surface)', border: '1px solid var(--border)', lineHeight: 1.7, color: 'var(--fg-muted)' }}>{`const STROKE_RING = {
+  position: 'absolute', inset: 0, borderRadius: 'inherit',
+  border: '1px solid color-mix(in srgb, var(--fg) 50%, transparent)',
+  pointerEvents: 'none',
+};
+
+function Card() {
+  const strokeOpacity = useSpring(0.2, { stiffness: 160, damping: 24 });
+  return (
+    <div
+      style={{ position: 'relative', borderRadius: 16, background: 'var(--surface)' }}
+      onMouseEnter={() => strokeOpacity.set(0.7)}
+      onMouseLeave={() => strokeOpacity.set(0.2)}
+    >
+      <motion.div style={{ ...STROKE_RING, opacity: strokeOpacity }} />
+      {/* content */}
+    </div>
+  );
+}`}</pre>
+                </div>
+
+                <div>
+                  <p className="t-caption font-mono font-bold tracking-widest mb-3" style={{ color: 'var(--brand)' }}>OTHER OPTIONS — /beyond-demo</p>
+                  <div className="flex flex-col gap-2">
+                    {[
+                      { option: 'F', name: 'Glass Glare', desc: 'Perimeter-locked blur blob, parallax at 40%, radial offset keeps center outside card. Most premium.' },
+                      { option: 'G', name: 'Border Sweep', desc: 'Conic-gradient ring sweeps clockwise once on hover entry. No fill, no blob.' },
+                      { option: 'H', name: 'Spring Stroke ✓ LIVE', desc: 'Spring opacity on border ring. Theme-adaptive. Used on ThinkingCard, BeyondCard, WritingCard.' },
+                    ].map(({ option, name, desc }) => (
+                      <div key={option} className="grid sm:grid-cols-[4rem_10rem_1fr] gap-3 items-start px-4 py-3 rounded-lg" style={{ background: 'var(--surface)', border: '1px solid var(--border)' }}>
+                        <code className="t-caption font-mono font-semibold" style={{ color: 'var(--brand)' }}>Option {option}</code>
+                        <p className="t-caption font-semibold text-fg" style={{ margin: 0 }}>{name}</p>
+                        <p className="t-caption text-fg-muted" style={{ margin: 0, lineHeight: 1.6 }}>{desc}</p>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
               </div>
             </Section>
 

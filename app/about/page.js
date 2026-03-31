@@ -1,19 +1,353 @@
 'use client';
 
-import { useState, useEffect, useRef } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { useState, useEffect, useRef, useCallback } from 'react';
+import { motion, AnimatePresence, useSpring, useMotionValue, useTransform } from 'framer-motion';
 import GradientBackground from '../components/layout/GradientBackground';
 import Button from '../components/ui/Button';
 import { ArrowIcon } from '../components/ui/icons';
 
-import { WORK_ITEMS, SKILL_GROUPS, ARTICLES, ABOUT_SECTIONS } from '../../data/about';
+import { WORK_ITEMS, SKILL_GROUPS, ARTICLES, ABOUT_SECTIONS, THINKING_ITEMS, OPINIONS, BEYOND_ITEMS } from '../../data/about';
+import CareerTimeline from '../components/sections/CareerTimeline';
 import { fadeUp, stagger, vp } from '../../lib/motion';
 import W from '../components/ui/W';
+import { SECTION_STYLES } from '../../lib/section-styles';
+
+/* ── Shared stroke ring — always inside the card div (borderRadius: inherit) ── */
+const STROKE_RING = {
+  position: 'absolute', inset: 0, borderRadius: 'inherit',
+  border: '1px solid color-mix(in srgb, var(--fg) 50%, transparent)',
+  pointerEvents: 'none',
+};
+
+/* ── Writing card ────────────────────────────────────────────────────── */
+function WritingCard({ article }) {
+  const [isHov, setIsHov] = useState(false);
+  const strokeOpacity = useSpring(0.2, { stiffness: 160, damping: 24 });
+
+  return (
+    <motion.div variants={fadeUp}>
+      <a
+        href={article.href}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="no-underline flex flex-col gap-3"
+        style={{
+          position: 'relative',
+          borderRadius: 16,
+          padding: '20px 22px',
+          background: 'var(--surface)',
+          display: 'flex',
+          transform: isHov ? 'translateY(-4px)' : 'translateY(0)',
+          boxShadow: isHov ? 'var(--shadow-md)' : 'none',
+          transition: 'transform 0.3s cubic-bezier(0.22,1,0.36,1), box-shadow 0.3s ease',
+        }}
+        onMouseEnter={() => { setIsHov(true); strokeOpacity.set(0.7); }}
+        onMouseLeave={() => { setIsHov(false); strokeOpacity.set(0.2); }}
+      >
+        <motion.div style={{ ...STROKE_RING, opacity: strokeOpacity }} />
+        <motion.span
+          animate={{ scale: isHov ? 1.15 : 1 }}
+          transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
+          style={{ fontSize: 24, lineHeight: 1, display: 'inline-block', transformOrigin: 'left center' }}
+        >
+          {article.emoji}
+        </motion.span>
+        <div className="flex flex-col gap-2" style={{ flex: 1 }}>
+          <p className="t-body1 font-semibold text-fg" style={{ margin: 0, lineHeight: 1.4 }}>
+            {article.title}
+          </p>
+          <p className="t-body2 text-fg-muted" style={{ margin: 0, lineHeight: 1.55 }}>
+            {article.desc}
+          </p>
+        </div>
+        <div
+          className="flex items-center gap-1 t-caption font-semibold"
+          style={{ marginTop: 4, color: isHov ? 'var(--color-coral)' : 'var(--fg-muted)', transition: 'color 0.2s ease' }}
+        >
+          <span>Read</span>
+          <svg width="11" height="11" viewBox="0 0 12 12" fill="none"
+            style={{ opacity: isHov ? 1 : 0.45, transform: isHov ? 'translate(2px, -2px)' : 'translate(0,0)', transition: 'opacity 0.2s ease, transform 0.2s ease' }}
+          >
+            <path d="M1 11L11 1M11 1H3M11 1V9" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+          </svg>
+        </div>
+      </a>
+    </motion.div>
+  );
+}
+
+/* ── Beyond the Work card ─────────────────────────────────────────────── */
+function BeyondCard({ card, index }) {
+  const strokeOpacity = useSpring(0.2, { stiffness: 160, damping: 24 });
+  const num = String(index + 1).padStart(2, '0');
+
+  return (
+    <div
+      style={{
+        position: 'relative', borderRadius: 16, padding: '20px',
+        background: 'var(--surface)', cursor: 'default',
+        display: 'flex', flexDirection: 'column', gap: 16, minHeight: 220,
+      }}
+      onMouseEnter={() => strokeOpacity.set(0.7)}
+      onMouseLeave={() => strokeOpacity.set(0.2)}
+    >
+      <motion.div style={{ ...STROKE_RING, opacity: strokeOpacity }} />
+      <p className="t-caption tabular-nums font-bold" style={{ color: 'var(--color-coral)', letterSpacing: '0.08em', margin: 0 }}>
+        {num}
+      </p>
+      <p className="t-body1 font-semibold text-fg" style={{ margin: 0, lineHeight: 1.4 }}>
+        {card.heading}
+      </p>
+      <p className="t-body2 text-fg-muted" style={{ margin: 0, lineHeight: 1.8 }}>
+        {card.body}
+      </p>
+    </div>
+  );
+}
+
+/* ── What I'm Thinking About card ────────────────────────────────────── */
+function ThinkingCard({ item, index }) {
+  const strokeOpacity = useSpring(0.2, { stiffness: 160, damping: 24 });
+
+  return (
+    <motion.div variants={fadeUp} style={{ height: '100%' }}>
+      <div
+        style={{
+          position: 'relative', borderRadius: 16, padding: '24px',
+          background: 'var(--surface)', cursor: 'default',
+          display: 'flex', flexDirection: 'column', gap: 16, height: '100%',
+        }}
+        onMouseEnter={() => strokeOpacity.set(0.7)}
+        onMouseLeave={() => strokeOpacity.set(0.2)}
+      >
+        <motion.div style={{ ...STROKE_RING, opacity: strokeOpacity }} />
+        <p className="t-caption tabular-nums font-bold" style={{ color: 'var(--color-coral)', letterSpacing: '0.08em', margin: 0 }}>
+          {String(index + 1).padStart(2, '0')}
+        </p>
+        <p className="t-body1 font-semibold text-fg" style={{ margin: 0, lineHeight: 1.4 }}>
+          {item.label}
+        </p>
+        <p className="t-body2 text-fg-muted" style={{ margin: 0, lineHeight: 1.7 }}>
+          {item.desc}
+        </p>
+      </div>
+    </motion.div>
+  );
+}
+
+/* ── Perimeter math — Glass Glare (F) ────────────────────────────── */
+const WIB_BLOB_R       = 80;
+const WIB_GLARE_OFFSET = 56;
+const WIB_PARALLAX     = 0.4;
+
+function wibPerimToXY(t, w, h) {
+  const P  = 2 * (w + h);
+  const tn = ((t % P) + P) % P;
+  if (tn <= w)         return { x: tn,               y: h };
+  if (tn <= w + h)     return { x: w,                y: h - (tn - w) };
+  if (tn <= 2 * w + h) return { x: w - (tn - w - h), y: 0 };
+  return                      { x: 0,                y: tn - 2 * w - h };
+}
+
+function wibCursorToPerimT(x, y, w, h) {
+  const cx = w / 2, cy = h / 2;
+  const dx = x - cx || 0.001;
+  const dy = y - cy || 0.001;
+  const ts = [
+    dx < 0 ? (0 - cx) / dx : Infinity,
+    dx > 0 ? (w - cx) / dx : Infinity,
+    dy < 0 ? (0 - cy) / dy : Infinity,
+    dy > 0 ? (h - cy) / dy : Infinity,
+  ].filter(s => s > 0 && isFinite(s));
+  const s  = Math.min(...ts);
+  const px = Math.max(0, Math.min(w, cx + s * dx));
+  const py = Math.max(0, Math.min(h, cy + s * dy));
+  const eps = 0.5;
+  if (px < eps)     return 2 * w + h + py;
+  if (px > w - eps) return w + (h - py);
+  if (py < eps)     return w + h + (w - px);
+  return px;
+}
+
+function wibOffsetPerimPoint(px, py, w, h) {
+  const cx = w / 2, cy = h / 2;
+  const dx = px - cx, dy = py - cy;
+  const len = Math.sqrt(dx * dx + dy * dy) || 1;
+  return { x: px + (dx / len) * WIB_GLARE_OFFSET, y: py + (dy / len) * WIB_GLARE_OFFSET };
+}
+
+/* ── What I Bring card — Style F (Glass Glare) + G (Border Sweep) ── */
+function WhatIBringCard({ item, index, textClr, mutedClr }) {
+  const cardRef    = useRef(null);
+  const cardDims   = useRef({ w: 0, h: 0 });
+  const perimCanon = useRef(0);
+
+  // F — Glass Glare: perimeter-locked blur blob
+  const perimBlob   = useMotionValue(0);
+  const glowOpacity = useSpring(0, { stiffness: 80, damping: 28 });
+  const glowX = useTransform(perimBlob, t => {
+    const { w, h } = cardDims.current;
+    if (!w || !h) return 0;
+    const { x: px, y: py } = wibPerimToXY(t, w, h);
+    return wibOffsetPerimPoint(px, py, w, h).x;
+  });
+  const glowY = useTransform(perimBlob, t => {
+    const { w, h } = cardDims.current;
+    if (!w || !h) return 0;
+    const { x: px, y: py } = wibPerimToXY(t, w, h);
+    return wibOffsetPerimPoint(px, py, w, h).y;
+  });
+  const glowLeft = useTransform(glowX, v => v - WIB_BLOB_R);
+  const glowTop  = useTransform(glowY, v => v - WIB_BLOB_R);
+
+  const updateGlare = useCallback((ex, ey) => {
+    const { w, h } = cardDims.current;
+    if (!w || !h) return;
+    const P       = 2 * (w + h);
+    const rawT    = wibCursorToPerimT(ex, ey, w, h);
+    const rawNorm = ((rawT % P) + P) % P;
+    const curNorm = ((perimCanon.current % P) + P) % P;
+    let delta = rawNorm - curNorm;
+    if (delta >  P / 2) delta -= P;
+    if (delta < -P / 2) delta += P;
+    perimCanon.current += delta;
+    perimBlob.set(perimBlob.get() + delta * WIB_PARALLAX);
+  }, [perimBlob]);
+
+  // H — Adaptive Outline: spring-animated stroke ring
+  const strokeOpacity = useSpring(0.2, { stiffness: 160, damping: 24 });
+
+  const handleMouseMove = useCallback((e) => {
+    const rect = cardRef.current.getBoundingClientRect();
+    cardDims.current = { w: rect.width, h: rect.height };
+    updateGlare(e.clientX - rect.left, e.clientY - rect.top);
+  }, [updateGlare]);
+
+  const handleMouseEnter = useCallback((e) => {
+    const rect = cardRef.current.getBoundingClientRect();
+    cardDims.current = { w: rect.width, h: rect.height };
+    const snapT = wibCursorToPerimT(
+      e.clientX - rect.left, e.clientY - rect.top,
+      cardDims.current.w, cardDims.current.h,
+    );
+    perimCanon.current = snapT;
+    perimBlob.set(snapT);
+    glowOpacity.set(1);
+    strokeOpacity.set(0.7);
+  }, [perimBlob, glowOpacity, strokeOpacity]);
+
+  const handleMouseLeave = useCallback(() => {
+    glowOpacity.set(0);
+    strokeOpacity.set(0.2);
+  }, [glowOpacity, strokeOpacity]);
+
+  const num = String(index + 1).padStart(2, '0');
+
+  return (
+    <motion.div variants={fadeUp} style={{ height: '100%' }}>
+      {/* Outer wrapper holds the sweep ring (needs overflow:visible) */}
+      <div
+        style={{ position: 'relative', borderRadius: 17, height: '100%' }}
+        onMouseMove={handleMouseMove}
+        onMouseEnter={handleMouseEnter}
+        onMouseLeave={handleMouseLeave}
+      >
+        {/* H — adaptive outline */}
+        <motion.div
+          style={{
+            position: 'absolute',
+            inset: 0,
+            borderRadius: 16,
+            border: '1px solid color-mix(in srgb, var(--section-solid-fg) 50%, transparent)',
+            opacity: strokeOpacity,
+            pointerEvents: 'none',
+          }}
+        />
+
+        {/* Card body — overflow:hidden clips the glare blob */}
+        <div
+          ref={cardRef}
+          style={{
+            borderRadius: 16,
+            padding: '24px',
+            background: 'color-mix(in srgb, var(--section-solid-fg) 5%, transparent)',
+            border: '1px solid color-mix(in srgb, var(--section-solid-fg) 10%, transparent)',
+            display: 'flex',
+            flexDirection: 'column',
+            gap: 16,
+            height: '100%',
+            overflow: 'hidden',
+            position: 'relative',
+            cursor: 'default',
+          }}
+        >
+          {/* F — glare blob */}
+          <motion.div
+            style={{
+              position: 'absolute',
+              top: 0,
+              left: 0,
+              width:  WIB_BLOB_R * 2,
+              height: WIB_BLOB_R * 2,
+              borderRadius: '50%',
+              background: 'rgba(255,255,255,0.45)',
+              filter: 'blur(52px)',
+              x: glowLeft,
+              y: glowTop,
+              opacity: glowOpacity,
+              pointerEvents: 'none',
+              zIndex: 0,
+            }}
+          />
+          <p className="t-caption tabular-nums font-bold" style={{ color: 'var(--color-coral)', letterSpacing: '0.08em', margin: 0, position: 'relative', zIndex: 1 }}>
+            {num}
+          </p>
+          <p className="t-body1 font-semibold" style={{ margin: 0, lineHeight: 1.4, color: textClr, position: 'relative', zIndex: 1 }}>
+            {item.title}
+          </p>
+          <p className="t-body2" style={{ margin: 0, lineHeight: 1.75, color: mutedClr, position: 'relative', zIndex: 1 }}>
+            {item.body}
+          </p>
+        </div>
+      </div>
+    </motion.div>
+  );
+}
 
 /* ── Constants ──────────────────────────────────────────────────────── */
-const RESUME_URL   = 'https://drive.google.com/file/d/1QuxjEMB-PyVbgwsjjPpacY3xJ3j8eXMU/view?usp=drive_link';
-const NOTION_ABOUT = 'https://thatguyabhishek.notion.site/About-fb861d61100943ee9356e50d28be3f03';
-const LINKEDIN_URL = 'https://www.linkedin.com/in/thatguyabhishek/';
+const RESUME_URL        = 'https://drive.google.com/file/d/1QuxjEMB-PyVbgwsjjPpacY3xJ3j8eXMU/view?usp=drive_link';
+const NOTION_ABOUT      = 'https://thatguyabhishek.notion.site/About-fb861d61100943ee9356e50d28be3f03';
+const NOTION_WHAT_I_BRING = 'https://www.notion.so/thatguyabhishek/What-I-Bring-26af6091ff9a469eadcde9b42a80a678';
+const LINKEDIN_URL      = 'https://www.linkedin.com/in/thatguyabhishek/';
+
+const WHAT_I_BRING_ITEMS = [
+  {
+    title: 'AI-Native Product Design',
+    body: "I've shipped AI features used by 400M+ people. Not 'used AI in my process' — designed the AI experience itself. Chart Insights, Copilot Excel integration, Wiki Agent. I understand the design challenges specific to AI: calibrating trust, handling uncertainty, designing for outputs you don't fully control. This is a rare combination right now and I'm deepening it actively.",
+  },
+  {
+    title: 'Systems Thinking at Scale',
+    body: "I've built design systems from scratch at four different organisations. I've designed for products that served 100M users simultaneously. I think in systems, not screens — which means I'm valuable long before and long after Figma is open. The design of how design gets done is as important to me as the design itself.",
+  },
+  {
+    title: 'Startup Instinct Inside Enterprise Structure',
+    body: "Two GTM startups. Four design practices built from zero. At Microsoft, I didn't just execute — I identified an opportunity (the Wiki Agent), built the case, designed the solution, and shipped it. That entrepreneurial instinct — seeing what doesn't exist yet and making it — is something I carry into every role, regardless of company size.",
+  },
+  {
+    title: 'Design That Moves Business Metrics',
+    body: "30% reduction in feature abandonment at Microsoft. 6% MAU lift for 100M+ Airtel users. 12% conversion improvement at GoodWorker. 50K app downloads with zero marketing spend. These aren't lucky outcomes — they're the result of designing with business outcomes as the constraint, not the afterthought.",
+  },
+  {
+    title: 'The Full Range — IC to Leader',
+    body: "I can do the work and I can lead the people doing the work. I've been a hands-on product designer, a Design Manager, a Creative Director, and a Founder. I know what good craft looks like up close. I know what a design team needs to stay motivated, unblocked, and shipping at quality. I'm most useful in organisations where both things are valued.",
+  },
+];
+
+const WHAT_I_BRING_METRICS = [
+  { stat: '30%',   label: 'Feature abandonment reduced at Microsoft' },
+  { stat: '100M+', label: 'Users on Airtel Thanks 2.0' },
+  { stat: '50K',   label: 'App downloads, almost zero marketing spend' },
+];
 
 const IMG_PORTRAIT = '/portrait.jpg';
 
@@ -54,7 +388,7 @@ export default function AboutPage() {
             <motion.div variants={stagger} initial="hidden" animate="visible">
               <motion.p variants={fadeUp} className="t-overline text-fg-muted mb-8">About</motion.p>
 
-              <div className="grid gap-8 items-start lg:grid-cols-[3fr_7fr]">
+              <div className="grid gap-12 items-start lg:grid-cols-[3fr_7fr]">
 
                   {/* LEFT 30% — portrait + currently callout card + article cards */}
                   <div className="flex flex-col gap-4">
@@ -199,9 +533,9 @@ export default function AboutPage() {
                   href={NOTION_ABOUT}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="no-underline t-caption font-semibold text-fg-muted inline-flex items-center gap-1.5"
+                  className="no-underline t-caption font-semibold text-fg-muted inline-flex items-center gap-2"
                   style={{ transition: 'color 0.2s' }}
-                  onMouseEnter={e => { e.currentTarget.style.color = '#ea8575'; }}
+                  onMouseEnter={e => { e.currentTarget.style.color = 'var(--color-coral)'; }}
                   onMouseLeave={e => { e.currentTarget.style.color = ''; }}
                 >
                   All writing on Notion
@@ -211,40 +545,9 @@ export default function AboutPage() {
                 </motion.a>
               </div>
 
-              <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
+              <div className="grid gap-5 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
                 {ARTICLES.map((article) => (
-                  <motion.a
-                    key={article.title}
-                    variants={fadeUp}
-                    href={article.href}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="group no-underline flex flex-col gap-3 rounded-2xl"
-                    style={{
-                      padding: '20px 22px',
-                      background: 'var(--surface)',
-                      border: '1px solid var(--border)',
-                      transition: 'border-color 0.2s ease, transform 0.25s cubic-bezier(0.22,1,0.36,1)',
-                    }}
-                    onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-3px)'; e.currentTarget.style.borderColor = 'color-mix(in srgb, var(--fg) 20%, transparent)'; }}
-                    onMouseLeave={e => { e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.borderColor = ''; }}
-                  >
-                    <span style={{ fontSize: 24, lineHeight: 1 }}>{article.emoji}</span>
-                    <div className="flex flex-col gap-1.5" style={{ flex: 1 }}>
-                      <p className="t-body2 font-semibold text-fg" style={{ margin: 0, lineHeight: 1.4 }}>
-                        {article.title}
-                      </p>
-                      <p className="t-caption text-fg-muted" style={{ margin: 0, lineHeight: 1.55 }}>
-                        {article.desc}
-                      </p>
-                    </div>
-                    <div className="flex items-center gap-1 t-caption font-semibold text-fg-muted" style={{ marginTop: 4, transition: 'color 0.15s' }}>
-                      <span className="group-hover:text-fg" style={{ transition: 'color 0.15s' }}>Read</span>
-                      <svg width="11" height="11" viewBox="0 0 12 12" fill="none" style={{ opacity: 0.45, transition: 'opacity 0.15s' }} className="group-hover:opacity-80">
-                        <path d="M1 11L11 1M11 1H3M11 1V9" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-                      </svg>
-                    </div>
-                  </motion.a>
+                  <WritingCard key={article.title} article={article} />
                 ))}
               </div>
             </motion.div>
@@ -252,7 +555,7 @@ export default function AboutPage() {
         </div>
 
         {/* ── 2. PHILOSOPHY ──────────────────────────────────────────── */}
-        <div className="border-t border-theme">
+        <div style={SECTION_STYLES[1].wrap}>
           <W className="py-20">
             <motion.div variants={stagger} initial="hidden" whileInView="visible" viewport={vp}>
               <motion.p variants={fadeUp} className="t-overline text-fg-muted mb-8">Philosophy</motion.p>
@@ -284,12 +587,107 @@ export default function AboutPage() {
           </W>
         </div>
 
-        {/* ── 3. HOW I WORK ──────────────────────────────────────────── */}
+        {/* ── 5. WHAT I BRING ────────────────────────────────────────── */}
+        <div style={SECTION_STYLES[4].wrap}>
+          <W className="py-20">
+            <motion.div variants={stagger} initial="hidden" whileInView="visible" viewport={vp}>
+
+              {/* Header row */}
+              <div className="flex items-end justify-between gap-4 mb-10 flex-wrap">
+                <div>
+                  <motion.p variants={fadeUp} className="t-overline mb-2" style={{ color: SECTION_STYLES[4].mutedClr }}>
+                    What I bring
+                  </motion.p>
+                  <motion.h3 variants={fadeUp} style={{ color: SECTION_STYLES[4].textClr, margin: 0 }}>
+                    The 5 Things I Bring
+                  </motion.h3>
+                </div>
+                <motion.a
+                  variants={fadeUp}
+                  href={NOTION_WHAT_I_BRING}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="no-underline inline-flex items-center gap-2"
+                  style={{
+                    padding: '10px 20px',
+                    borderRadius: 9999,
+                    border: '1px solid color-mix(in srgb, var(--section-solid-fg) 20%, transparent)',
+                    color: SECTION_STYLES[4].mutedClr,
+                    fontSize: 13,
+                    fontWeight: 600,
+                    transition: 'border-color 0.2s, color 0.2s',
+                  }}
+                  onMouseEnter={e => { e.currentTarget.style.borderColor = 'var(--color-coral)'; e.currentTarget.style.color = 'var(--color-coral)'; }}
+                  onMouseLeave={e => { e.currentTarget.style.borderColor = ''; e.currentTarget.style.color = ''; }}
+                >
+                  Read more on Notion
+                  <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+                    <path d="M1 11L11 1M11 1H3M11 1V9" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                  </svg>
+                </motion.a>
+              </div>
+
+              {/* 5 cards — 3 col first row, 2 col second row */}
+              <div className="grid gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 mb-6">
+                {WHAT_I_BRING_ITEMS.slice(0, 3).map((item, i) => (
+                  <WhatIBringCard
+                    key={item.title}
+                    item={item}
+                    index={i}
+                    textClr={SECTION_STYLES[4].textClr}
+                    mutedClr={SECTION_STYLES[4].mutedClr}
+                  />
+                ))}
+              </div>
+              <div className="grid gap-6 grid-cols-1 sm:grid-cols-2 mb-12">
+                {WHAT_I_BRING_ITEMS.slice(3).map((item, i) => (
+                  <WhatIBringCard
+                    key={item.title}
+                    item={item}
+                    index={i + 3}
+                    textClr={SECTION_STYLES[4].textClr}
+                    mutedClr={SECTION_STYLES[4].mutedClr}
+                  />
+                ))}
+              </div>
+
+              {/* Metrics strip */}
+              <motion.div
+                variants={fadeUp}
+                className="grid grid-cols-3 gap-px"
+                style={{
+                  background: 'color-mix(in srgb, var(--section-solid-fg) 10%, transparent)',
+                  borderRadius: 16,
+                  overflow: 'hidden',
+                  border: '1px solid color-mix(in srgb, var(--section-solid-fg) 10%, transparent)',
+                }}
+              >
+                {WHAT_I_BRING_METRICS.map((m) => (
+                  <div
+                    key={m.stat}
+                    className="flex flex-col gap-2 py-6 px-6"
+                    style={{ background: 'color-mix(in srgb, var(--section-solid-fg) 5%, transparent)' }}
+                  >
+                    <p className="t-h2 font-bold tabular-nums" style={{ color: 'var(--color-coral)', margin: 0, lineHeight: 1.1 }}>
+                      {m.stat}
+                    </p>
+                    <p className="t-body3" style={{ color: SECTION_STYLES[4].mutedClr, margin: 0, lineHeight: 1.5 }}>
+                      {m.label}
+                    </p>
+                  </div>
+                ))}
+              </motion.div>
+
+            </motion.div>
+          </W>
+        </div>
+
+        {/* ── 6. HOW I WORK ──────────────────────────────────────────── */}
         <div className="border-t border-theme">
           <W className="py-20">
             <motion.div variants={stagger} initial="hidden" whileInView="visible" viewport={vp}>
               <motion.p variants={fadeUp} className="t-overline text-fg-muted mb-2">Process</motion.p>
-              <motion.h2 variants={fadeUp} className="mb-10">How I Work</motion.h2>
+              <motion.h3 variants={fadeUp} className="mb-10">How I Work</motion.h3>
 
               {/* Top: stacked full-width description */}
               <motion.div variants={fadeUp} className="flex flex-col gap-4 t-body1 text-fg-muted mb-12">
@@ -310,7 +708,7 @@ export default function AboutPage() {
               {/* Bottom: headings list (1/3) + content callout (2/3) */}
               <motion.div
                 variants={fadeUp}
-                className="grid gap-6"
+                className="grid gap-8"
                 style={{ gridTemplateColumns: '1fr 2fr' }}
                 onMouseEnter={() => setPaused(true)}
                 onMouseLeave={() => setPaused(false)}
@@ -325,8 +723,8 @@ export default function AboutPage() {
                         style={{
                           background: 'none',
                           border: 'none',
-                          borderLeft: `2px solid ${i === activeWork ? '#4839ca' : 'var(--border)'}`,
-                          padding: '14px 16px',
+                          borderLeft: `2px solid ${i === activeWork ? 'var(--brand)' : 'var(--border)'}`,
+                          padding: '16px 16px',
                           cursor: 'pointer',
                           transition: 'border-color 0.2s ease',
                           position: 'relative',
@@ -345,9 +743,9 @@ export default function AboutPage() {
                               top: 0,
                               width: 2,
                               height: '100%',
-                              background: '#4839ca',
+                              background: 'var(--brand)',
                               transformOrigin: 'top',
-                              borderRadius: 1,
+                              borderRadius: 2,
                             }}
                           />
                         )}
@@ -370,8 +768,8 @@ export default function AboutPage() {
                   <div
                     className="rounded-2xl"
                     style={{
-                      background: 'color-mix(in srgb, #4839ca 8%, var(--surface))',
-                      border: '1px solid color-mix(in srgb, #4839ca 20%, var(--border))',
+                      background: 'color-mix(in srgb, var(--brand) 8%, var(--surface))',
+                      border: '1px solid color-mix(in srgb, var(--brand) 20%, var(--border))',
                       overflow: 'hidden',
                       position: 'relative',
                     }}
@@ -404,12 +802,30 @@ export default function AboutPage() {
           </W>
         </div>
 
-        {/* ── 4. BECOMING AI-NATIVE ──────────────────────────────────── */}
+        {/* ── 7. BEYOND THE WORK ─────────────────────────────────────── */}
+        <div className="border-t border-theme">
+          <W className="py-20">
+            <motion.div variants={stagger} initial="hidden" whileInView="visible" viewport={vp}>
+              <motion.p variants={fadeUp} className="t-overline text-fg-muted mb-2">The human behind the work</motion.p>
+              <motion.h3 variants={fadeUp} className="mb-10">Beyond the Work</motion.h3>
+
+              <div className="grid grid-cols-2 gap-6 items-start">
+                {BEYOND_ITEMS.map((card, i) => (
+                  <motion.div key={card.heading} variants={fadeUp}>
+                    <BeyondCard card={card} index={i} />
+                  </motion.div>
+                ))}
+              </div>
+            </motion.div>
+          </W>
+        </div>
+
+        {/* ── 8. BECOMING AI-NATIVE ──────────────────────────────────── */}
         <div className="border-t border-theme">
           <W className="py-20">
             <motion.div variants={stagger} initial="hidden" whileInView="visible" viewport={vp}>
               <motion.p variants={fadeUp} className="t-overline text-fg-muted mb-2">Current focus</motion.p>
-              <motion.h2 variants={fadeUp} className="mb-10">Becoming AI-Native</motion.h2>
+              <motion.h3 variants={fadeUp} className="mb-10">Becoming AI-Native</motion.h3>
 
               <div className="grid lg:grid-cols-2 gap-x-16 gap-y-6">
                 <motion.div variants={fadeUp} className="flex flex-col gap-5 t-body1 text-fg-muted">
@@ -458,110 +874,146 @@ export default function AboutPage() {
           </W>
         </div>
 
-        {/* ── 5. BEYOND THE WORK ─────────────────────────────────────── */}
+        {/* ── 5b. STRONG OPINIONS ────────────────────────────────────── */}
+        <div style={SECTION_STYLES[2].wrap}>
+          <W className="py-20">
+            <motion.div variants={stagger} initial="hidden" whileInView="visible" viewport={vp}>
+              <motion.p variants={fadeUp} className="t-overline mb-2" style={{ color: SECTION_STYLES[2].mutedClr }}>Unfiltered</motion.p>
+              <motion.h3 variants={fadeUp} className="mb-10" style={{ color: SECTION_STYLES[2].textClr }}>Strong Opinions</motion.h3>
+
+              <div className="grid sm:grid-cols-2 gap-x-16 gap-y-0">
+                {OPINIONS.map((opinion, i) => {
+                  const colCount = 2;
+                  const lastRowStart = OPINIONS.length - (OPINIONS.length % colCount || colCount);
+                  const isLastRow = i >= lastRowStart;
+                  return (
+                    <motion.div
+                      key={i}
+                      variants={fadeUp}
+                      className="flex gap-5 items-start py-7"
+                      style={{
+                        borderTop: `1px solid color-mix(in srgb, ${SECTION_STYLES[2].textClr} 12%, transparent)`,
+                        borderBottom: isLastRow ? 'none' : `1px solid color-mix(in srgb, ${SECTION_STYLES[2].textClr} 12%, transparent)`,
+                      }}
+                    >
+                      <p
+                        className="t-caption tabular-nums font-bold flex-shrink-0"
+                        style={{ color: 'var(--color-coral)', letterSpacing: '0.08em', marginTop: 3, minWidth: 24 }}
+                      >
+                        {String(i + 1).padStart(2, '0')}
+                      </p>
+                      <p className="t-body1" style={{ margin: 0, lineHeight: 1.7, color: SECTION_STYLES[2].textClr }}>
+                        {opinion}
+                      </p>
+                    </motion.div>
+                  );
+                })}
+              </div>
+            </motion.div>
+          </W>
+        </div>
+
+        {/* ── 5c. CAREER TIMELINE ────────────────────────────────────── */}
         <div className="border-t border-theme">
           <W className="py-20">
             <motion.div variants={stagger} initial="hidden" whileInView="visible" viewport={vp}>
-              <motion.p variants={fadeUp} className="t-overline text-fg-muted mb-2">The human behind the work</motion.p>
-              <motion.h2 variants={fadeUp} className="mb-10">Beyond the Work</motion.h2>
+              <motion.p variants={fadeUp} className="t-overline text-fg-muted mb-2">Track record</motion.p>
+              <motion.h3 variants={fadeUp} className="mb-10">Career Timeline</motion.h3>
+              <motion.div variants={fadeUp}>
+                <CareerTimeline />
+              </motion.div>
+            </motion.div>
+          </W>
+        </div>
 
-              <div className="grid sm:grid-cols-3 gap-6">
-                {[
-                  {
-                    heading: 'Maker by instinct',
-                    body: "I've built apps, launched brands, sold plants, and almost started a 3D print farm. Not all of it worked. Most of it taught me something that no design brief ever has.",
-                  },
-                  {
-                    heading: 'Voracious reader',
-                    body: "I consume voraciously across disciplines — philosophy, behavioural economics, AI ethics, business strategy. The reading list isn't decorative. Every book I finish changes how I frame the next problem.",
-                  },
-                  {
-                    heading: 'Opinionated about design',
-                    body: "I have strong opinions about the design community's love of process theater. I think most design frameworks are taught wrong. And I believe the best design education is shipping something real and watching what happens.",
-                  },
-                ].map((card) => (
-                  <motion.div
-                    key={card.heading}
-                    variants={fadeUp}
-                    className="flex flex-col gap-3 rounded-2xl p-6"
-                    style={{ background: 'var(--surface)', border: '1px solid var(--border)' }}
-                  >
-                    <p className="t-body1 font-semibold text-fg">{card.heading}</p>
-                    <p className="t-body2 text-fg-muted" style={{ lineHeight: 1.7 }}>{card.body}</p>
+        {/* ── 11. EXPERIENCE ───────────────────────────────────────────── */}
+        {[ABOUT_SECTIONS[0]].map((section) => (
+          <div key={section.title} className="border-t border-theme">
+            <W className="py-20">
+              <motion.div variants={stagger} initial="hidden" whileInView="visible" viewport={vp}>
+                <motion.p variants={fadeUp} className="t-overline text-fg-muted mb-8">More about me</motion.p>
+                <div className="grid gap-12 items-start lg:grid-cols-[3fr_7fr]">
+                  <motion.div variants={fadeUp} className="flex flex-col gap-3 lg:pt-1">
+                    <h3 className="t-h3" style={{ margin: 0 }}>{section.title}</h3>
                   </motion.div>
+                  <motion.div variants={stagger} className="flex flex-col gap-6">
+                    <motion.p variants={fadeUp} className="t-h4" style={{ color: 'var(--color-coral)', margin: 0, lineHeight: 1.4, fontWeight: 600 }}>
+                      {section.lead}
+                    </motion.p>
+                    <motion.p variants={fadeUp} className="t-body1 text-fg-muted" style={{ lineHeight: 1.75, margin: 0, whiteSpace: 'pre-line' }}>
+                      {section.body}
+                    </motion.p>
+                    <motion.div variants={fadeUp}>
+                      <a
+                        href={section.href}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="no-underline inline-flex items-center gap-2"
+                        style={{ padding: '10px 20px', borderRadius: 9999, border: '1px solid var(--border)', color: 'var(--fg-muted)', fontSize: 13, fontWeight: 600, transition: 'border-color 0.2s, color 0.2s' }}
+                        onMouseEnter={e => { e.currentTarget.style.borderColor = 'var(--color-coral)'; e.currentTarget.style.color = 'var(--color-coral)'; }}
+                        onMouseLeave={e => { e.currentTarget.style.borderColor = ''; e.currentTarget.style.color = ''; }}
+                      >
+                        Read more on Notion
+                        <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+                          <path d="M1 11L11 1M11 1H3M11 1V9" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                        </svg>
+                      </a>
+                    </motion.div>
+                  </motion.div>
+                </div>
+              </motion.div>
+            </W>
+          </div>
+        ))}
+
+        {/* ── 12. WHAT I'M THINKING ──────────────────────────────────── */}
+        <div className="border-t border-theme">
+          <W className="py-20">
+            <motion.div variants={stagger} initial="hidden" whileInView="visible" viewport={vp}>
+              <motion.p variants={fadeUp} className="t-overline text-fg-muted mb-2">On my mind</motion.p>
+              <motion.h3 variants={fadeUp} className="mb-10">What I&apos;m Thinking About</motion.h3>
+              <div className="grid sm:grid-cols-3 gap-6">
+                {THINKING_ITEMS.map((item, i) => (
+                  <ThinkingCard key={item.label} item={item} index={i} />
                 ))}
               </div>
             </motion.div>
           </W>
         </div>
 
-        {/* ── 6. MORE ABOUT ME — one full section per entry ────────────── */}
-        {ABOUT_SECTIONS.map((section, i) => (
+        {/* ── 13. RECENT READS ─────────────────────────────────────────── */}
+        {[ABOUT_SECTIONS[1]].map((section) => (
           <div key={section.title} className="border-t border-theme">
             <W className="py-20">
-              <motion.div
-                variants={stagger}
-                initial="hidden"
-                whileInView="visible"
-                viewport={vp}
-              >
-                {/* Overline + "More about me" label on first entry only */}
-                {i === 0 && (
-                  <motion.p variants={fadeUp} className="t-overline text-fg-muted mb-8">
-                    More about me
-                  </motion.p>
-                )}
-
+              <motion.div variants={stagger} initial="hidden" whileInView="visible" viewport={vp}>
                 <div className="grid gap-12 items-start lg:grid-cols-[3fr_7fr]">
-
-                    {/* Left — emoji + title */}
-                    <motion.div variants={fadeUp} className="flex flex-col gap-3 lg:pt-1">
-                      <span style={{ fontSize: 36, lineHeight: 1 }}>{section.emoji}</span>
-                      <h2 className="t-h2" style={{ margin: 0 }}>{section.title}</h2>
-                    </motion.div>
-
-                    {/* Right — lead + body + CTA */}
-                    <motion.div variants={stagger} className="flex flex-col gap-6">
-                      <motion.p
-                        variants={fadeUp}
-                        className="t-h4"
-                        style={{ color: 'var(--color-coral)', margin: 0, lineHeight: 1.4, fontWeight: 600 }}
+                  <motion.div variants={fadeUp} className="flex flex-col gap-3 lg:pt-1">
+                    <h3 className="t-h3" style={{ margin: 0 }}>{section.title}</h3>
+                  </motion.div>
+                  <motion.div variants={stagger} className="flex flex-col gap-6">
+                    <motion.p variants={fadeUp} className="t-h4" style={{ color: 'var(--color-coral)', margin: 0, lineHeight: 1.4, fontWeight: 600 }}>
+                      {section.lead}
+                    </motion.p>
+                    <motion.p variants={fadeUp} className="t-body1 text-fg-muted" style={{ lineHeight: 1.75, margin: 0, whiteSpace: 'pre-line' }}>
+                      {section.body}
+                    </motion.p>
+                    <motion.div variants={fadeUp}>
+                      <a
+                        href={section.href}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="no-underline inline-flex items-center gap-2"
+                        style={{ padding: '10px 20px', borderRadius: 9999, border: '1px solid var(--border)', color: 'var(--fg-muted)', fontSize: 13, fontWeight: 600, transition: 'border-color 0.2s, color 0.2s' }}
+                        onMouseEnter={e => { e.currentTarget.style.borderColor = 'var(--color-coral)'; e.currentTarget.style.color = 'var(--color-coral)'; }}
+                        onMouseLeave={e => { e.currentTarget.style.borderColor = ''; e.currentTarget.style.color = ''; }}
                       >
-                        {section.lead}
-                      </motion.p>
-                      <motion.p
-                        variants={fadeUp}
-                        className="t-body1 text-fg-muted"
-                        style={{ lineHeight: 1.75, margin: 0, whiteSpace: 'pre-line' }}
-                      >
-                        {section.body}
-                      </motion.p>
-                      <motion.div variants={fadeUp}>
-                        <a
-                          href={section.href}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="no-underline inline-flex items-center gap-2"
-                          style={{
-                            padding: '10px 20px',
-                            borderRadius: 9999,
-                            border: '1px solid var(--border)',
-                            color: 'var(--fg-muted)',
-                            fontSize: 13,
-                            fontWeight: 600,
-                            transition: 'border-color 0.2s, color 0.2s',
-                          }}
-                          onMouseEnter={e => { e.currentTarget.style.borderColor = 'var(--color-coral)'; e.currentTarget.style.color = 'var(--color-coral)'; }}
-                          onMouseLeave={e => { e.currentTarget.style.borderColor = ''; e.currentTarget.style.color = ''; }}
-                        >
-                          Read more on Notion
-                          <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
-                            <path d="M1 11L11 1M11 1H3M11 1V9" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-                          </svg>
-                        </a>
-                      </motion.div>
+                        Read more on Notion
+                        <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+                          <path d="M1 11L11 1M11 1H3M11 1V9" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                        </svg>
+                      </a>
                     </motion.div>
-
+                  </motion.div>
                 </div>
               </motion.div>
             </W>
@@ -572,42 +1024,50 @@ export default function AboutPage() {
         <div className="border-t border-theme">
           <W className="py-20">
             <motion.div variants={stagger} initial="hidden" whileInView="visible" viewport={vp}>
-              <motion.p variants={fadeUp} className="t-overline text-fg-muted mb-2">Capabilities</motion.p>
-              <motion.h2 variants={fadeUp} className="mb-3">Skills &amp; Expertise</motion.h2>
-              <motion.p variants={fadeUp} className="t-body1 text-fg-muted mb-10 max-w-[560px]">
-                Built across 12+ years, multiple industries, and two startups.
-                T-shaped by design, not by accident.
-              </motion.p>
+              <div className="grid gap-12 items-start lg:grid-cols-[3fr_7fr]">
 
-              <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
-                {SKILL_GROUPS.map((group) => (
-                  <motion.div
-                    key={group.label}
-                    variants={fadeUp}
-                    className="flex flex-col gap-4 rounded-2xl p-5"
-                    style={{ background: 'var(--surface)', border: '1px solid var(--border)' }}
-                  >
-                    <div className="flex items-center gap-2">
-                      <span className="text-xl leading-none">{group.icon}</span>
-                      <p className="t-body2 font-semibold text-fg" style={{ margin: 0 }}>{group.label}</p>
-                    </div>
-                    <div className="flex flex-wrap gap-1.5">
-                      {group.skills.map((skill) => (
-                        <span
-                          key={skill}
-                          className="ui-tag"
-                          style={{
-                            background: 'color-mix(in srgb, var(--fg) 7%, transparent)',
-                            color: 'var(--fg-muted)',
-                            border: '1px solid var(--border)',
-                          }}
-                        >
-                          {skill}
-                        </span>
-                      ))}
-                    </div>
-                  </motion.div>
-                ))}
+                {/* Left 30% — label + h3 + subtitle */}
+                <motion.div variants={fadeUp} className="flex flex-col gap-3 lg:pt-1">
+                  <p className="t-overline text-fg-muted">Capabilities</p>
+                  <h3 className="t-h3" style={{ margin: 0 }}>Skills &amp; Expertise</h3>
+                  <p className="t-body2 text-fg-muted" style={{ lineHeight: 1.65, margin: 0 }}>
+                    Built across 12+ years, multiple industries, and two startups.
+                    T-shaped by design, not by accident.
+                  </p>
+                </motion.div>
+
+                {/* Right 70% — 2×2 skill group grid */}
+                <div className="grid sm:grid-cols-2 gap-6">
+                  {SKILL_GROUPS.map((group) => (
+                    <motion.div
+                      key={group.label}
+                      variants={fadeUp}
+                      className="flex flex-col gap-4 rounded-2xl p-5"
+                      style={{ background: 'var(--surface)', border: '1px solid var(--border)' }}
+                    >
+                      <div className="flex items-center gap-2">
+                        <span className="text-xl leading-none">{group.icon}</span>
+                        <p className="t-body2 font-semibold text-fg" style={{ margin: 0 }}>{group.label}</p>
+                      </div>
+                      <div className="flex flex-wrap gap-2">
+                        {group.skills.map((skill) => (
+                          <span
+                            key={skill}
+                            className="ui-tag"
+                            style={{
+                              background: 'color-mix(in srgb, var(--fg) 7%, transparent)',
+                              color: 'var(--fg-muted)',
+                              border: '1px solid var(--border)',
+                            }}
+                          >
+                            {skill}
+                          </span>
+                        ))}
+                      </div>
+                    </motion.div>
+                  ))}
+                </div>
+
               </div>
             </motion.div>
           </W>

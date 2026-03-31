@@ -26,7 +26,7 @@ import W from '../ui/W';
 function Ticker() {
   const text = TICKER_CHUNK.repeat(4);
   return (
-    <div className="border-t border-theme overflow-hidden whitespace-nowrap py-2.5">
+    <div className="border-t border-theme overflow-hidden whitespace-nowrap py-3">
       <div className="inline-flex footer-ticker-inner">
         {[0, 1].map((i) => (
           <span
@@ -56,15 +56,13 @@ export default function Footer() {
 
           {/* ── 1. CTA headline ── */}
           <motion.div variants={fadeUp}>
-            <p className="t-h2 mb-4">
-              Are you looking for a product designer who can fix UX, bring diverse industry
-              experience, embrace end-to-end thinking, establish design systems, bridge user empathy
-              with metrics, enable product scaling, infuse innovation and collaboration, and make a
-              lasting impact?
+            <p className="t-h3">
+              Good design isn&apos;t decoration. It&apos;s the decision that changes the outcome. I bring craft,
+              systems thinking, and leadership to problems that actually matter — not as separate skills,
+              but as one way of working. If that&apos;s who you&apos;re looking for,{' '}
+              <span style={{ color: 'var(--color-coral)' }}>look no further, get in touch.</span>
             </p>
-            <h2 style={{ color: 'var(--color-coral)' }}>
-              Look no further. Get in touch.
-            </h2>
+            <hr className="mt-8 border-theme" />
           </motion.div>
 
           {/* ── 2. CTA cards ── */}
@@ -100,11 +98,11 @@ export default function Footer() {
             {/* ── LinkedIn card ── */}
             <motion.div
               variants={fadeUp}
-              className="bg-white flex-[2] rounded-[10px] flex flex-col gap-4 p-6 footer-li-card"
+              className="bg-white flex-[2] rounded-[8px] flex flex-col gap-4 p-6 footer-li-card"
             >
               {/* Top row: avatar icon + LinkedIn logo */}
               <div className="flex items-start justify-between">
-                <div className="rounded-full overflow-hidden shrink-0 footer-li-icon-wrap" style={{ width: 90, height: 90, padding: 10 }}>
+                <div className="w-[88px] h-[88px] p-2 rounded-full overflow-hidden shrink-0 footer-li-icon-wrap">
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img src={IMG_AVATAR_ICON} alt="" aria-hidden="true" loading="lazy" className="w-full h-full object-cover" />
                 </div>

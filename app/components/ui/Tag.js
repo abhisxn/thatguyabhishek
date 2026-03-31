@@ -9,12 +9,12 @@
 
 export const TAG_PALETTE = [
   { bg: '#FADEC9', color: '#D9730D' },
-  { bg: '#FDECC8', color: '#CB912F' },
-  { bg: '#DBEDDB', color: '#448361' },
-  { bg: '#D3E5EF', color: '#2E7DAE' },
+  { bg: '#FDECC8', color: 'var(--color-warning)' },   /* was #CB912F → token */
+  { bg: '#DBEDDB', color: 'var(--color-success)' },   /* was #448361 → token */
+  { bg: '#D3E5EF', color: 'var(--color-info)' },      /* was #2E7DAE → token */
   { bg: '#E8DEEE', color: '#9065B0' },
   { bg: '#F5E0E9', color: '#C14F8A' },
-  { bg: '#FFE2DD', color: '#C4554D' },
+  { bg: '#FFE2DD', color: 'var(--color-error)' },     /* was #C4554D → token */
   { bg: '#EEE0DA', color: '#9F6B53' },
   { bg: '#E3E2E0', color: '#787774' },
 ];

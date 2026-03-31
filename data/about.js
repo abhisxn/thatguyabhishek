@@ -11,7 +11,7 @@ export const WORK_ITEMS = [
   },
   {
     label: 'Research is not a phase',
-    desc: 'Talking to users is something I do continuously, not as a gate before design starts. The best insights come when you\'re not looking for them.',
+    desc: "Talking to users is something I do continuously, not as a gate before design starts. The best insights come when you're not looking for them.",
   },
   {
     label: 'I disagree constructively',
@@ -21,6 +21,48 @@ export const WORK_ITEMS = [
     label: 'AI is a tool, not a trend',
     desc: "I'm actively building AI-native workflows — not just using AI to make faster mockups, but rethinking what's possible when intelligence is embedded in the product itself.",
   },
+];
+
+export const THINKING_ITEMS = [
+  {
+    label: 'Can designers own strategy, or are we always downstream of it?',
+    desc: "I've been in rooms where design had a seat at the table and rooms where we were decorating decisions already made. The difference wasn't the company's stated values — it was how much designers understood the business. Still figuring out what that means for how I work.",
+  },
+  {
+    label: 'AI is changing what "senior" means.',
+    desc: "Not the tools — the judgment. When a junior designer with the right prompts can produce what used to take a senior three days, seniority stops being about output and starts being about knowing what to build and why. That's a good thing. Most design teams haven't caught up yet.",
+  },
+  {
+    label: 'I keep almost starting a business.',
+    desc: "A 3D print farm. An import operation. A salon with my sister. None of these are random — they're all about owning the means of production instead of just designing for someone who does. Haven't pulled the trigger yet. But the instinct keeps showing up.",
+  },
+];
+
+export const BEYOND_ITEMS = [
+  {
+    heading: 'Maker by instinct',
+    body: "I've built apps, launched brands, sold plants online, and once nearly started a 3D print farm. The businesses that worked taught me about users. The ones that didn't taught me about everything else. What no design brief ever gives you: the specific feeling of watching something you built fail in public, in real time, with real money involved. I've had that twice. It changes how you design.",
+  },
+  {
+    heading: "I learn when I'm stuck",
+    body: "The things I know best, I learned because a problem forced me to. Not from a planned reading list — from a question I couldn't answer until I went looking. A video essay at 1am. A thread that led to three more. An AI conversation that started as a search and turned into an argument. Give me a real problem and I'll figure out exactly what I need to know to solve it. That's not a gap. That's how I work.",
+  },
+  {
+    heading: 'Opinionated about the craft',
+    body: "I have strong opinions about the design community's love of process theater — the double diamonds, the \"how might we\" workshops, the frameworks taught as religion. Most of them aren't wrong. They're just taught wrong. As rituals instead of tools. The best design education is still: ship something real, watch what happens, try not to repeat the same mistake twice.",
+  },
+  {
+    heading: 'I started before there were rules',
+    body: "Digital design in the early 2000s meant Flash, no grids, no systems, no precedent. The only brief was \"make it work.\" The only feedback loop was whether people came back. That era is gone — but the mindset isn't. I don't have zero respect for convention. I just need to know why a rule exists before I follow it. And if the answer is \"that's how it's always been done,\" that's usually not enough.",
+  },
+];
+
+export const OPINIONS = [
+  "Most design processes are taught as religion, not as tools. The double diamond is a map. Maps are useful. They're not the territory.",
+  '"Design thinking" isn\'t a design skill. It\'s a way of framing problems that any sharp thinker in any discipline can do. Designers named it first. We don\'t own it.',
+  "The best junior designers I've worked with are obsessed with the problem. The ones who struggle are often the ones obsessed with the craft. Both matter — the order is what changes everything.",
+  "AI won't replace designers. It'll replace the ones who use it to go faster but think the same way. The ones using it to ask different questions will be fine.",
+  'There\'s a lot of noise on design LinkedIn. Lists, plugins, "I vibe-coded this." I understand why it works algorithmically. I just wish the signal-to-noise ratio were better. We\'re capable of more interesting conversations than that.',
 ];
 
 export const SKILL_GROUPS = [
@@ -82,16 +124,9 @@ export const ABOUT_SECTIONS = [
     href: 'https://thatguyabhishek.notion.site/My-Experience-05872802d7624f4daa8a8785ba02b5b3',
   },
   {
-    emoji: '🙋‍♂️',
-    title: 'What I Bring',
-    lead: 'Most designers can show you their screens. Fewer can tell you what moved because of them.',
-    body: "Fewer still can tell you how they built the team, set the strategy, and made the decisions that led to those screens being built correctly the first time. I can do all three.",
-    href: 'https://thatguyabhishek.notion.site/What-I-Bring-26af6091ff9a469eadcde9b42a80a678',
-  },
-  {
     emoji: '🏓',
     title: 'Recent Reads',
-    lead: 'What I\'m reading, and why it matters.',
+    lead: "What I'm reading, and why it matters.",
     body: 'A running list of books, essays, and ideas that are actively shaping how I think about design, AI, and leadership. Updated as I read.',
     href: NOTION_ABOUT,
   },

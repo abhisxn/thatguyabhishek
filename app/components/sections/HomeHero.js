@@ -38,7 +38,7 @@ export default function HomeHero() {
                   href="https://www.linkedin.com/in/thatguyabhishek/"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center gap-1 underline text-[#ea8575]"
+                  className="inline-flex items-center gap-1 underline text-[var(--color-coral)]"
                 >
                   Click here
                   <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">

@@ -8,8 +8,8 @@ import Link from 'next/link';
  *  filled-brand  — brand fill         → hover: brand outline
  *
  * Sizes
- *  lg  — btn1: 20px Glory Medium, px-5 py-2.5
- *  sm  — btn2: 16px Glory Medium, pl-5 pr-3 py-2.5 (room for trailing icon)
+ *  lg  — btn1: 20px Glory Medium, px-5 py-3
+ *  sm  — btn2: 16px Glory Medium, pl-5 pr-3 py-3 (room for trailing icon)
  */
 
 const VARIANT_CLASS = {
@@ -31,11 +31,11 @@ export default function Button({
   style     = {},
 }) {
   const sizeClass = size === 'sm'
-    ? 't-btn2 pl-5 pr-3 py-2.5'
-    : 't-btn1 px-5 py-2.5';
+    ? 't-btn2 pl-5 pr-3 py-3'   /* was py-2.5 (10px, not ×4) → py-3 = 12px */
+    : 't-btn1 px-5 py-3';        /* was py-2.5 (10px, not ×4) → py-3 = 12px */
 
   const cls = [
-    'inline-flex items-center justify-center gap-1.5',
+    'inline-flex items-center justify-center gap-2',  /* was gap-1.5 (6px, not ×4) → gap-2 = 8px */
     'rounded-full font-medium',
     VARIANT_CLASS[variant] ?? 'btn-outline',
     sizeClass,

@@ -17,6 +17,7 @@ const SECTIONS = [
   { id: 'block-elements',   label: '13 Block Elements' },
   { id: 'callout-types',    label: '14 Callout System' },
   { id: 'tables',           label: '15 Tables' },
+  { id: 'card-interactions', label: '16 Card Interactions' },
 ];
 
 export default function StyleNav() {

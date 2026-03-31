@@ -29,7 +29,7 @@ function AwardRow({ tier, project, festival }) {
     >
       {/* Tier badge */}
       <span
-        className="t-caption whitespace-nowrap rounded-full px-2.5 py-1 font-bold self-center shrink-0"
+        className="t-caption whitespace-nowrap rounded-full px-2 py-1 font-bold self-center shrink-0"
         style={{ background: s.bg, color: s.color, border: `1px solid ${s.border}` }}
       >
         {tier}
@@ -128,14 +128,14 @@ function FullListCard({ count }) {
         e.currentTarget.style.transform   = 'translateY(0)';
       }}
     >
-      <p className="t-body3 font-semibold" style={{ color: '#4839ca' }}>
+      <p className="t-body3 font-semibold" style={{ color: 'var(--brand)' }}>
         + {count} more mentions
       </p>
-      <div className="flex items-center gap-1.5">
-        <span className="t-caption font-bold" style={{ color: '#4839ca' }}>
+      <div className="flex items-center gap-2">
+        <span className="t-caption font-bold" style={{ color: 'var(--brand)' }}>
           Full list on Notion
         </span>
-        <ArrowIcon size={11} style={{ color: '#4839ca' }} />
+        <ArrowIcon size={12} style={{ color: 'var(--brand)' }} />
       </div>
     </a>
   );
@@ -207,7 +207,7 @@ export default function AwardsPage() {
                 <div className="flex items-center gap-3">
                   <h2 className="t-h4 font-bold" style={{ color: 'var(--fg)' }}>Awards</h2>
                   <span
-                    className="t-caption px-2.5 py-1 rounded-full font-bold"
+                    className="t-caption px-2 py-1 rounded-full font-bold"
                     style={{
                       background: 'var(--surface)',
                       border:     '1px solid var(--border)',
@@ -285,7 +285,7 @@ export default function AwardsPage() {
                 <div className="flex items-center gap-3">
                   <h2 className="t-h4 font-bold" style={{ color: 'var(--fg)' }}>Press &amp; Mentions</h2>
                   <span
-                    className="t-caption px-2.5 py-1 rounded-full font-bold"
+                    className="t-caption px-2 py-1 rounded-full font-bold"
                     style={{
                       background:  'var(--surface)',
                       border:      '1px solid var(--border)',

@@ -9,6 +9,8 @@ import { getProjectPageData } from '../../../lib/notion-project';
 import { findProjectBySlug } from '../../../lib/notion-work';
 import W from '../../components/ui/W';
 import DevBlockMap from '../../components/dev/DevBlockMap';
+import ProjectPageHero from '../../components/sections/ProjectPageHero';
+import FadeSection from '../../components/ui/FadeSection';
 
 // ISR: revalidate every hour — Notion signed image URLs expire after ~1 hour
 export const revalidate = 3600;
@@ -91,17 +93,6 @@ function ArrowRight() {
   );
 }
 
-function Tag({ label }) {
-  return (
-    <span
-      className="inline-flex items-center px-3 py-1 rounded-full t-caption font-medium"
-      style={{ background: 'var(--surface)', border: '1px solid var(--border)', color: 'var(--fg-muted)' }}
-    >
-      {label}
-    </span>
-  );
-}
-
 // ─── ProjectContent — async, streams in via Suspense ─────────────────────────
 // Everything that requires a Notion API call lives here.
 
@@ -168,8 +159,8 @@ async function ProjectContent({ slug, projectJson }) {
               href={meta.notionUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 t-body3 font-semibold px-5 py-2.5 rounded-full border-2 transition-colors duration-200 hover:bg-[#4839ca] hover:text-white"
-              style={{ borderColor: '#4839ca', color: '#4839ca' }}
+              className="inline-flex items-center gap-2 t-body3 font-semibold px-5 py-3 rounded-full border-2 transition-colors duration-200 hover:bg-[var(--brand)] hover:text-white"
+              style={{ borderColor: 'var(--brand)', color: 'var(--brand)' }}
             >
               Read on Notion <ArrowRight />
             </a>
@@ -214,40 +205,14 @@ export default async function ProjectPage({ params }) {
         <W className="pt-24 pb-0">
           <Link
             href="/work"
-            className="inline-flex items-center gap-1.5 t-caption font-medium text-fg-muted hover:text-fg transition-colors"
+            className="inline-flex items-center gap-2 t-caption font-medium text-fg-muted hover:text-fg transition-colors"
           >
             <BackArrow /> Back to Work
           </Link>
         </W>
 
         {/* ── Hero — instant, from static JSON ── */}
-        {project && (
-          <W className="pt-8 pb-12">
-            {project.tags?.length > 0 && (
-              <div className="flex flex-wrap gap-2 mb-5">
-                {project.tags.map((tag) => <Tag key={tag} label={tag} />)}
-              </div>
-            )}
-
-            <h1 className="t-display mb-5">{project.title}</h1>
-
-            {project.desc && (
-              <p className="t-body1 text-fg-muted leading-relaxed mb-8">{project.desc}</p>
-            )}
-
-            {project.url && (
-              <a
-                href={project.url}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 t-body3 font-semibold px-5 py-2.5 rounded-full border-2 transition-colors duration-200 hover:bg-[#4839ca] hover:text-white"
-                style={{ borderColor: '#4839ca', color: '#4839ca' }}
-              >
-                View Live Project <ArrowRight />
-              </a>
-            )}
-          </W>
-        )}
+        {project && <ProjectPageHero project={project} />}
 
         {/* ── Banner + content — streams from Notion ── */}
         <Suspense fallback={<ContentSkeleton />}>
@@ -266,26 +231,28 @@ export default async function ProjectPage({ params }) {
           </W>
         )}
 
-        {/* ── Footer CTA — instant ── */}
-        <W className="py-16 border-t border-theme mt-4">
-          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6">
-            <div>
-              <p className="t-h4 font-bold mb-1">Liked this project?</p>
-              <p className="t-body2 text-fg-muted">Let&apos;s talk about what we can build together.</p>
+        {/* ── Footer CTA ── */}
+        <FadeSection>
+          <W className="py-16 border-t border-theme mt-4">
+            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6">
+              <div>
+                <p className="t-h4 font-bold mb-1">Liked this project?</p>
+                <p className="t-body2 text-fg-muted">Let&apos;s talk about what we can build together.</p>
+              </div>
+              <div className="flex items-center gap-3 flex-shrink-0">
+                <Link href="/work" className="t-body3 font-medium text-fg-muted hover:text-fg transition-colors">
+                  ← More work
+                </Link>
+                <a
+                  href="mailto:abhisxn@gmail.com"
+                  className="inline-flex items-center gap-2 t-body3 font-semibold px-5 py-3 rounded-full btn-filled-brand"
+                >
+                  Get in touch
+                </a>
+              </div>
             </div>
-            <div className="flex items-center gap-3 flex-shrink-0">
-              <Link href="/work" className="t-body3 font-medium text-fg-muted hover:text-fg transition-colors">
-                ← More work
-              </Link>
-              <a
-                href="mailto:abhisxn@gmail.com"
-                className="inline-flex items-center gap-2 t-body3 font-semibold px-5 py-2.5 rounded-full btn-filled-brand"
-              >
-                Get in touch
-              </a>
-            </div>
-          </div>
-        </W>
+          </W>
+        </FadeSection>
 
       </main>
     </>

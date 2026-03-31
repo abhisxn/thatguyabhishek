@@ -1,6 +1,7 @@
 import { RenderBlocks } from './NotionBlocks';
 import RichText from '../ui/RichText';
 import { SECTION_STYLES, styleIndexFromColor } from '@/lib/section-styles';
+import FadeSection from '../ui/FadeSection';
 
 /* ─────────────────────────────────────────────────────────────
  * SECTION LAYOUT SYSTEM
@@ -130,7 +131,7 @@ function SpotlightBlob() {
       style={{
         position: 'absolute', inset: 0, pointerEvents: 'none',
         background:
-          'radial-gradient(ellipse 60% 80% at 50% 50%, color-mix(in srgb, #4839ca 8%, transparent) 0%, transparent 70%)',
+          'radial-gradient(ellipse 60% 80% at 50% 50%, color-mix(in srgb, var(--brand) 8%, transparent) 0%, transparent 70%)',
       }}
     />
   );
@@ -171,7 +172,7 @@ export function Section({ blocks, childrenMap, styleIndex, projects, isIntro }) 
                 >
                   <RichText texts={headingRichText} />
                 </p>
-                <div className="mt-4 h-px w-8" style={{ background: '#4839ca' }} />
+                <div className="mt-4 h-px w-8" style={{ background: 'var(--brand)' }} />
                 {subtitleBlocks.length > 0 && (
                   <div className="mt-3" style={{ color: s.mutedClr }}>
                     <RenderBlocks
@@ -249,7 +250,7 @@ export function SectionedBlocks({ blocks, childrenMap, projects }) {
   return (
     <>
       {sections.map(({ blocks: sectionBlocks }, i) => (
-        <div key={i}>
+        <FadeSection key={i}>
           {i > 0 && <SectionDivider />}
           <Section
             blocks={sectionBlocks}
@@ -258,7 +259,7 @@ export function SectionedBlocks({ blocks, childrenMap, projects }) {
             styleIndex={styleIndexFor(sectionBlocks, childrenMap)}
             isIntro={i === 0 && getSplitInfo(sectionBlocks, childrenMap) === null}
           />
-        </div>
+        </FadeSection>
       ))}
     </>
   );

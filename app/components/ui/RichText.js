@@ -7,26 +7,28 @@
  *   <RichText texts={block.paragraph.rich_text} />
  */
 
-/* Notion annotation color → CSS style mapping */
+/* Notion annotation color → CSS style mapping
+ * Foreground colors reference semantic tokens where a match exists.
+ * Background highlights: padding/radius snap to base-4 grid. */
 const COLOR_MAP = {
   gray:              { color: 'var(--fg-muted)', opacity: 0.65 },
   brown:             { color: '#9e6b4f' },
-  orange:            { color: '#ea8575' },
-  yellow:            { color: '#cb912f' },
-  green:             { color: '#448361' },
-  blue:              { color: '#2e7dae' },
-  purple:            { color: '#4839ca' },
+  orange:            { color: 'var(--color-coral)' },         /* was #ea8575 → token */
+  yellow:            { color: 'var(--color-warning)' },       /* was #cb912f → token */
+  green:             { color: 'var(--color-success)' },       /* was #448361 → token */
+  blue:              { color: 'var(--color-info)' },          /* was #2e7dae → token */
+  purple:            { color: 'var(--brand)' },               /* was #4839ca → token */
   pink:              { color: '#e255a1' },
-  red:               { color: '#c4554d' },
-  gray_background:   { background: 'rgba(206,205,202,0.25)', borderRadius: '3px', padding: '1px 3px' },
-  brown_background:  { background: 'rgba(158,107,79,0.15)',  borderRadius: '3px', padding: '1px 3px' },
-  orange_background: { background: 'rgba(234,133,117,0.15)', borderRadius: '3px', padding: '1px 3px' },
-  yellow_background: { background: 'rgba(203,145,47,0.15)',  borderRadius: '3px', padding: '1px 3px' },
-  green_background:  { background: 'rgba(68,131,97,0.15)',   borderRadius: '3px', padding: '1px 3px' },
-  blue_background:   { background: 'rgba(46,125,174,0.15)',  borderRadius: '3px', padding: '1px 3px' },
-  purple_background: { background: 'rgba(72,57,202,0.15)',   borderRadius: '3px', padding: '1px 3px' },
-  pink_background:   { background: 'rgba(226,85,161,0.15)',  borderRadius: '3px', padding: '1px 3px' },
-  red_background:    { background: 'rgba(196,85,77,0.15)',   borderRadius: '3px', padding: '1px 3px' },
+  red:               { color: 'var(--color-error)' },         /* was #c4554d → token */
+  gray_background:   { background: 'rgba(206,205,202,0.25)', borderRadius: '4px', padding: '2px 4px' },  /* was 3px/1px 3px → 4px/2px 4px */
+  brown_background:  { background: 'rgba(158,107,79,0.15)',  borderRadius: '4px', padding: '2px 4px' },
+  orange_background: { background: 'var(--color-warning-bg)', borderRadius: '4px', padding: '2px 4px' },
+  yellow_background: { background: 'var(--color-warning-bg)', borderRadius: '4px', padding: '2px 4px' },
+  green_background:  { background: 'var(--color-success-bg)', borderRadius: '4px', padding: '2px 4px' },
+  blue_background:   { background: 'var(--color-info-bg)',    borderRadius: '4px', padding: '2px 4px' },
+  purple_background: { background: 'var(--brand-muted)',      borderRadius: '4px', padding: '2px 4px' },
+  pink_background:   { background: 'rgba(226,85,161,0.15)',  borderRadius: '4px', padding: '2px 4px' },
+  red_background:    { background: 'var(--color-error-bg)',   borderRadius: '4px', padding: '2px 4px' },
 };
 
 export default function RichText({ texts }) {

@@ -35,8 +35,8 @@ export const CARD_SIZES = {
   },
   m: {
     radius:    'rounded-[20px]',
-    imgHeight: 'h-[220px]',
-    hoverPad:  'group-hover:pt-2.5 group-hover:px-2.5',
+    imgHeight: 'h-[224px]',  /* was 220px (not ×8) → 224 = 8×28 */
+    hoverPad:  'group-hover:pt-3 group-hover:px-3',  /* was 2.5 → 10px (not ×4); pt-3 = 12px */
     imgRadius: 'rounded-t-[16px] group-hover:rounded-[16px]',
     titleCls:  't-h5',
     descCls:   't-body2',
@@ -49,13 +49,13 @@ export const CARD_SIZES = {
   },
   s: {
     radius:    'rounded-xl',
-    imgHeight: 'h-[150px]',
+    imgHeight: 'h-[152px]',  /* was 150px (not ×8) → 152 = 8×19 */
     hoverPad:  'group-hover:pt-2 group-hover:px-2',
-    imgRadius: 'rounded-t-[10px] group-hover:rounded-[10px]',
+    imgRadius: 'rounded-t-[8px] group-hover:rounded-[8px]',  /* was 10px (not ×4) → 8 = 8×1 */
     titleCls:  'text-base font-semibold leading-tight',
     descCls:   't-body3 line-clamp-3',
     contentGap: 'gap-3 px-3 pt-3 pb-4',
-    innerGap:  'gap-1.5',
+    innerGap:  'gap-2',   /* was 1.5 → 6px (not ×4); gap-2 = 8px */
     showDesc:  false,
     showBtn:   false,
     showTags:  true,
@@ -68,7 +68,7 @@ export const CARD_SIZES = {
     imgRadius: null,
     titleCls:  'text-sm font-semibold leading-snug',
     contentGap: 'gap-2 px-3 py-3',
-    innerGap:  'gap-1.5',
+    innerGap:  'gap-2',  /* was 1.5 → 6px (not ×4); gap-2 = 8px */
     showDesc:  false,
     showBtn:   false,
     showTags:  true,

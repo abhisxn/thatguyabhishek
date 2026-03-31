@@ -92,7 +92,7 @@ export default function ProjectsExpandableGrid({
         <div className="mt-10 flex justify-center">
           <button
             onClick={() => setExpanded((v) => !v)}
-            className="inline-flex items-center gap-2 px-6 py-2.5 rounded-full t-body3 font-semibold btn-outline-brand"
+            className="inline-flex items-center gap-2 px-6 py-3 rounded-full t-body3 font-semibold btn-outline-brand"
             aria-expanded={expanded}
           >
             {expanded ? 'Show Less' : viewAllLabel}

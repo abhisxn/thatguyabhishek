@@ -2,8 +2,8 @@
 export const revalidate = 3600;
 
 import GradientBackground from '../components/layout/GradientBackground';
-import CalloutBlock from '../components/sections/CalloutBlock';
 import FadeSection from '../components/ui/FadeSection';
+import CalloutBlock from '../components/sections/CalloutBlock';
 import { getWorkPageData } from '../../lib/notion-work';
 import { RenderBlocks } from '../components/sections/NotionBlocks';
 import ProjectsExpandableGrid from '../components/sections/ProjectsExpandableGrid';
@@ -47,9 +47,9 @@ export default async function WorkPage() {
           <>
             {/* Prose content — description, intro text */}
             {proseBlocks.length > 0 && (
-              <div className="px-6 sm:px-10 lg:px-16 pt-16 pb-4 max-w-[1200px] mx-auto flex flex-col gap-4">
+              <FadeSection className="px-6 sm:px-10 lg:px-16 pt-16 pb-4 max-w-[1200px] mx-auto flex flex-col gap-4">
                 <RenderBlocks blocks={proseBlocks} childrenMap={childrenMap} skipDatabase />
-              </div>
+              </FadeSection>
             )}
 
             {/* Featured project cards grid */}

@@ -127,7 +127,7 @@ export default function Card({
         {sz.showBtn && href && (
           <span className={[
             'mt-auto inline-flex items-center justify-center',
-            'px-5 py-2.5 rounded-full t-btn1 font-semibold border-2',
+            'px-5 py-3 rounded-full t-btn1 font-semibold border-2',
             'transition-colors duration-200',
             sty.btn,
           ].join(' ')}>

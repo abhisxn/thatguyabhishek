@@ -12,11 +12,11 @@
 
 export function Input({ label, id, error, className = '', ...props }) {
   return (
-    <div className="flex flex-col gap-1.5 w-full">
+    <div className="flex flex-col gap-2 w-full">
       {label && (
         <label
           htmlFor={id}
-          className="text-[13px] font-semibold tracking-wide uppercase"
+          className="text-[12px] font-semibold tracking-wide uppercase"
           style={{ color: 'var(--fg-muted)', letterSpacing: '0.06em' }}
         >
           {label}
@@ -28,7 +28,7 @@ export function Input({ label, id, error, className = '', ...props }) {
         {...props}
       />
       {error && (
-        <p className="text-[12px] font-medium" style={{ color: '#C4554D' }}>
+        <p className="text-[12px] font-medium" style={{ color: 'var(--color-error)' }}>
           {error}
         </p>
       )}
@@ -38,11 +38,11 @@ export function Input({ label, id, error, className = '', ...props }) {
 
 export function Textarea({ label, id, rows = 4, error, className = '', ...props }) {
   return (
-    <div className="flex flex-col gap-1.5 w-full">
+    <div className="flex flex-col gap-2 w-full">
       {label && (
         <label
           htmlFor={id}
-          className="text-[13px] font-semibold tracking-wide uppercase"
+          className="text-[12px] font-semibold tracking-wide uppercase"
           style={{ color: 'var(--fg-muted)', letterSpacing: '0.06em' }}
         >
           {label}
@@ -55,7 +55,7 @@ export function Textarea({ label, id, rows = 4, error, className = '', ...props 
         {...props}
       />
       {error && (
-        <p className="text-[12px] font-medium" style={{ color: '#C4554D' }}>
+        <p className="text-[12px] font-medium" style={{ color: 'var(--color-error)' }}>
           {error}
         </p>
       )}

@@ -147,7 +147,7 @@ export function NotionBlock({ block, projects, childrenMap, skipDatabase, skipDi
             type="checkbox"
             defaultChecked={checked}
             disabled
-            className="mt-0.5 size-4 flex-shrink-0 accent-[#4839ca] rounded"
+            className="mt-0.5 size-4 flex-shrink-0 accent-[var(--brand)] rounded"
           />
           <span className={checked ? 'line-through opacity-50' : ''}>
             <RichText texts={texts} />
@@ -305,7 +305,7 @@ export function NotionBlock({ block, projects, childrenMap, skipDatabase, skipDi
       const url = block.button?.action?.type === 'url' ? block.button.action.url : null;
       if (!url) return <span className="t-body3 font-medium text-fg-muted">{label}</span>;
       return (
-        <a href={url} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1.5 t-body3 font-medium px-5 py-2.5 rounded-full transition-colors border border-theme text-fg hover:bg-surface">
+        <a href={url} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 t-body3 font-medium px-5 py-3 rounded-full transition-colors border border-theme text-fg hover:bg-surface">
           {label}
         </a>
       );

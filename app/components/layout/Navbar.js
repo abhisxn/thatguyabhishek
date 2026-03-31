@@ -42,7 +42,7 @@ export default function Navbar() {
       <div className="max-w-[1200px] mx-auto px-6 sm:px-10 lg:px-16 h-16 flex items-center justify-between">
         <Link href="/" className="flex items-center hover:opacity-70 transition-opacity duration-200">
           {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src="/logo.svg" alt="thatguyabhishek" className="h-[46px] w-auto" />
+          <img src="/logo.svg" alt="thatguyabhishek" className="h-12 w-auto" />
         </Link>
 
         {/* Desktop */}
@@ -76,11 +76,11 @@ export default function Navbar() {
           <button
             onClick={() => setOpen((v) => !v)}
             aria-label="Toggle menu"
-            className="flex flex-col justify-center gap-[5px] w-8 h-8"
+            className="flex flex-col justify-center gap-[4px] w-8 h-8"
           >
-            <span className={`block h-px transition-all duration-300 origin-center ${open ? 'w-5 translate-y-[7px] rotate-45' : 'w-5'}`} style={{ background: 'var(--fg)' }} />
+            <span className={`block h-px transition-all duration-300 origin-center ${open ? 'w-5 translate-y-2 rotate-45' : 'w-5'}`} style={{ background: 'var(--fg)' }} />
             <span className={`block h-px transition-all duration-300 ${open ? 'w-0 opacity-0' : 'w-4'}`} style={{ background: 'var(--fg)' }} />
-            <span className={`block h-px transition-all duration-300 origin-center ${open ? 'w-5 -translate-y-[7px] -rotate-45' : 'w-5'}`} style={{ background: 'var(--fg)' }} />
+            <span className={`block h-px transition-all duration-300 origin-center ${open ? 'w-5 -translate-y-2 -rotate-45' : 'w-5'}`} style={{ background: 'var(--fg)' }} />
           </button>
         </div>
       </div>

@@ -130,7 +130,7 @@ export default function ContactPage() {
                       <p className="t-body2 font-semibold">{c.value}</p>
                     </div>
                     <p className="t-body3 flex-1 text-fg-muted">{c.desc}</p>
-                    <span className="inline-flex items-center gap-1.5 t-body3 font-semibold text-[#a5b4fc]">
+                    <span className="inline-flex items-center gap-2 t-body3 font-semibold text-[var(--brand)]">
                       {c.cta} <ArrowIcon size={12} />
                     </span>
                   </motion.a>

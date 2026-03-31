@@ -37,11 +37,11 @@ function RefreshCard({ title, description, buttonLabel, onAction, disabled, stat
       <button
         onClick={onAction}
         disabled={disabled}
-        className="self-start px-5 py-2.5 rounded-full text-sm font-semibold transition-colors duration-200"
+        className="self-start px-5 py-3 rounded-full text-sm font-semibold transition-colors duration-200"
         style={{
-          background: disabled ? 'var(--surface)' : '#4839ca',
+          background: disabled ? 'var(--surface)' : 'var(--brand)',
           color: disabled ? 'var(--fg-muted)' : '#ffffff',
-          border: `2px solid ${disabled ? 'var(--border)' : '#4839ca'}`,
+          border: `2px solid ${disabled ? 'var(--border)' : 'var(--brand)'}`,
           cursor: disabled ? 'not-allowed' : 'pointer',
         }}
       >
@@ -105,7 +105,7 @@ export default function AdminRefreshPage() {
             value={secret}
             onChange={(e) => setSecret(e.target.value)}
             placeholder="REFRESH_SECRET value"
-            className="w-full px-4 py-2.5 rounded-xl text-sm"
+            className="w-full px-4 py-3 rounded-xl text-sm"
             style={{
               background: 'var(--surface)',
               border: '1px solid var(--border)',

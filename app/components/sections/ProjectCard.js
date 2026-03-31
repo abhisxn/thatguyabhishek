@@ -92,7 +92,7 @@ export function ProjectsCarousel({
         <p className="t-h4 font-semibold">{heading}</p>
         <Link
           href={viewAllHref}
-          className="inline-flex items-center gap-1.5 t-body3 font-semibold px-4 py-2 rounded-full btn-outline-brand"
+          className="inline-flex items-center gap-2 t-body3 font-semibold px-4 py-2 rounded-full btn-outline-brand"
         >
           View all
           <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">

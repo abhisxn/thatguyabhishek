@@ -1,10 +1,18 @@
 'use client';
 
 import Link from 'next/link';
+import { motion } from 'framer-motion';
+import { fadeUp, vp } from '@/lib/motion';
 import './MoreWorkCard.css';
 
 export default function MoreWorkCard() {
   return (
+    <motion.div
+      variants={fadeUp}
+      initial="hidden"
+      whileInView="visible"
+      viewport={vp}
+    >
     <Link
       href="/work"
       className="mw-card group block no-underline relative overflow-hidden rounded-[24px] h-full min-h-[480px] flex flex-col items-center justify-center gap-10 p-10"
@@ -28,5 +36,6 @@ export default function MoreWorkCard() {
         </svg>
       </span>
     </Link>
+    </motion.div>
   );
 }
