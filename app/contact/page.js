@@ -2,7 +2,6 @@
 
 import { motion } from 'framer-motion';
 import GradientBackground from '../components/layout/GradientBackground';
-import Button from '../components/ui/Button';
 import { ArrowIcon } from '../components/ui/icons';
 import { fadeUp, stagger, vp } from '../../lib/motion';
 import W from '../components/ui/W';
@@ -130,7 +129,7 @@ export default function ContactPage() {
                       <p className="t-body2 font-semibold">{c.value}</p>
                     </div>
                     <p className="t-body3 flex-1 text-fg-muted">{c.desc}</p>
-                    <span className="inline-flex items-center gap-2 t-body3 font-semibold text-[var(--brand)]">
+                    <span className="inline-flex items-center gap-2 t-body3 font-semibold text-[var(--fg)] group-hover:text-[var(--color-coral)] transition-colors duration-200">
                       {c.cta} <ArrowIcon size={12} />
                     </span>
                   </motion.a>

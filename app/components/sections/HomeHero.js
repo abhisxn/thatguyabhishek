@@ -12,10 +12,30 @@ export default function HomeHero() {
           variants={fadeUp}
           initial="hidden"
           animate="visible"
-          className="t-display mb-10 w-full"
+          className="t-display mb-8 w-full"
         >
           Hey there, I&apos;m Abhishek Saxena, a product designer enabling growth led design for 12+ years
         </motion.h1>
+
+        {/* Mobile avatar — visible below headline, hidden at lg+ */}
+        <motion.div
+          initial={{ opacity: 0, scale: 0.88, y: 16 }}
+          animate={{ opacity: 1, scale: 1, y: 0 }}
+          transition={{ duration: 0.8, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
+          className="flex lg:hidden justify-center mb-10"
+        >
+          <motion.div
+            animate={{ y: [0, -10, 0] }}
+            transition={{ duration: 5.5, repeat: Infinity, ease: 'easeInOut' }}
+            className="hero-avatar-float-sm"
+          >
+            <div className="hero-avatar-glow-sm" />
+            <div className="avatar-circle-sm">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src="/avatar.gif" alt="Abhishek Saxena" className="hero-avatar-img-sm" />
+            </div>
+          </motion.div>
+        </motion.div>
 
         <div className="grid lg:grid-cols-[1fr_480px] gap-10 items-center">
           <motion.div variants={stagger} initial="hidden" animate="visible">

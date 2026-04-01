@@ -677,15 +677,73 @@ export default function AboutPage() {
                 </p>
               </motion.div>
 
-              {/* Bottom: headings list (1/3) + content callout (2/3) */}
+              {/* Bottom: tabs + content callout */}
               <motion.div
                 variants={fadeUp}
-                className="grid gap-8"
-                style={{ gridTemplateColumns: '1fr 2fr' }}
                 onMouseEnter={() => setPaused(true)}
                 onMouseLeave={() => setPaused(false)}
               >
-                  {/* Left column — stacked headings */}
+                {/* ── Mobile: horizontal scrollable pill tabs ── */}
+                <div className="block md:hidden overflow-x-auto -mx-6 px-6 pb-3 mb-5">
+                  <div className="flex gap-2" style={{ width: 'max-content' }}>
+                    {WORK_ITEMS.map((item, i) => (
+                      <button
+                        key={item.label}
+                        onClick={() => goTo(i)}
+                        style={{
+                          background: i === activeWork ? 'var(--brand)' : 'color-mix(in srgb, var(--brand) 8%, var(--surface))',
+                          border: `1px solid ${i === activeWork ? 'var(--brand)' : 'color-mix(in srgb, var(--brand) 16%, var(--border))'}`,
+                          color: i === activeWork ? '#fff' : 'var(--fg-muted)',
+                          borderRadius: 9999,
+                          padding: '8px 16px',
+                          fontSize: '14px',
+                          fontWeight: 600,
+                          cursor: 'pointer',
+                          whiteSpace: 'nowrap',
+                          transition: 'all 0.2s ease',
+                        }}
+                      >
+                        {item.label}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                {/* ── Mobile: content panel below tabs ── */}
+                <div
+                  className="block md:hidden rounded-2xl"
+                  style={{
+                    background: 'color-mix(in srgb, var(--brand) 8%, var(--surface))',
+                    border: '1px solid color-mix(in srgb, var(--brand) 20%, var(--border))',
+                    overflow: 'hidden',
+                  }}
+                >
+                  <AnimatePresence mode="wait" initial={false} custom={direction}>
+                    <motion.div
+                      key={`mob-${activeWork}`}
+                      custom={direction}
+                      initial={{ opacity: 0, x: direction * 24 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      exit={{ opacity: 0, x: direction * -24 }}
+                      transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
+                      style={{ padding: '24px 22px' }}
+                    >
+                      <p
+                        className="t-caption tabular-nums"
+                        style={{ color: 'var(--color-coral)', marginBottom: 14, fontWeight: 700, letterSpacing: '0.08em' }}
+                      >
+                        {String(activeWork + 1).padStart(2, '0')} / {String(WORK_ITEMS.length).padStart(2, '0')}
+                      </p>
+                      <p className="t-h3" style={{ color: 'var(--fg)', margin: 0, lineHeight: 1.35, fontWeight: 600 }}>
+                        {WORK_ITEMS[activeWork].desc}
+                      </p>
+                    </motion.div>
+                  </AnimatePresence>
+                </div>
+
+                {/* ── Desktop: side-by-side grid (1fr + 2fr) ── */}
+                <div className="hidden md:grid gap-8" style={{ gridTemplateColumns: '1fr 2fr' }}>
+                  {/* Left column — stacked border-left headings */}
                   <div className="flex flex-col">
                     {WORK_ITEMS.map((item, i) => (
                       <button
@@ -711,10 +769,8 @@ export default function AboutPage() {
                             transition={{ duration: CAROUSEL_INTERVAL / 1000, ease: 'linear' }}
                             style={{
                               position: 'absolute',
-                              left: -2,
-                              top: 0,
-                              width: 2,
-                              height: '100%',
+                              left: -2, top: 0,
+                              width: 2, height: '100%',
                               background: 'var(--brand)',
                               transformOrigin: 'top',
                               borderRadius: 2,
@@ -768,7 +824,8 @@ export default function AboutPage() {
                       </motion.div>
                     </AnimatePresence>
                   </div>
-                </motion.div>
+                </div>
+              </motion.div>
 
             </motion.div>
           </W>
@@ -781,7 +838,7 @@ export default function AboutPage() {
               <motion.p variants={fadeUp} className="t-overline text-fg-muted mb-2">The human behind the work</motion.p>
               <motion.h3 variants={fadeUp} className="mb-10">Beyond the Work</motion.h3>
 
-              <div className="grid grid-cols-2 gap-6 items-start">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 items-start">
                 {BEYOND_ITEMS.map((card, i) => (
                   <NumberedCard key={card.heading} heading={card.heading} body={card.body} index={i} style={{ minHeight: 220 }} />
                 ))}

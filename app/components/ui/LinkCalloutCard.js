@@ -76,7 +76,7 @@ export function LinkCalloutCardUI({ title, body, btnLabel, href, ogImage, bg = '
 
       {/* ── Right: OG thumbnail — full card height ── */}
       {ogImage && (
-        <div className="w-[200px] shrink-0 overflow-hidden">
+        <div className="w-[120px] sm:w-[200px] shrink-0 overflow-hidden">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             src={ogImage}
