@@ -53,10 +53,10 @@ function WritingCard({ article }) {
           {article.emoji}
         </motion.span>
         <div className="flex flex-col gap-2" style={{ flex: 1 }}>
-          <p className="t-body1 font-semibold text-fg" style={{ margin: 0, lineHeight: 1.4 }}>
+          <p className="t-h5 text-fg" style={{ margin: 0 }}>
             {article.title}
           </p>
-          <p className="t-body2 text-fg-muted" style={{ margin: 0, lineHeight: 1.55 }}>
+          <p className="t-body2 text-fg-muted" style={{ margin: 0 }}>
             {article.desc}
           </p>
         </div>
@@ -76,37 +76,8 @@ function WritingCard({ article }) {
   );
 }
 
-/* ── Beyond the Work card ─────────────────────────────────────────────── */
-function BeyondCard({ card, index }) {
-  const strokeOpacity = useSpring(0.2, { stiffness: 160, damping: 24 });
-  const num = String(index + 1).padStart(2, '0');
-
-  return (
-    <div
-      style={{
-        position: 'relative', borderRadius: 16, padding: '20px',
-        background: 'var(--surface)', cursor: 'default',
-        display: 'flex', flexDirection: 'column', gap: 16, minHeight: 220,
-      }}
-      onMouseEnter={() => strokeOpacity.set(0.7)}
-      onMouseLeave={() => strokeOpacity.set(0.2)}
-    >
-      <motion.div style={{ ...STROKE_RING, opacity: strokeOpacity }} />
-      <p className="t-caption tabular-nums font-bold" style={{ color: 'var(--color-coral)', letterSpacing: '0.08em', margin: 0 }}>
-        {num}
-      </p>
-      <p className="t-body1 font-semibold text-fg" style={{ margin: 0, lineHeight: 1.4 }}>
-        {card.heading}
-      </p>
-      <p className="t-body2 text-fg-muted" style={{ margin: 0, lineHeight: 1.8 }}>
-        {card.body}
-      </p>
-    </div>
-  );
-}
-
-/* ── What I'm Thinking About card ────────────────────────────────────── */
-function ThinkingCard({ item, index }) {
+/* ── Shared numbered card — used by Beyond the Work + What I'm Thinking About ── */
+function NumberedCard({ heading, body, index, style }) {
   const strokeOpacity = useSpring(0.2, { stiffness: 160, damping: 24 });
 
   return (
@@ -116,6 +87,7 @@ function ThinkingCard({ item, index }) {
           position: 'relative', borderRadius: 16, padding: '24px',
           background: 'var(--surface)', cursor: 'default',
           display: 'flex', flexDirection: 'column', gap: 16, height: '100%',
+          ...style,
         }}
         onMouseEnter={() => strokeOpacity.set(0.7)}
         onMouseLeave={() => strokeOpacity.set(0.2)}
@@ -124,11 +96,11 @@ function ThinkingCard({ item, index }) {
         <p className="t-caption tabular-nums font-bold" style={{ color: 'var(--color-coral)', letterSpacing: '0.08em', margin: 0 }}>
           {String(index + 1).padStart(2, '0')}
         </p>
-        <p className="t-body1 font-semibold text-fg" style={{ margin: 0, lineHeight: 1.4 }}>
-          {item.label}
+        <p className="t-h5 text-fg" style={{ margin: 0 }}>
+          {heading}
         </p>
-        <p className="t-body2 text-fg-muted" style={{ margin: 0, lineHeight: 1.7 }}>
-          {item.desc}
+        <p className="t-body2 text-fg-muted" style={{ margin: 0 }}>
+          {body}
         </p>
       </div>
     </motion.div>
@@ -811,9 +783,7 @@ export default function AboutPage() {
 
               <div className="grid grid-cols-2 gap-6 items-start">
                 {BEYOND_ITEMS.map((card, i) => (
-                  <motion.div key={card.heading} variants={fadeUp}>
-                    <BeyondCard card={card} index={i} />
-                  </motion.div>
+                  <NumberedCard key={card.heading} heading={card.heading} body={card.body} index={i} style={{ minHeight: 220 }} />
                 ))}
               </div>
             </motion.div>
@@ -974,7 +944,7 @@ export default function AboutPage() {
               <motion.h3 variants={fadeUp} className="mb-10">What I&apos;m Thinking About</motion.h3>
               <div className="grid sm:grid-cols-3 gap-6">
                 {THINKING_ITEMS.map((item, i) => (
-                  <ThinkingCard key={item.label} item={item} index={i} />
+                  <NumberedCard key={item.label} heading={item.label} body={item.desc} index={i} />
                 ))}
               </div>
             </motion.div>

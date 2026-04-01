@@ -21,6 +21,7 @@ const TICKER_CHUNK =
   'YOU ARE CURRENTLY BROWSING PORTFOLIO WEBSITE OF PRODUCT DESIGNER THAT GUY ABHISHEK \u2756 THE CONCEPT, CONTENT AND MEDIA OF THIS WEBSITE IS COPYRIGHTED \u2756 MADE WITH LOVE \u2665 \u00A9 2026 THATGUYABHISHEK.COM \u2756 ';
 
 import W from '../ui/W';
+import Button from '../ui/Button';
 
 /* ── Ticker strip ────────────────────────────────────────────── */
 function Ticker() {
@@ -89,9 +90,9 @@ export default function Footer() {
                 <p className="footer-cta-heading footer-cta-heading--white">
                   Let&apos;s work together.
                 </p>
-                <a href="mailto:abhisxn@gmail.com" className="btn-card-dark">
+                <Button href="mailto:abhisxn@gmail.com" variant="outline" size="lg">
                   Connect with me
-                </a>
+                </Button>
               </div>
             </motion.div>
 
@@ -116,14 +117,14 @@ export default function Footer() {
                   Design Guy, 12+ yrs of Product, UX &amp; Advertising, 35+ Awards, 2 GTM Startups. Senior Designer @ Microsoft
                 </p>
                 <div className="mt-auto">
-                  <a
+                  <Button
                     href="https://www.linkedin.com/in/thatguyabhishek/"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="btn-card-light"
+                    variant="outline-brand"
+                    size="lg"
+                    external
                   >
                     Know more
-                  </a>
+                  </Button>
                 </div>
               </div>
             </motion.div>

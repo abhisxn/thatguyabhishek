@@ -1,7 +1,8 @@
 import Link from 'next/link';
 import RichText from '../ui/RichText';
-import { getCalloutType, calloutColorToBg, styleForNotion } from '../ui/card-utils';
+import { getCalloutType, calloutColorToBg, styleForNotion, CALLOUT_BG } from '../ui/card-utils';
 import Card from '../ui/Card';
+import LinkCalloutCard from '../ui/LinkCalloutCard';
 import { slugify } from '../../../lib/slugify';
 import projectsJson from '../../../data/projects.json';
 
@@ -17,6 +18,53 @@ export function getImageUrl(imageBlock) {
 /** Finds the first href inside a Notion rich_text array (inline hyperlink). */
 function findRichTextUrl(richText) {
   return richText?.find((t) => t.href)?.href ?? null;
+}
+
+/** Resolves the href from a rich_text item — checks top-level href and text.link.url fallback. */
+function getRichTextHref(t) {
+  return t.href || t.text?.link?.url || null;
+}
+
+/**
+ * Checks whether a rich_text ARRAY (whole paragraph) represents a [bracket] button.
+ *
+ * Notion stores \[[Read more](url)\] as three separate items:
+ *   "[" (no href)  +  "Read more" (href set)  +  "]" (no href)
+ * Per-item checks miss this pattern — we must test the FULL joined plain text.
+ */
+function isBracketBtnParagraph(richText) {
+  if (!richText?.length) return false;
+  const full = richText.map((t) => t.plain_text).join('').trim();
+  return /^\[.+\]$/.test(full) && richText.some((t) => getRichTextHref(t));
+}
+
+/**
+ * Extracts the [bracket] link button from a callout's child paragraphs.
+ * Returns { label, url } or null.
+ */
+function extractLinkButton(children) {
+  for (const b of children) {
+    if (b.type !== 'paragraph') continue;
+    const rt = b.paragraph?.rich_text ?? [];
+    if (!isBracketBtnParagraph(rt)) continue;
+    const label = rt.map((t) => t.plain_text).join('').trim().slice(1, -1);
+    const url   = getRichTextHref(rt.find((t) => getRichTextHref(t)));
+    return { label, url };
+  }
+  return null;
+}
+
+/**
+ * Returns the plain text of the first paragraph child that is NOT the [bracket] button.
+ */
+function extractBodyParagraph(children) {
+  for (const b of children) {
+    if (b.type !== 'paragraph') continue;
+    const rt = b.paragraph?.rich_text ?? [];
+    if (!rt.length || isBracketBtnParagraph(rt)) continue;
+    return rt.map((t) => t.plain_text).join('');
+  }
+  return null;
 }
 
 /** Extracts a Notion page ID from a page-mention (@-link) in a rich_text array. */
@@ -74,94 +122,24 @@ function extractCalloutUrl(calloutTexts, children) {
   return null;
 }
 
-/* ── bg token → Tailwind classes + CSS variable overrides ────────────────── *
- *
- * The `bg` key comes from calloutColorToBg() in card-utils.js (rank 0–6).
- * Applies uniformly to all callout types regardless of emoji.
- *
- *   rank  Notion color    token     visual
- *   ────────────────────────────────────────────────────────────
- *    0    (none)          default   subtle surface-1 + border
- *    1    gray            inverse   navy light / parchment dark
- *    2    brown           solid     parchment light / navy dark
- *    3    red / pink      outline   transparent + 2px border
- *    4    orange / yellow warm      warning tint + border
- *    5    green           success   success tint + border
- *    6    blue / purple   gradient  dual-theme gradient
- *
- * Each entry:
- *   wrap  — Tailwind bg + border classes on the outer element
- *   fg    — Tailwind text class for primary text
- *   muted — Tailwind text class for secondary / child text
- *   vars  — CSS custom-property overrides scoped to the element
- */
-const BG = {
-  /* 0 — no Notion color: subtle surface container */
-  default: {
-    wrap:  'bg-[var(--surface-1)] border border-[var(--border)]',
-    fg:    'text-[var(--fg)]',
-    muted: 'text-[var(--fg-muted)]',
-    vars:  {},
-  },
-  /* 1 — gray: navy light / parchment dark */
-  inverse: {
-    wrap:  'bg-[var(--bg-inverse)] border border-[var(--border)]',
-    fg:    'text-[var(--bg-solid)]',
-    muted: 'text-[color-mix(in_srgb,var(--bg-solid)_65%,transparent)]',
-    vars:  { '--fg': 'var(--bg-solid)', '--fg-muted': 'color-mix(in srgb, var(--bg-solid) 65%, transparent)', '--border': 'var(--border-strong)' },
-  },
-  /* 2 — brown: parchment light / navy dark */
-  solid: {
-    wrap:  'bg-[var(--bg-solid)] border border-[var(--border)]',
-    fg:    'text-[var(--bg-inverse)]',
-    muted: 'text-[color-mix(in_srgb,var(--bg-inverse)_65%,transparent)]',
-    vars:  { '--fg': 'var(--bg-inverse)', '--fg-muted': 'color-mix(in srgb, var(--bg-inverse) 65%, transparent)' },
-  },
-  /* 3 — red / pink: transparent + border */
-  outline: {
-    wrap:  'bg-transparent border-2 border-[var(--border-strong)]',
-    fg:    'text-[var(--fg)]',
-    muted: 'text-[var(--fg-muted)]',
-    vars:  {},
-  },
-  /* 4 — orange / yellow: warning tint */
-  warm: {
-    wrap:  'bg-[var(--color-warning-bg)] border border-[var(--color-warning)]',
-    fg:    'text-[var(--fg)]',
-    muted: 'text-[var(--fg-muted)]',
-    vars:  {},
-  },
-  /* 5 — green: success tint */
-  success: {
-    wrap:  'bg-[var(--color-success-bg)] border border-[var(--color-success)]',
-    fg:    'text-[var(--fg)]',
-    muted: 'text-[var(--fg-muted)]',
-    vars:  {},
-  },
-  /* 6 — blue / purple: dual-theme gradient (dark: blue-purple / light: pink-green pastel) */
-  gradient: {
-    wrap:  'border border-transparent',
-    fg:    'text-[var(--fg)]',
-    muted: 'text-[var(--fg-muted)]',
-    vars:  { background: 'linear-gradient(135deg, var(--gradient-dual-from), var(--gradient-dual-to))' },
-  },
-};
+/* BG token map lives in card-utils.js as CALLOUT_BG — imported above. */
+const BG = CALLOUT_BG;
 
 const EASE = 'ease-[cubic-bezier(0.22,1,0.36,1)]';
 
-/* ── 💡 Insight ───────────────────────────────────────────────────────────── */
+/* ── 💡 Insight / 📌 Pin (unified) ───────────────────────────────────────── */
 function InsightCallout({ emoji, texts, contentSlot, bg }) {
   const { wrap, fg, muted, vars } = BG[bg] ?? BG.default;
   return (
-    <div className={`flex-1 px-6 py-5 rounded-2xl ${wrap}`} style={vars}>
-      {emoji && <p className="text-xl mb-3">{emoji}</p>}
+    <div className={`flex-1 flex gap-4 items-start px-6 py-5 rounded-2xl ${wrap}`} style={vars}>
+      {emoji && <span className="text-xl flex-shrink-0 mt-0.5">{emoji}</span>}
       <div className="flex flex-col gap-2 min-w-0 w-full">
         {texts.length > 0 && (
           <p className={`t-body2 font-semibold leading-snug ${fg}`}>
             <RichText texts={texts} />
           </p>
         )}
-        {contentSlot && <div className={`flex flex-col gap-2 ${muted}`}>{contentSlot}</div>}
+        {contentSlot && <div className={`flex flex-col gap-2 t-body2 ${muted}`}>{contentSlot}</div>}
       </div>
     </div>
   );
@@ -184,13 +162,13 @@ function FeatureCallout({ emoji, texts, contentSlot, bg, linkUrl, isExternal }) 
     >
       {emoji && <span className="text-4xl leading-none block mb-5">{emoji}</span>}
       {texts.length > 0 && (
-        <p className={`t-h4 font-bold leading-snug mb-3 ${fg}`}>
+        <p className={`t-h5 font-bold leading-snug mb-3 ${fg}`}>
           <RichText texts={texts} />
         </p>
       )}
       {contentSlot && <div className={`flex flex-col gap-2 ${muted}`}>{contentSlot}</div>}
       {linkUrl && (
-        <p className={`mt-5 t-body3 font-semibold ${ ['inverse','solid','gradient'].includes(bg) ? 'text-[var(--fg)]' : 'text-[var(--brand)]'}`}>
+        <p className={`mt-5 t-body2 font-semibold ${ ['inverse','solid','gradient'].includes(bg) ? 'text-[var(--fg)]' : 'text-[var(--brand)]'}`}>
           View →
         </p>
       )}
@@ -223,27 +201,11 @@ function QuoteCallout({ texts, contentSlot, bg }) {
 function NoteCallout({ emoji, texts, contentSlot }) {
   return (
     <div className="flex gap-3 items-start px-5 py-4 rounded-xl bg-[var(--surface-0)] border border-[var(--border)]">
-      {emoji && <span className="text-sm flex-shrink-0 mt-0.5 opacity-50">{emoji}</span>}
-      <div className="flex flex-col gap-2 min-w-0 w-full t-body3 text-[var(--fg-muted)] leading-relaxed">
+      {emoji && <span className="text-m flex-shrink-0 mt-0.5 opacity-50">{emoji}</span>}
+      <div className="flex flex-col gap-2 min-w-0 w-full t-body2 text-[var(--fg-muted)] leading-relaxed">
         {texts.length > 0 && <p><RichText texts={texts} /></p>}
         {contentSlot}
       </div>
-    </div>
-  );
-}
-
-/* ── 📌 Pin ────────────────────────────────────────────────────────────────── */
-function PinCallout({ texts, contentSlot, bg }) {
-  const { wrap, fg, muted, vars } = BG[bg] ?? BG.default;
-  return (
-    <div className={`flex-1 px-6 py-5 rounded-2xl ${wrap}`} style={vars}>
-      <p className="text-base mb-3">📌</p>
-      {texts.length > 0 && (
-        <p className={`t-h5 leading-snug ${fg}`}>
-          <RichText texts={texts} />
-        </p>
-      )}
-      {contentSlot && <div className={`flex flex-col gap-2 mt-3 ${muted}`}>{contentSlot}</div>}
     </div>
   );
 }
@@ -269,7 +231,7 @@ function DefaultCallout({ texts, contentSlot, bg, linkUrl, isExternal }) {
       )}
       {contentSlot && <div className={`flex flex-col gap-2 mt-3 ${muted}`}>{contentSlot}</div>}
       {linkUrl && (
-        <p className={`mt-4 t-body3 font-semibold ${ ['inverse','solid','gradient'].includes(bg) ? 'text-[var(--fg)]' : 'text-[var(--brand)]'}`}>
+        <p className={`mt-4 t-body2 font-semibold ${ ['inverse','solid','gradient'].includes(bg) ? 'text-[var(--fg)]' : 'text-[var(--brand)]'}`}>
           Read more →
         </p>
       )}
@@ -304,21 +266,51 @@ export default function CalloutBlock({ block, childrenMap, contentSlot, hrefOver
   const color           = block.callout?.color ?? 'default';
   const calloutChildren = childrenMap?.[block.id] ?? [];
 
-  const type    = getCalloutType(block);
-  const bg      = calloutColorToBg(color);  // Notion color → BG token
-  const linkUrl = extractCalloutUrl(texts, calloutChildren);
-  const isExt   = !!(linkUrl?.startsWith('http://') || linkUrl?.startsWith('https://'));
+  const type = getCalloutType(block);
+  const bg   = calloutColorToBg(color);
+
+  /* ── 🌐 Link card — title + body + [btn] hyperlink + OG thumbnail ── */
+  if (type === 'linkcard') {
+    // Button: check callout's own texts first (paragraph-level), then child paragraphs
+    const textsAreBtn = isBracketBtnParagraph(texts);
+    const btn = textsAreBtn
+      ? {
+          label: texts.map((t) => t.plain_text).join('').trim().slice(1, -1),
+          url:   getRichTextHref(texts.find((t) => getRichTextHref(t))),
+        }
+      : extractLinkButton(calloutChildren);
+
+    // Title = callout texts — but only if they're NOT the bracket button itself
+    const title = textsAreBtn
+      ? null
+      : texts.map((t) => t.plain_text).join('').trim() || null;
+
+    const body = extractBodyParagraph(calloutChildren);
+    return (
+      <LinkCalloutCard
+        title={title}
+        body={body}
+        btnLabel={btn?.label ?? null}
+        href={btn?.url ?? null}
+        bg={bg}
+      />
+    );
+  }
 
   if (type === 'insight') {
     return <InsightCallout emoji={emoji} texts={texts} contentSlot={contentSlot} bg={bg} />;
   }
   if (type === 'feature') {
+    const linkUrl = extractCalloutUrl(texts, calloutChildren);
+    const isExt   = !!(linkUrl?.startsWith('http://') || linkUrl?.startsWith('https://'));
     return <FeatureCallout emoji={emoji} texts={texts} contentSlot={contentSlot} bg={bg} linkUrl={linkUrl} isExternal={isExt} />;
   }
   if (type === 'quote')   return <QuoteCallout texts={texts} contentSlot={contentSlot} bg={bg} />;
   if (type === 'note')    return <NoteCallout emoji={emoji} texts={texts} contentSlot={contentSlot} />;
-  if (type === 'pin')     return <PinCallout texts={texts} contentSlot={contentSlot} bg={bg} />;
+  if (type === 'pin')     return <InsightCallout emoji={emoji} texts={texts} contentSlot={contentSlot} bg={bg} />;
   if (type === 'default') {
+    const linkUrl = extractCalloutUrl(texts, calloutChildren);
+    const isExt   = !!(linkUrl?.startsWith('http://') || linkUrl?.startsWith('https://'));
     return <DefaultCallout texts={texts} contentSlot={contentSlot} bg={bg} linkUrl={linkUrl} isExternal={isExt} />;
   }
 
@@ -345,6 +337,7 @@ export default function CalloutBlock({ block, childrenMap, contentSlot, hrefOver
     const desc         = descBlock ? descBlock.paragraph.rich_text.map((t) => t.plain_text).join('') : null;
     const title        = texts.map((t) => t.plain_text).join('') || headingTexts.map((t) => t.plain_text).join('') || null;
     const calloutSlug      = title ? slugify(title) : null;
+    const linkUrl          = extractCalloutUrl(texts, calloutChildren);
     const notionUrl        = linkUrl;
     // extractNotionPageId handles both absolute (https://notion.so/...) and
     // relative (/abc123...) URLs — Notion returns relative paths for internal page links

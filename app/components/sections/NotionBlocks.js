@@ -80,6 +80,10 @@ export function NotionBlock({ block, projects, childrenMap, skipDatabase, skipDi
       const h3texts = block.heading_3?.rich_text ?? [];
       return <h4 className={`${compact ? 't-h5' : 't-h4'} mt-2 text-[var(--fg)]`}><RichText texts={h3texts} /></h4>;
     }
+    case 'heading_4': {
+      const h4texts = block.heading_4?.rich_text ?? [];
+      return <h5 className={`${compact ? 't-h6' : 't-h5'} mt-2 text-[var(--fg)]`}><RichText texts={h4texts} /></h5>;
+    }
 
     /* ─── Quote ─── */
     case 'quote':
@@ -91,7 +95,7 @@ export function NotionBlock({ block, projects, childrenMap, skipDatabase, skipDi
       const codeText = block.code?.rich_text?.map((t) => t.plain_text).join('') ?? '';
       const caption = block.code?.caption;
       return (
-        <figure className="my-1">
+        <figure className="my-1 min-w-0 max-w-full">
           {lang && lang !== 'plain text' && (
             <div className="t-caption font-mono px-4 py-1.5 rounded-t-xl notion-code-lang">
               {lang}
@@ -188,7 +192,7 @@ export function NotionBlock({ block, projects, childrenMap, skipDatabase, skipDi
       }
 
       const contentSlot = contentChildren.length > 0
-        ? <RenderBlocks blocks={contentChildren} projects={projects} childrenMap={childrenMap} gap="gap-3" compact />
+        ? <RenderBlocks blocks={contentChildren} projects={projects} childrenMap={childrenMap} gap="gap-3" />
         : null;
       return <CalloutBlock block={effectiveBlock} childrenMap={childrenMap} contentSlot={contentSlot} />;
     }

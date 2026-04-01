@@ -4,12 +4,13 @@ import { useState } from 'react';
 import { motion, useSpring } from 'framer-motion';
 import { SECTION_STYLES } from '@/lib/section-styles';
 import Card from '../components/ui/Card';
-import Button from '../components/ui/Button';
-import Badge from '../components/ui/Badge';
+import Button, { BUTTON_VARIANTS } from '../components/ui/Button';
+import Badge, { BADGE_VARIANTS } from '../components/ui/Badge';
 import Tag, { TAG_PALETTE } from '../components/ui/Tag';
 import { Input, Textarea } from '../components/ui/Input';
 import Select from '../components/ui/Select';
 import { CARD_SIZES, CARD_STYLES } from '../components/ui/card-utils';
+import { LinkCalloutCardUI } from '../components/ui/LinkCalloutCard';
 import StyleNav from '../components/ui/StyleNav';
 
 /* ── Section wrapper ─────────────────────────────────────────── */
@@ -104,8 +105,8 @@ function WritingDemoCard() {
           transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
           style={{ fontSize: 24, lineHeight: 1, display: 'inline-block', transformOrigin: 'left center' }}
         >✍️</motion.span>
-        <p className="t-body2 font-semibold text-fg" style={{ margin: 0, lineHeight: 1.4 }}>Why designers should learn to say no</p>
-        <p className="t-caption text-fg-muted" style={{ margin: 0, lineHeight: 1.55 }}>Short description of the article goes here in two lines max.</p>
+        <p className="t-h5 text-fg" style={{ margin: 0 }}>Why designers should learn to say no</p>
+        <p className="t-body2 text-fg-muted" style={{ margin: 0 }}>Short description of the article goes here in two lines max.</p>
         <div className="flex items-center gap-1 t-caption font-semibold" style={{ color: isHov ? 'var(--color-coral)' : 'var(--fg-muted)', transition: 'color 0.2s ease' }}>
           <span>Read</span>
           <svg width="11" height="11" viewBox="0 0 12 12" fill="none"
@@ -427,28 +428,17 @@ export default function StyleGuide() {
                 <div>
                   <Label>variant — lg size</Label>
                   <div className="flex flex-wrap gap-4 items-center">
-                    <Button variant="outline">btn-outline</Button>
-                    <Button variant="filled">btn-filled</Button>
-                    <Button variant="outline-brand">btn-outline-brand</Button>
-                    <Button variant="filled-brand">btn-filled-brand</Button>
+                    {Object.keys(BUTTON_VARIANTS).map((v) => (
+                      <Button key={v} variant={v}>{v}</Button>
+                    ))}
                   </div>
                 </div>
                 <div>
                   <Label>variant — sm size</Label>
                   <div className="flex flex-wrap gap-4 items-center">
-                    <Button variant="outline"       size="sm">btn-outline</Button>
-                    <Button variant="filled"        size="sm">btn-filled</Button>
-                    <Button variant="outline-brand" size="sm">btn-outline-brand</Button>
-                    <Button variant="filled-brand"  size="sm">btn-filled-brand</Button>
-                  </div>
-                </div>
-                <div>
-                  <Label>Footer card buttons (white bg context)</Label>
-                  <div className="flex flex-wrap gap-4 items-center p-8 rounded-2xl" style={{ background: '#4a2d7f' }}>
-                    <a href="#" className="btn-card-dark">btn-card-dark</a>
-                  </div>
-                  <div className="flex flex-wrap gap-4 items-center p-8 rounded-2xl mt-3 bg-white">
-                    <a href="#" className="btn-card-light">btn-card-light</a>
+                    {Object.keys(BUTTON_VARIANTS).map((v) => (
+                      <Button key={v} variant={v} size="sm">{v}</Button>
+                    ))}
                   </div>
                 </div>
               </div>
@@ -462,7 +452,7 @@ export default function StyleGuide() {
                 <div>
                   <Label>with dot (default)</Label>
                   <div className="flex flex-wrap gap-3">
-                    {['default','success','warning','error','info','brand'].map((v) => (
+                    {Object.keys(BADGE_VARIANTS).map((v) => (
                       <Badge key={v} variant={v}>{v}</Badge>
                     ))}
                   </div>
@@ -470,7 +460,7 @@ export default function StyleGuide() {
                 <div>
                   <Label>dot=false</Label>
                   <div className="flex flex-wrap gap-3">
-                    {['default','success','warning','error','info','brand'].map((v) => (
+                    {Object.keys(BADGE_VARIANTS).map((v) => (
                       <Badge key={v} variant={v} dot={false}>{v}</Badge>
                     ))}
                   </div>
@@ -755,6 +745,7 @@ export default function StyleGuide() {
                 <BlockRow block="heading_1"            renders="<h2 class='t-h2 mt-10'>"              notes="Top-level: triggers 30/70 section split; becomes sticky left label" />
                 <BlockRow block="heading_2"            renders="<h3 class='t-h3 mt-8'>"              notes="Subsection within right column" />
                 <BlockRow block="heading_3"            renders="<h4 class='t-h4 mt-6'>"              notes="Minor heading" />
+                <BlockRow block="heading_4"            renders="<h5 class='t-h5 mt-2'>"              notes="Label-level heading; compact mode → t-h6" />
                 <BlockRow block="quote"                renders="<blockquote>"                         notes="Native Notion quote block — plain blockquote styling" />
                 <BlockRow block="bulleted_list_item"   renders="<ul class='list-disc'><li>"           notes="Consecutive items auto-grouped into one <ul>" />
                 <BlockRow block="numbered_list_item"   renders="<ol class='list-decimal'><li>"        notes="Consecutive items auto-grouped into one <ol>" />
@@ -786,10 +777,11 @@ export default function StyleGuide() {
                 <BlockRow block="callout + 🎯 or 📊"   renders="FeatureCallout"  notes="Large block. URL child → entire card is linkable. BG token from color rank." />
                 <BlockRow block="callout + 💬"          renders="QuoteCallout"    notes="Italic pull-quote. BG token from color rank." />
                 <BlockRow block="callout + ✏️"          renders="NoteCallout"     notes="Compact annotation. Emoji at opacity-50. Color ignored." />
-                <BlockRow block="callout + 📌"          renders="PinCallout"      notes="📌 emoji marker above content. BG token from color rank." />
-                <BlockRow block="callout + ⛔️"          renders="card"            notes="Explicit project card. hasImage → size l, else m. CARD_STYLES key from color rank." />
-                <BlockRow block="callout (no emoji)"    renders="DefaultCallout"  notes="Clean body text. URL child → linkable with 'Read more →'. BG token from color rank." />
-                <BlockRow block="callout (other emoji)" renders="InsightCallout"  notes="Unknown emoji → insight fallback." />
+                <BlockRow block="callout + 📌"          renders="InsightCallout"  notes="Merged into InsightCallout — emoji left, body2 title + content." />
+                <BlockRow block="callout + ⛔️"          renders="card"              notes="Explicit project card. hasImage → size l, else m. CARD_STYLES key from color rank." />
+                <BlockRow block="callout + 🌐"          renders="LinkCalloutCard"   notes="Link card: title (body2 semibold) + body + [bracket] hyperlink → CTA button + OG thumbnail. OG image fetched server-side." />
+                <BlockRow block="callout (no emoji)"    renders="DefaultCallout"    notes="Clean body text. URL child → linkable with 'Read more →'. BG token from color rank." />
+                <BlockRow block="callout (other emoji)" renders="InsightCallout"    notes="Unknown emoji → insight fallback." />
 
                 {/* Skipped */}
                 <p className="px-4 pt-4 pb-1 t-caption font-mono text-[var(--brand)] font-semibold opacity-70">Skipped (render null)</p>
@@ -818,6 +810,11 @@ export default function StyleGuide() {
                 <div>
                   <Label>heading_3 → t-h4</Label>
                   <h4 className="t-h4 mt-2">Minor Heading</h4>
+                </div>
+
+                <div>
+                  <Label>heading_4 → t-h5 (label-level; compact → t-h6)</Label>
+                  <h5 className="t-h5 mt-2">Label Heading</h5>
                 </div>
 
                 <div>
@@ -943,13 +940,21 @@ export default function StyleGuide() {
                   <div className="flex flex-col gap-5">
 
                     <div>
-                      <Label>💡 insight — highlighted callout + optional child paragraphs</Label>
-                      <div className="px-5 py-4 rounded-xl mt-2"
+                      <Label>💡 insight / 📌 pin — unified: emoji left, title body2 semibold, content body2</Label>
+                      <div className="flex gap-4 items-start px-6 py-5 rounded-xl mt-2"
                         style={{ background: 'var(--surface-1)', border: '1px solid var(--border)' }}>
-                        <p className="text-xl mb-3">💡</p>
+                        <span className="text-xl flex-shrink-0 mt-0.5">💡</span>
                         <div className="flex flex-col gap-2">
                           <p className="t-body2 font-semibold leading-snug">Insight callout title</p>
-                          <p className="t-body3 leading-relaxed" style={{ color: 'var(--fg-muted)' }}>Optional child paragraph in muted text.</p>
+                          <p className="t-body2 leading-relaxed" style={{ color: 'var(--fg-muted)' }}>Optional child paragraph in muted body2 text.</p>
+                        </div>
+                      </div>
+                      <div className="flex gap-4 items-start px-6 py-5 rounded-xl mt-2"
+                        style={{ background: 'var(--surface-1)', border: '1px solid var(--border)' }}>
+                        <span className="text-xl flex-shrink-0 mt-0.5">📌</span>
+                        <div className="flex flex-col gap-2">
+                          <p className="t-body2 font-semibold leading-snug">Pinned callout title</p>
+                          <p className="t-body2 leading-relaxed" style={{ color: 'var(--fg-muted)' }}>Same renderer as insight — emoji on left, body2 content.</p>
                         </div>
                       </div>
                     </div>
@@ -979,11 +984,21 @@ export default function StyleGuide() {
                     </div>
 
                     <div>
-                      <Label>📌 pin — emoji marker + optional child paragraphs</Label>
-                      <div className="px-5 py-4 rounded-xl mt-2" style={{ background: 'var(--surface-1)', border: '1px solid var(--border)' }}>
-                        <p className="text-base mb-3">📌</p>
-                        <p className="t-body2 font-semibold leading-snug">Pinned callout title</p>
-                        <p className="t-body3 leading-relaxed mt-2" style={{ color: 'var(--fg-muted)' }}>Optional child paragraph for announcements or top-of-page context.</p>
+                      <Label>🌐 linkcard — title + optional body + [bracket] CTA + OG thumbnail right</Label>
+                      <div className="flex flex-col gap-3 mt-2 max-w-2xl">
+                        <LinkCalloutCardUI
+                          title="How I redesigned Excel's chart defaults to reduce cognitive load"
+                          body="A deep dive into the decision-making process, user research, and system constraints that shaped a new default chart style for millions of users."
+                          btnLabel="Read the case study"
+                          href="https://thatguyabhishek.com"
+                          ogImage={null}
+                        />
+                        <LinkCalloutCardUI
+                          title="GoodWorker Design System"
+                          btnLabel="Know more"
+                          href="https://thatguyabhishek.com"
+                          ogImage={null}
+                        />
                       </div>
                     </div>
 
@@ -1025,15 +1040,16 @@ export default function StyleGuide() {
                       <Label>Emoji → type reference (CALLOUT_EMOJI_MAP in card-utils.js)</Label>
                       <div className="flex flex-col gap-2 mt-2">
                         {[
-                          { emoji: '💡',        type: 'insight',  rule: 'Highlighted callout. BG per Notion color.' },
+                          { emoji: '💡',        type: 'insight',  rule: 'Emoji left, title body2 semibold, content body2. BG per Notion color.' },
                           { emoji: '🎯',        type: 'feature',  rule: 'Large block. URL child → whole block clickable.' },
                           { emoji: '📊',        type: 'feature',  rule: 'Alias for 🎯 — stats / metrics sections.' },
                           { emoji: '🔗',        type: 'feature',  rule: 'Alias for 🎯 — link / resource blocks.' },
                           { emoji: '💬',        type: 'quote',    rule: 'Italic pull-quote. inverse bg → boxed.' },
                           { emoji: '✏️',        type: 'note',     rule: 'Compact annotation.' },
-                          { emoji: '📌',        type: 'pin',      rule: '📌 emoji marker above content. BG per Notion color.' },
+                          { emoji: '📌',        type: 'insight',  rule: 'Same renderer as 💡 — merged into InsightCallout.' },
                           { emoji: '⛔️',       type: 'card',     rule: 'Explicit project/link card (with variation selector).' },
                           { emoji: '⛔',        type: 'card',     rule: 'Defensive alias — same as ⛔️ without variation selector.' },
+                          { emoji: '🌐',        type: 'linkcard', rule: 'Link card: title + body + [bracket] hyperlink → CTA button + OG thumbnail (Microlink).' },
                           { emoji: '(none)',    type: 'default',  rule: 'Clean text. URL child → linkable.' },
                           { emoji: '(other)',   type: 'insight',  rule: 'Unknown emoji → insight fallback.' },
                         ].map(({ emoji, type, rule }) => (
@@ -1056,26 +1072,26 @@ export default function StyleGuide() {
 
                     {/* Non-card: BG token */}
                     <div>
-                      <Label>insight / feature / quote / pin / default — color → BG token (7 variants)</Label>
+                      <Label>insight (incl. pin) / feature / quote / default — color → BG token (7 variants)</Label>
                       <div className="flex flex-col gap-3 mt-2">
                         {[
                           { token: 'default',  notionColors: 'default (no color set)', bg: 'var(--surface-1)',        border: '1px solid var(--border)',        textClr: 'var(--fg)',        mutedClr: 'var(--fg-muted)' },
                           { token: 'inverse',  notionColors: 'gray',                   bg: 'var(--bg-inverse)',        border: '1px solid var(--border)',        textClr: 'var(--bg-solid)',  mutedClr: 'color-mix(in srgb, var(--bg-solid) 65%, transparent)' },
                           { token: 'solid',    notionColors: 'brown',                  bg: 'var(--bg-solid)',          border: '1px solid var(--border)',        textClr: 'var(--bg-inverse)', mutedClr: 'color-mix(in srgb, var(--bg-inverse) 65%, transparent)' },
                           { token: 'outline',  notionColors: 'red, pink',              bg: 'transparent',              border: '2px solid var(--border-strong)', textClr: 'var(--fg)',        mutedClr: 'var(--fg-muted)' },
-                          { token: 'warm',     notionColors: 'orange, yellow',         bg: 'var(--color-warning-bg)', border: '1px solid var(--color-warning)',  textClr: 'var(--fg)',        mutedClr: 'var(--fg-muted)' },
-                          { token: 'success',  notionColors: 'green',                  bg: 'var(--color-success-bg)', border: '1px solid var(--color-success)',  textClr: 'var(--fg)',        mutedClr: 'var(--fg-muted)' },
-                          { token: 'gradient', notionColors: 'blue, purple',           bg: 'linear-gradient(135deg, var(--gradient-dual-from), var(--gradient-dual-to))', border: '1px solid transparent', textClr: 'var(--fg)', mutedClr: 'var(--fg-muted)' },
+                          { token: 'warm',     notionColors: 'orange, yellow',         bg: 'color-mix(in srgb, var(--color-warning) 20%, transparent)',  border: '1px solid color-mix(in srgb, var(--color-warning) 35%, transparent)',  textClr: 'var(--fg)', mutedClr: 'var(--fg-muted)' },
+                          { token: 'success',  notionColors: 'green',                  bg: 'color-mix(in srgb, var(--color-success) 20%, transparent)',  border: '1px solid color-mix(in srgb, var(--color-success) 35%, transparent)',  textClr: 'var(--fg)', mutedClr: 'var(--fg-muted)' },
+                          { token: 'gradient', notionColors: 'blue, purple',           bg: 'linear-gradient(135deg, var(--gradient-dual-from), var(--gradient-dual-to))', border: '1px solid var(--brand-border)', textClr: 'var(--fg)', mutedClr: 'var(--fg-muted)' },
                         ].map(({ token, notionColors, bg, border, textClr, mutedClr }) => (
-                          <div key={token} className="px-5 py-4 rounded-xl"
+                          <div key={token} className="flex gap-4 items-start px-6 py-5 rounded-xl"
                             style={{ background: bg, border, '--fg': textClr, '--fg-muted': mutedClr }}>
-                            <p className="text-xl mb-3">💡</p>
+                            <span className="text-xl flex-shrink-0 mt-0.5">💡</span>
                             <div className="flex flex-col gap-1">
                               <div className="flex items-center gap-2 flex-wrap">
                                 <code className="t-caption font-mono font-bold" style={{ color: 'var(--brand)' }}>bg={token}</code>
                                 <p className="t-caption" style={{ color: mutedClr }}>← Notion: {notionColors}</p>
                               </div>
-                              <p className="t-body3 font-semibold leading-snug" style={{ color: textClr }}>Insight in {token} style</p>
+                              <p className="t-body2 font-semibold leading-snug" style={{ color: textClr }}>Insight in {token} style</p>
                             </div>
                           </div>
                         ))}
@@ -1227,15 +1243,15 @@ export default function StyleGuide() {
                     Resting opacity 0.2 → hover 0.7.
                   </p>
                   <div className="grid sm:grid-cols-3 gap-5">
-                    <StrokeDemoCard label="ThinkingCard / BeyondCard — static content">
+                    <StrokeDemoCard label="NumberedCard — Beyond the Work">
                       <p className="t-caption tabular-nums font-bold" style={{ color: 'var(--color-coral)', letterSpacing: '0.08em', margin: '0 0 12px' }}>01</p>
-                      <p className="t-body2 font-semibold text-fg" style={{ margin: '0 0 8px', lineHeight: 1.4 }}>Can designers own strategy?</p>
-                      <p className="t-body3 text-fg-muted" style={{ margin: 0, lineHeight: 1.7 }}>A short description of the thought or interest lives here, two to three lines.</p>
+                      <p className="t-h5 text-fg" style={{ margin: '0 0 8px' }}>I keep almost starting a business.</p>
+                      <p className="t-body2 text-fg-muted" style={{ margin: 0 }}>A 3D print farm. An import operation. None of these are random.</p>
                     </StrokeDemoCard>
-                    <StrokeDemoCard label="BeyondCard — num + heading + body">
+                    <StrokeDemoCard label="NumberedCard — What I'm Thinking About">
                       <p className="t-caption tabular-nums font-bold" style={{ color: 'var(--color-coral)', letterSpacing: '0.08em', margin: '0 0 12px' }}>02</p>
-                      <p className="t-body2 font-semibold text-fg" style={{ margin: '0 0 8px', lineHeight: 1.4 }}>I keep almost starting a business.</p>
-                      <p className="t-body3 text-fg-muted" style={{ margin: 0, lineHeight: 1.8 }}>A 3D print farm. An import operation. None of these are random.</p>
+                      <p className="t-h5 text-fg" style={{ margin: '0 0 8px' }}>Can designers own strategy?</p>
+                      <p className="t-body2 text-fg-muted" style={{ margin: 0 }}>A short description of the thought or interest lives here, two to three lines.</p>
                     </StrokeDemoCard>
                     <WritingDemoCard />
                   </div>
@@ -1270,7 +1286,7 @@ function Card() {
                     {[
                       { option: 'F', name: 'Glass Glare', desc: 'Perimeter-locked blur blob, parallax at 40%, radial offset keeps center outside card. Most premium.' },
                       { option: 'G', name: 'Border Sweep', desc: 'Conic-gradient ring sweeps clockwise once on hover entry. No fill, no blob.' },
-                      { option: 'H', name: 'Spring Stroke ✓ LIVE', desc: 'Spring opacity on border ring. Theme-adaptive. Used on ThinkingCard, BeyondCard, WritingCard.' },
+                      { option: 'H', name: 'Spring Stroke ✓ LIVE', desc: 'Spring opacity on border ring. Theme-adaptive. Used on NumberedCard (Beyond + Thinking) and WritingCard.' },
                     ].map(({ option, name, desc }) => (
                       <div key={option} className="grid sm:grid-cols-[4rem_10rem_1fr] gap-3 items-start px-4 py-3 rounded-lg" style={{ background: 'var(--surface)', border: '1px solid var(--border)' }}>
                         <code className="t-caption font-mono font-semibold" style={{ color: 'var(--brand)' }}>Option {option}</code>

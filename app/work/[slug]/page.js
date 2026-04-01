@@ -126,7 +126,7 @@ async function ProjectContent({ slug, projectJson }) {
     ? (heroImageBlock.image?.type === 'external'
         ? heroImageBlock.image.external.url
         : heroImageBlock.image?.file?.url)
-    : meta.cover;
+    : null;
 
   return (
     <>

@@ -12,12 +12,15 @@ import Link from 'next/link';
  *  sm  — btn2: 16px Glory Medium, pl-5 pr-3 py-3 (room for trailing icon)
  */
 
-const VARIANT_CLASS = {
+export const BUTTON_VARIANTS = {
   'outline':       'btn-outline',
   'filled':        'btn-filled',
   'outline-brand': 'btn-outline-brand',
   'filled-brand':  'btn-filled-brand',
 };
+
+// internal alias kept for component use
+const VARIANT_CLASS = BUTTON_VARIANTS;
 
 export default function Button({
   children,

@@ -42,12 +42,13 @@ function getSplitInfo(blocks, childrenMap) {
   if (first.type === 'column_list') {
     const columns        = childrenMap?.[first.id] ?? [];
     const firstColBlocks = childrenMap?.[columns[0]?.id] ?? [];
-    if (firstColBlocks[0]?.type === 'heading_1') {
+    const h1Idx          = firstColBlocks.findIndex((b) => b.type === 'heading_1');
+    if (h1Idx !== -1) {
       return {
-        headingRichText: firstColBlocks[0].heading_1?.rich_text ?? [],
-        subtitleBlocks:  firstColBlocks.slice(1),   // subtext / captions below H1 in col 1
-        bodyColumns:     columns.slice(1),           // remaining columns → right panel
-        bodyBlocks:      blocks.slice(1),            // blocks after the column_list → right panel
+        headingRichText: firstColBlocks[h1Idx].heading_1?.rich_text ?? [],
+        subtitleBlocks:  firstColBlocks.slice(h1Idx + 1), // subtext / captions below H1 in col 1
+        bodyColumns:     columns.slice(1),                 // remaining columns → right panel
+        bodyBlocks:      blocks.slice(1),                  // blocks after the column_list → right panel
       };
     }
   }
@@ -75,10 +76,10 @@ export function splitSections(blocks, childrenMap) {
       pendingSplit = 'heading';
 
     } else if (b.type === 'column_list' && current.length) {
-      /* Split if the column_list leads with a heading_1 */
+      /* Split if the column_list has a heading_1 anywhere in its first column */
       const columns        = childrenMap?.[b.id] ?? [];
       const firstColBlocks = childrenMap?.[columns[0]?.id] ?? [];
-      if (firstColBlocks[0]?.type === 'heading_1') {
+      if (firstColBlocks.some((cb) => cb.type === 'heading_1')) {
         sections.push({ blocks: current, splitBy: pendingSplit });
         current = [b];
         pendingSplit = 'heading';
@@ -106,9 +107,8 @@ function styleIndexFor(blocks, childrenMap) {
   if (colList) {
     const columns        = childrenMap?.[colList.id] ?? [];
     const firstColBlocks = childrenMap?.[columns[0]?.id] ?? [];
-    if (firstColBlocks[0]?.type === 'heading_1') {
-      return styleIndexFromColor(firstColBlocks[0].heading_1?.color);
-    }
+    const h1             = firstColBlocks.find((b) => b.type === 'heading_1');
+    if (h1) return styleIndexFromColor(h1.heading_1?.color);
   }
 
   return 0;
@@ -161,10 +161,10 @@ export function Section({ blocks, childrenMap, styleIndex, projects, isIntro }) 
           className="max-w-[1200px] mx-auto px-6 sm:px-10 lg:px-16 py-12 sm:py-16"
           style={s.inner}
         >
-          <div className="grid gap-8 lg:gap-10 lg:grid-cols-[30fr_70fr]">
+          <div className="grid gap-8 lg:gap-16 lg:grid-cols-[30fr_70fr]">
 
             {/* Left — 30% sticky label + optional subtitle from col 1 */}
-            <div>
+            <div className="min-w-0">
               <div className="lg:sticky lg:top-28">
                 <p
                   className="t-h4 font-bold leading-snug"
@@ -180,6 +180,7 @@ export function Section({ blocks, childrenMap, styleIndex, projects, isIntro }) 
                       projects={projects}
                       childrenMap={childrenMap}
                       gap="gap-2"
+                      compact
                     />
                   </div>
                 )}
@@ -187,7 +188,7 @@ export function Section({ blocks, childrenMap, styleIndex, projects, isIntro }) 
             </div>
 
             {/* Right — 70% content: body columns first, then remaining blocks */}
-            <div className="flex flex-col gap-5" style={{ color: s.mutedClr }}>
+            <div className="flex flex-col gap-5 min-w-0" style={{ color: s.mutedClr }}>
               {bodyColumns.map((col) => {
                 const colBlocks = childrenMap?.[col.id] ?? [];
                 return (

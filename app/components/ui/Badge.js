@@ -9,7 +9,7 @@
  *   <Badge variant="brand" dot={false}>Microsoft</Badge>
  */
 
-const VARIANT = {
+export const BADGE_VARIANTS = {
   default: 'ui-badge--default',
   success: 'ui-badge--success',
   warning: 'ui-badge--warning',
@@ -17,6 +17,8 @@ const VARIANT = {
   info:    'ui-badge--info',
   brand:   'ui-badge--brand',
 };
+
+const VARIANT = BADGE_VARIANTS;
 
 export default function Badge({
   children,

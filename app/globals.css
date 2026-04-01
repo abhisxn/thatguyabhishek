@@ -21,7 +21,7 @@
  * ────────────────────────────────────────────────────────────────────────────────────
  *
  * Notion block → style map:
- *   page title  → t-display   heading_1 → t-h2   heading_2 → t-h3   heading_3 → t-h4
+ *   page title  → t-display   heading_1 → t-h2   heading_2 → t-h3   heading_3 → t-h4   heading_4 → t-h5
  * ────────────────────────────────────────────────────────────────────────────────────
  * .t-body1   22px    fixed   —                                   medium      relaxed
  * .t-body2   18px    fixed   —                                   medium      relaxed
@@ -815,7 +815,7 @@ body {
   background: var(--surface-1);
   font-weight: 700;
   font-size: 12px;    /* was 11px (odd) → 12 = 4×3 */
-  text-transform: uppercase;
+  text-transform: capitalize;
   letter-spacing: 0.07em;
   color: var(--fg-muted);
 }

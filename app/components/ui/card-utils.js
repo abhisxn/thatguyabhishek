@@ -164,6 +164,7 @@ export const CALLOUT_EMOJI_MAP = {
   '⛔️': 'card',
   '⛔':  'card',   // without variation selector — defensive alias
   '📌': 'pin',
+  '🌐': 'linkcard', // link card: title + body + [btn] hyperlink + OG thumbnail
 };
 
 /* Returns 'default' (no emoji), 'card' (⛔️), 'pin' (📌),
@@ -213,6 +214,70 @@ const CARD_TOKENS = ['default', 'inverse', 'solid', 'outline', 'elevated', 'soli
 
 export function calloutColorToBg(color)  { return BG_TOKENS[colorRank(color)]   ?? 'default'; }
 function        colorToCardStyle(color)  { return CARD_TOKENS[colorRank(color)]  ?? 'default'; }
+
+/* ─────────────────────────────────────────────────────────────────────────────
+ * BG TOKEN MAP
+ *
+ * Keyed by BG_TOKENS values. Used by all callout renderers (including
+ * LinkCalloutCardUI) to apply the correct background/border/text treatment
+ * based on the Notion callout color.
+ *
+ *   wrap  — Tailwind bg + border classes on the outer element
+ *   fg    — Tailwind text class for primary text
+ *   muted — Tailwind text class for secondary / child text
+ *   vars  — CSS custom-property overrides scoped to the element
+ * ──────────────────────────────────────────────────────────────────────────── */
+export const CALLOUT_BG = {
+  /* 0 — no Notion color: subtle surface container */
+  default: {
+    wrap:  'bg-[var(--surface-1)] border border-[var(--border)]',
+    fg:    'text-[var(--fg)]',
+    muted: 'text-[var(--fg-muted)]',
+    vars:  {},
+  },
+  /* 1 — gray: navy light / parchment dark */
+  inverse: {
+    wrap:  'bg-[var(--bg-inverse)] border border-[var(--border)]',
+    fg:    'text-[var(--bg-solid)]',
+    muted: 'text-[color-mix(in_srgb,var(--bg-solid)_65%,transparent)]',
+    vars:  { '--fg': 'var(--bg-solid)', '--fg-muted': 'color-mix(in srgb, var(--bg-solid) 65%, transparent)', '--border': 'var(--border-strong)' },
+  },
+  /* 2 — brown: parchment light / navy dark */
+  solid: {
+    wrap:  'bg-[var(--bg-solid)] border border-[var(--border)]',
+    fg:    'text-[var(--bg-inverse)]',
+    muted: 'text-[color-mix(in_srgb,var(--bg-inverse)_65%,transparent)]',
+    vars:  { '--fg': 'var(--bg-inverse)', '--fg-muted': 'color-mix(in srgb, var(--bg-inverse) 65%, transparent)' },
+  },
+  /* 3 — red / pink: transparent + border */
+  outline: {
+    wrap:  'bg-transparent border-2 border-[var(--border-strong)]',
+    fg:    'text-[var(--fg)]',
+    muted: 'text-[var(--fg-muted)]',
+    vars:  {},
+  },
+  /* 4 — orange / yellow: warning tint at 20% */
+  warm: {
+    wrap:  'bg-[color-mix(in_srgb,var(--color-warning)_20%,transparent)] border border-[color-mix(in_srgb,var(--color-warning)_35%,transparent)]',
+    fg:    'text-[var(--fg)]',
+    muted: 'text-[var(--fg-muted)]',
+    vars:  {},
+  },
+  /* 5 — green: success tint at 20% */
+  success: {
+    wrap:  'bg-[color-mix(in_srgb,var(--color-success)_20%,transparent)] border border-[color-mix(in_srgb,var(--color-success)_35%,transparent)]',
+    fg:    'text-[var(--fg)]',
+    muted: 'text-[var(--fg-muted)]',
+    vars:  {},
+  },
+  /* 6 — blue / purple: dual-theme gradient (dark: blue-purple / light: pink-green pastel) */
+  gradient: {
+    wrap:  'border border-[var(--brand-border)]',
+    fg:    'text-[var(--fg)]',
+    muted: 'text-[var(--fg-muted)]',
+    vars:  { background: 'linear-gradient(135deg, var(--gradient-dual-from), var(--gradient-dual-to))' },
+  },
+};
 
 /* ─────────────────────────────────────────────────────────────────────────────
  * NOTION → CARD STYLE MAPPER
