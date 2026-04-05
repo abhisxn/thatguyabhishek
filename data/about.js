@@ -25,16 +25,16 @@ export const WORK_ITEMS = [
 
 export const THINKING_ITEMS = [
   {
-    label: 'Can designers own strategy, or are we always downstream of it?',
-    desc: "I've been in rooms where design had a seat at the table and rooms where we were decorating decisions already made. The difference wasn't the company's stated values — it was how much designers understood the business. Still figuring out what that means for how I work.",
+    label: 'Craft is the new moat.',
+    desc: "People are getting better at spotting AI-generated design. When AI can produce 'good enough' in seconds, good enough becomes table stakes. What's valuable now is what AI can't generate: genuine judgment about what should exist and why it should feel the way it feels.",
   },
   {
-    label: 'AI is changing what "senior" means.',
-    desc: "Not the tools — the judgment. When a junior designer with the right prompts can produce what used to take a senior three days, seniority stops being about output and starts being about knowing what to build and why. That's a good thing. Most design teams haven't caught up yet.",
+    label: "98% deletion isn't a charting problem.",
+    desc: "Excel's 98% chart deletion rate looked like a usability problem. It wasn't. Users deleted charts because they didn't trust what the chart was telling them. You don't fix mistrust with better affordances. You fix it with a system that explains its reasoning.",
   },
   {
-    label: 'I keep almost starting a business.',
-    desc: "A 3D print farm. An import operation. A salon with my sister. None of these are random — they're all about owning the means of production instead of just designing for someone who does. Haven't pulled the trigger yet. But the instinct keeps showing up.",
+    label: "The moment you can't take it back.",
+    desc: "We shipped Airtel Thanks 2.0 to 100 million users simultaneously. No staged rollout. No rollback option. Designing at that scale changes something — the Figma frame is a hypothesis, but shipping to 100M is running the experiment with no control group.",
   },
 ];
 
