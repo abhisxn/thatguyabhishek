@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { motion, useSpring } from 'framer-motion';
+import { m, useSpring } from 'framer-motion';
 import { SECTION_STYLES } from '@/lib/section-styles';
 import Card from '../components/ui/Card';
 import Button, { BUTTON_VARIANTS } from '../components/ui/Button';
@@ -71,7 +71,7 @@ function StrokeDemoCard({ label, children }) {
         onMouseEnter={() => strokeOpacity.set(0.7)}
         onMouseLeave={() => strokeOpacity.set(0.2)}
       >
-        <motion.div style={{ ...STROKE_RING_STYLE, opacity: strokeOpacity }} />
+        <m.div style={{ ...STROKE_RING_STYLE, opacity: strokeOpacity }} />
         {children}
       </div>
     </div>
@@ -99,12 +99,12 @@ function WritingDemoCard() {
         onMouseEnter={() => { setIsHov(true); strokeOpacity.set(0.7); }}
         onMouseLeave={() => { setIsHov(false); strokeOpacity.set(0.2); }}
       >
-        <motion.div style={{ ...STROKE_RING_STYLE, opacity: strokeOpacity }} />
-        <motion.span
+        <m.div style={{ ...STROKE_RING_STYLE, opacity: strokeOpacity }} />
+        <m.span
           animate={{ scale: isHov ? 1.15 : 1 }}
           transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
           style={{ fontSize: 24, lineHeight: 1, display: 'inline-block', transformOrigin: 'left center' }}
-        >✍️</motion.span>
+        >✍️</m.span>
         <p className="t-h5 text-fg" style={{ margin: 0 }}>Why designers should learn to say no</p>
         <p className="t-body2 text-fg-muted" style={{ margin: 0 }}>Short description of the article goes here in two lines max.</p>
         <div className="flex items-center gap-1 t-caption font-semibold" style={{ color: isHov ? 'var(--color-coral)' : 'var(--fg-muted)', transition: 'color 0.2s ease' }}>
@@ -964,7 +964,7 @@ export default function StyleGuide() {
                       <div className="block rounded-2xl p-8 mt-2" style={{ background: 'var(--surface-1)', border: '1px solid var(--border)' }}>
                         <span className="text-4xl leading-none block mb-5">🎯</span>
                         <p className="t-h4 font-bold leading-snug mb-3">Feature block</p>
-                        <p className="t-body2 leading-relaxed" style={{ color: 'var(--fg-muted)' }}>Key result / feature highlight. Add a URL child block → whole card becomes clickable with hover lift + "View →" arrow.</p>
+                        <p className="t-body2 leading-relaxed" style={{ color: 'var(--fg-muted)' }}>Key result / feature highlight. Add a URL child block → whole card becomes clickable with hover lift + &quot;View →&quot; arrow.</p>
                       </div>
                     </div>
 
@@ -1273,7 +1273,7 @@ function Card() {
       onMouseEnter={() => strokeOpacity.set(0.7)}
       onMouseLeave={() => strokeOpacity.set(0.2)}
     >
-      <motion.div style={{ ...STROKE_RING, opacity: strokeOpacity }} />
+      <m.div style={{ ...STROKE_RING, opacity: strokeOpacity }} />
       {/* content */}
     </div>
   );

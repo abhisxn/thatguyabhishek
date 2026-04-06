@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { m, AnimatePresence } from 'framer-motion';
 import { ProjectCard } from './ProjectCard';
 import { fadeUp, stagger, vp } from '../../../lib/motion';
 
@@ -41,7 +41,7 @@ export default function ProjectsExpandableGrid({
   return (
     <div>
       {heading && (
-        <motion.h2
+        <m.h2
           variants={fadeUp}
           initial="hidden"
           whileInView="visible"
@@ -49,11 +49,11 @@ export default function ProjectsExpandableGrid({
           className="t-h3 mb-8 text-[var(--fg)]"
         >
           {heading}
-        </motion.h2>
+        </m.h2>
       )}
 
       {/* Initial cards — always visible */}
-      <motion.div
+      <m.div
         variants={stagger}
         initial="hidden"
         whileInView="visible"
@@ -61,16 +61,16 @@ export default function ProjectsExpandableGrid({
         className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8"
       >
         {initial.map((p) => (
-          <motion.div key={p.id} variants={fadeUp}>
+          <m.div key={p.id} variants={fadeUp}>
             <ProjectCard page={p} size="s" showDesc />
-          </motion.div>
+          </m.div>
         ))}
-      </motion.div>
+      </m.div>
 
       {/* Expanded cards — animate in */}
       <AnimatePresence>
         {expanded && (
-          <motion.div
+          <m.div
             key="expanded"
             variants={stagger}
             initial="hidden"
@@ -79,11 +79,11 @@ export default function ProjectsExpandableGrid({
             className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 mt-8"
           >
             {rest.map((p) => (
-              <motion.div key={p.id} variants={fadeUp}>
+              <m.div key={p.id} variants={fadeUp}>
                 <ProjectCard page={p} size="s" showDesc />
-              </motion.div>
+              </m.div>
             ))}
-          </motion.div>
+          </m.div>
         )}
       </AnimatePresence>
 

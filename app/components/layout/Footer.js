@@ -1,6 +1,7 @@
 'use client';
 
-import { motion } from 'framer-motion';
+import { useRef, useCallback } from 'react';
+import { m, useMotionValue, useTransform, useSpring } from 'framer-motion';
 import Link from 'next/link';
 
 /* ── Local assets ───────────────────────────────────────────── */
@@ -23,6 +24,29 @@ const TICKER_CHUNK =
 import W from '../ui/W';
 import Button from '../ui/Button';
 
+/* ── Magnetic tilt hook ─────────────────────────────────────── */
+function useTilt(maxDeg = 6) {
+  const ref = useRef(null);
+  const x = useMotionValue(0);
+  const y = useMotionValue(0);
+  const rotateX = useSpring(useTransform(y, [-0.5, 0.5], [maxDeg, -maxDeg]), { stiffness: 300, damping: 30 });
+  const rotateY = useSpring(useTransform(x, [-0.5, 0.5], [-maxDeg, maxDeg]), { stiffness: 300, damping: 30 });
+
+  const onMouseMove = useCallback((e) => {
+    const rect = ref.current?.getBoundingClientRect();
+    if (!rect) return;
+    x.set((e.clientX - rect.left) / rect.width - 0.5);
+    y.set((e.clientY - rect.top) / rect.height - 0.5);
+  }, [x, y]);
+
+  const onMouseLeave = useCallback(() => {
+    x.set(0);
+    y.set(0);
+  }, [x, y]);
+
+  return { ref, rotateX, rotateY, onMouseMove, onMouseLeave };
+}
+
 /* ── Ticker strip ────────────────────────────────────────────── */
 function Ticker() {
   const text = TICKER_CHUNK.repeat(4);
@@ -44,10 +68,13 @@ function Ticker() {
 
 /* ── Main export ─────────────────────────────────────────────── */
 export default function Footer() {
+  const purpleTilt = useTilt(5);
+  const liTilt = useTilt(5);
+
   return (
     <footer className="border-t border-theme text-fg relative z-[1]">
       <W className="py-14 sm:py-20 lg:py-24">
-        <motion.div
+        <m.div
           variants={stagger}
           initial="hidden"
           whileInView="visible"
@@ -56,7 +83,7 @@ export default function Footer() {
         >
 
           {/* ── 1. CTA headline ── */}
-          <motion.div variants={fadeUp}>
+          <m.div variants={fadeUp}>
             <p className="t-h3">
               Good design isn&apos;t decoration. It&apos;s the decision that changes the outcome. I bring craft,
               systems thinking, and leadership to problems that actually matter — not as separate skills,
@@ -64,14 +91,18 @@ export default function Footer() {
               <span style={{ color: 'var(--color-coral)' }}>look no further, get in touch.</span>
             </p>
             <hr className="mt-8 border-theme" />
-          </motion.div>
+          </m.div>
 
           {/* ── 2. CTA cards ── */}
-          <motion.div variants={stagger} className="flex flex-col sm:flex-row gap-5 sm:gap-8">
+          <m.div variants={stagger} className="flex flex-col sm:flex-row gap-5 sm:gap-8">
 
             {/* ── Purple card ── */}
-            <motion.div
+            <m.div
               variants={fadeUp}
+              ref={purpleTilt.ref}
+              onMouseMove={purpleTilt.onMouseMove}
+              onMouseLeave={purpleTilt.onMouseLeave}
+              style={{ perspective: 900, rotateX: purpleTilt.rotateX, rotateY: purpleTilt.rotateY, transformStyle: 'preserve-3d' }}
               className="relative overflow-hidden flex-[3] rounded-2xl footer-cta-purple"
             >
               {/* Gradient blob — lower-left, mix-blend-hard-light */}
@@ -94,11 +125,15 @@ export default function Footer() {
                   Connect with me
                 </Button>
               </div>
-            </motion.div>
+            </m.div>
 
             {/* ── LinkedIn card ── */}
-            <motion.div
+            <m.div
               variants={fadeUp}
+              ref={liTilt.ref}
+              onMouseMove={liTilt.onMouseMove}
+              onMouseLeave={liTilt.onMouseLeave}
+              style={{ perspective: 900, rotateX: liTilt.rotateX, rotateY: liTilt.rotateY, transformStyle: 'preserve-3d' }}
               className="bg-white flex-[2] rounded-[8px] flex flex-col gap-4 p-6 footer-li-card"
             >
               {/* Top row: avatar icon + LinkedIn logo */}
@@ -127,40 +162,40 @@ export default function Footer() {
                   </Button>
                 </div>
               </div>
-            </motion.div>
-          </motion.div>
+            </m.div>
+          </m.div>
 
           {/* ── 3. Links grid — Socials + Links + Contact ── */}
-          <motion.div
+          <m.div
             variants={stagger}
             className="flex flex-col sm:flex-row gap-8 sm:gap-6 text-center border-t border-theme pt-[clamp(2rem,4vw,4rem)]"
           >
             {/* Socials */}
-            <motion.div variants={fadeUp} className="flex flex-col gap-5 items-center sm:flex-1 footer-link-col">
+            <m.div variants={fadeUp} className="flex flex-col gap-5 items-center sm:flex-1 footer-link-col">
               <p className="t-body1 font-semibold text-fg">Socials</p>
               <a href="https://www.linkedin.com/in/thatguyabhishek/" target="_blank" rel="noopener noreferrer" className="t-body2 text-fg-muted inline-block font-medium relative after:absolute after:left-0 after:-bottom-0.5 after:h-px after:w-0 after:bg-current after:transition-all after:duration-200 hover:after:w-full">👤 Linkedin</a>
               <a href="https://dribbble.com/abhisheksaxena" target="_blank" rel="noopener noreferrer" className="t-body2 text-fg-muted inline-block font-medium relative after:absolute after:left-0 after:-bottom-0.5 after:h-px after:w-0 after:bg-current after:transition-all after:duration-200 hover:after:w-full">⚡ Dribbble</a>
               <a href="https://www.behance.net/AbhishekSaxena" target="_blank" rel="noopener noreferrer" className="t-body2 text-fg-muted inline-block font-medium relative after:absolute after:left-0 after:-bottom-0.5 after:h-px after:w-0 after:bg-current after:transition-all after:duration-200 hover:after:w-full">🔸 Behance</a>
-            </motion.div>
+            </m.div>
 
             {/* Links */}
-            <motion.div variants={fadeUp} className="flex flex-col gap-5 items-center sm:flex-1 footer-link-col">
+            <m.div variants={fadeUp} className="flex flex-col gap-5 items-center sm:flex-1 footer-link-col">
               <p className="t-body1 font-semibold text-fg">Links</p>
               <Link href="/about" className="t-body2 text-fg-muted inline-block font-medium relative after:absolute after:left-0 after:-bottom-0.5 after:h-px after:w-0 after:bg-current after:transition-all after:duration-200 hover:after:w-full">☝ About</Link>
               <Link href="/work" className="t-body2 text-fg-muted inline-block font-medium relative after:absolute after:left-0 after:-bottom-0.5 after:h-px after:w-0 after:bg-current after:transition-all after:duration-200 hover:after:w-full">🎨 Work</Link>
               <Link href="/awards" className="t-body2 text-fg-muted inline-block font-medium relative after:absolute after:left-0 after:-bottom-0.5 after:h-px after:w-0 after:bg-current after:transition-all after:duration-200 hover:after:w-full">🏆 Awards</Link>
-            </motion.div>
+            </m.div>
 
             {/* Contact */}
-            <motion.div variants={fadeUp} className="flex flex-col gap-5 items-center sm:flex-1 footer-link-col">
+            <m.div variants={fadeUp} className="flex flex-col gap-5 items-center sm:flex-1 footer-link-col">
               <p className="t-body1 font-semibold text-fg">Contact</p>
               <a href="tel:+919999005281" className="t-body2 text-fg-muted inline-block font-medium relative after:absolute after:left-0 after:-bottom-0.5 after:h-px after:w-0 after:bg-current after:transition-all after:duration-200 hover:after:w-full">📞 Call for a Chat</a>
               <a href="mailto:abhisxn@gmail.com" className="t-body2 text-fg-muted inline-block font-medium relative after:absolute after:left-0 after:-bottom-0.5 after:h-px after:w-0 after:bg-current after:transition-all after:duration-200 hover:after:w-full">📧 Send an email</a>
               <a href="https://wa.me/919999005281" target="_blank" rel="noopener noreferrer" className="t-body2 text-fg-muted inline-block font-medium relative after:absolute after:left-0 after:-bottom-0.5 after:h-px after:w-0 after:bg-current after:transition-all after:duration-200 hover:after:w-full">💬 Whatsapp me</a>
-            </motion.div>
-          </motion.div>
+            </m.div>
+          </m.div>
 
-        </motion.div>
+        </m.div>
       </W>
 
       {/* ── 4. Ticker ── */}

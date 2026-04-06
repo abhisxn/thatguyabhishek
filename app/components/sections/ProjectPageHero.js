@@ -1,6 +1,6 @@
 'use client';
 
-import { motion } from 'framer-motion';
+import { m } from 'framer-motion';
 import { fadeUp, stagger, vp } from '@/lib/motion';
 
 function Tag({ label }) {
@@ -26,30 +26,30 @@ export default function ProjectPageHero({ project }) {
   if (!project) return null;
 
   return (
-    <motion.div
+    <m.div
       variants={stagger}
       initial="hidden"
       animate="visible"
       className="pt-8 pb-12 px-6 sm:px-10 lg:px-16 max-w-[1200px] mx-auto"
     >
       {project.tags?.length > 0 && (
-        <motion.div variants={fadeUp} className="flex flex-wrap gap-2 mb-5">
+        <m.div variants={fadeUp} className="flex flex-wrap gap-2 mb-5">
           {project.tags.map((tag) => <Tag key={tag} label={tag} />)}
-        </motion.div>
+        </m.div>
       )}
 
-      <motion.h1 variants={fadeUp} className="t-display mb-5">
+      <m.h1 variants={fadeUp} className="t-display mb-5">
         {project.title}
-      </motion.h1>
+      </m.h1>
 
       {project.desc && (
-        <motion.p variants={fadeUp} className="t-body1 text-fg-muted leading-relaxed mb-8">
+        <m.p variants={fadeUp} className="t-body1 text-fg-muted leading-relaxed mb-8">
           {project.desc}
-        </motion.p>
+        </m.p>
       )}
 
       {project.url && (
-        <motion.a
+        <m.a
           variants={fadeUp}
           href={project.url}
           target="_blank"
@@ -58,8 +58,8 @@ export default function ProjectPageHero({ project }) {
           style={{ borderColor: 'var(--brand)', color: 'var(--brand)' }}
         >
           View Live Project <ArrowRight />
-        </motion.a>
+        </m.a>
       )}
-    </motion.div>
+    </m.div>
   );
 }

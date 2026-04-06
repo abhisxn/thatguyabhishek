@@ -453,5 +453,80 @@ export default function ComponentName({ prop1, prop2 }) {
 
 ---
 
-*Last updated: March 2026*
+---
+
+## FIGMA MCP INTEGRATION RULES
+
+These rules govern every Figma-driven implementation task. Follow them in order — do not skip steps.
+
+### Figma File References
+
+| File | Key | Purpose |
+|---|---|---|
+| Source designs | `W3X90ArCwhgRQjTnBUvg93` | Homepage dark theme `node-id=1717-1032`, light theme `node-id=1722-1140` |
+| Design system | `7aiv0CSLE2XLZGQjrqQ9ic` | Tokens, typography, atoms, molecules, organisms, page layouts |
+
+### Required Flow (never skip)
+
+1. Call `get_design_context` on the relevant node from the source Figma file
+2. Call `get_screenshot` on the same node for visual reference
+3. Check `app/components/ui/` and `app/components/sections/` for existing components before creating new ones
+4. Implement using the project's stack — **not** raw Figma/Tailwind output
+5. Validate in both light and dark theme before marking complete
+
+### Design Token Mapping
+
+IMPORTANT: Never hardcode hex values. Map Figma variables to CSS custom properties:
+
+| Figma Variable | CSS Custom Property | Usage |
+|---|---|---|
+| `color/text/primary` | `var(--fg)` | Primary text |
+| `color/text/muted` | `var(--fg-muted)` | Secondary text, captions |
+| `color/bg/solid` | `var(--bg-solid)` | Page backgrounds |
+| `color/surface/1` | `var(--surface)` | Cards, inputs |
+| `color/border/default` | `var(--border)` | All borders |
+| `color/brand/default` | `var(--brand)` | Brand purple `#4839ca` |
+| `color/primitive/coral` | `var(--color-coral)` | Warm accent `#ea8575` |
+| `color/component/nav/bg` | `var(--bg-solid)` dark + blur | Navbar background |
+
+### Component Locations
+
+- **Atoms** (Button, Badge, Tag, Input, Select): `app/components/ui/`
+- **Molecules** (Card, Footer, Navbar): `app/components/layout/` and `app/components/ui/`
+- **Sections/Organisms** (HomeHero, AboutSection, CareerTimeline): `app/components/sections/`
+- **Pages**: `app/[page]/page.js`
+
+### Styling Rules
+
+- IMPORTANT: Use Tailwind utility classes + CSS variables. Never inline styles except for CSS custom properties.
+- Typography classes: `t-display`, `t-h1`–`t-h6`, `t-body1`–`t-body3`, `t-caption`, `t-overline`, `t-lead`
+- Theme-aware color classes: `text-fg`, `text-fg-muted`, `bg-surface`, `border-theme`
+- Spacing: base-8 grid — use multiples of 8px. Tailwind: `gap-8`, `px-16`, `py-24` etc.
+- Radius tokens: `rounded-[var(--radius-card)]` (24px), `rounded-[var(--radius-pill)]` (100px)
+
+### Asset Rules
+
+- IMPORTANT: If Figma MCP returns a localhost image/SVG source, use it directly — do not create placeholders
+- Store all static assets in `public/` — images, GIFs, SVGs
+- Use `next/image` for all raster images. Never `<img>` for internal routes.
+
+### Figma Design System Structure (file `7aiv0CSLE2XLZGQjrqQ9ic`)
+
+Pages in order:
+1. 🎨 Cover — file status + index
+2. 📐 Design Tokens — 3-tier variable system (Primitives → Semantic → Component)
+3. ✍️ Typography — Glory font, all text styles with specimens
+4. 🧩 Components — Atoms — button, input, tag, chip, link, avatar, toggle, divider, skeleton
+5. 🧱 Components — Molecules — project cards, award cards, section headers, social rows, nav, footer
+6. 🏗️ Components — Organisms — all at desktop/tablet/mobile breakpoints
+7. 📏 Layout & Grid — grid system, spacing scale, z-index, motion
+8. 🌐 Homepage through ✉️ Contact — full page compositions
+9. 📁 Project Page Template
+
+Navbar component: `molecule/nav/topbar` — HORIZONTAL, SPACE_BETWEEN, padding 0 140px
+Footer component: `molecule/footer/default` — VERTICAL, full auto-layout, variable-bound colors
+
+---
+
+*Last updated: April 2026*
 *Owner: Abhishek Saxena — abhisxn@gmail.com*

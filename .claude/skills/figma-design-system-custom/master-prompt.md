@@ -1,66 +1,8 @@
----
-name: figma-design-system
-description: >
-  Use this skill to build a complete, production-ready Figma design system
-  and portfolio site file using the Figma MCP. Triggers when the user asks
-  to "build a Figma file", "create a design system", "set up my portfolio
-  in Figma", "scaffold a design library", or references building pages,
-  tokens, components, or a full site layout inside Figma. Always runs in
-  phase-by-phase checkpoint mode — never in one shot.
-user-invocable: true
-metadata:
-  version: "1.3"
-  author: Abhishek Saxena
-  updated: 2026-03-30
-  status: ready
-  requires: "Figma MCP"
----
+# Figma Design System — Master Prompt
 
-# Figma Design System Skill
-
-This skill builds a complete Figma file end-to-end:
-design tokens → typography → components (atoms, molecules, organisms)
-→ layout system → full page designs → project page template.
-
-It uses a checkpoint model — Claude Code completes one phase, confirms,
-then proceeds. Never runs all phases in a single shot.
+Paste this into Claude Code after confirming Figma MCP is connected.
 
 ---
-
-## Prerequisites — Fill These In Before Running
-
-Answer all 8 questions. Replace every `[PLACEHOLDER]` in the master prompt.
-The more specific the input, the less guesswork in the output.
-
-| # | Question | Your Answer |
-|---|---|---|
-| Q1 | Color mode — Dark only / Light only / Dual with switching? | Dual with switching — dark primary, light available. Default: dark. |
-| Q2 | Typography — Font name(s)? Google / Adobe / System? | Glory (primary — Google Font via next/font/google). Manrope (secondary — Google Font via next/font/google, used in LinkedIn card). |
-| Q3 | Visual direction — one word or sentence | Editorial-minimal. Dark mode primary. Heavy typographic hierarchy. White space is intentional. Brand purple on near-black. Feels like linear.app or stripe.com. |
-| Q4 | Token depth — Flat (simple) or Tiered (Primitive → Semantic → Component)? | Tiered — 3 levels: Primitive → Semantic → Component |
-| Q5 | Component scope — Atoms only / Full library (atoms + molecules + organisms)? | Full library — atoms + molecules + organisms |
-| Q6 | Breakpoints — Confirm or override: 375 / 768 / 1280 / 1440px | Confirmed: 375 / 768 / 1280 / 1440px |
-| Q7 | Figma target — New file or existing? (paste link if existing) | Existing — https://www.figma.com/design/W3X90ArCwhgRQjTnBUvg93/Abhishek-Saxena |
-| Q8 | Icon library — Lucide / Phosphor / Other? | Lucide React (used throughout codebase) |
-
----
-
-## How to Run
-
-1. Open Claude Code with Figma MCP connected
-2. Answer all 8 prerequisite questions above
-3. Fill in every `[PLACEHOLDER]` in the Master Prompt below
-4. Paste the filled Master Prompt into Claude Code
-5. Confirm each phase checkpoint before proceeding to the next
-6. Run the Testing Rules as a validation pass after all phases complete
-
-> ⚠️ Do not run all phases in one shot. Use the checkpoint system.
-> If Figma MCP errors on a complex component, retry with the simplest
-> variant first, then layer in complexity.
-
----
-
-## Master Prompt
 
 ```
 You are an expert Figma design system architect. Your task is to build a
@@ -248,61 +190,44 @@ Mono font:    ui-monospace / system-mono (code blocks only)
 
 NOTE: The codebase uses fluid clamp() for all headings. Figma does not natively support
 clamp(). Create TWO versions per heading style: one at min size (mobile) and one at max
-size (desktop). Label each clearly. This is the source-of-truth mapping:
+size (desktop). Label each clearly.
 
 Create Figma Text Styles with slash notation:
 
-Display (page titles / hero banners):
-  CODE CLASS: .t-display
+Display:
   display/desktop → 84px / SemiBold (600) / 100% leading / -0.02em
   display/mobile  → 48px / SemiBold (600) / 100% leading / -0.02em
 
-Headings (fluid — min @ mobile, max @ desktop):
-  CODE CLASS: .t-h1
-  heading/h1/desktop → 72px / SemiBold (600) / 100% / -0.01em
-  heading/h1/mobile  → 36px / SemiBold (600) / 100% / -0.01em
+Headings:
+  heading/h1/desktop → 72px / SemiBold / 100% / -0.01em
+  heading/h1/mobile  → 36px / SemiBold / 100% / -0.01em
+  heading/h2/desktop → 60px / SemiBold / 120% / 0em
+  heading/h2/mobile  → 30px / SemiBold / 120% / 0em
+  heading/h3/desktop → 48px / SemiBold / 120% / 0em
+  heading/h3/mobile  → 24px / SemiBold / 120% / 0em
+  heading/h4/desktop → 32px / SemiBold / 120% / 0em
+  heading/h4/mobile  → 20px / SemiBold / 120% / 0em
+  heading/h5/desktop → 28px / SemiBold / 120% / 0em
+  heading/h5/mobile  → 18px / SemiBold / 120% / 0em
+  heading/h6         → 16px / SemiBold / 120% / 0em  (fixed — no fluid)
 
-  CODE CLASS: .t-h2
-  heading/h2/desktop → 60px / SemiBold (600) / 120% / 0em
-  heading/h2/mobile  → 30px / SemiBold (600) / 120% / 0em
+Body (fixed):
+  body/1 → 22px / Medium (500) / 120%   ← prominent paragraphs
+  body/2 → 18px / Medium (500) / 120%   ← standard body
+  body/3 → 14px / Medium (500) / 120%   ← small / secondary
 
-  CODE CLASS: .t-h3
-  heading/h3/desktop → 48px / SemiBold (600) / 120% / 0em
-  heading/h3/mobile  → 24px / SemiBold (600) / 120% / 0em
-
-  CODE CLASS: .t-h4
-  heading/h4/desktop → 32px / SemiBold (600) / 120% / 0em
-  heading/h4/mobile  → 20px / SemiBold (600) / 120% / 0em
-
-  CODE CLASS: .t-h5
-  heading/h5/desktop → 28px / SemiBold (600) / 120% / 0em
-  heading/h5/mobile  → 18px / SemiBold (600) / 120% / 0em
-
-  CODE CLASS: .t-h6 (fixed, no fluid)
-  heading/h6 → 16px / SemiBold (600) / 120% / 0em
-
-Body (fixed sizes — no fluid):
-  CODE CLASS: .t-body1
-  body/1 → 22px / Medium (500) / 120%   ← used for prominent body paragraphs
-
-  CODE CLASS: .t-body2
-  body/2 → 18px / Medium (500) / 120%   ← standard body text
-
-  CODE CLASS: .t-body3
-  body/3 → 14px / Medium (500) / 120%   ← small / secondary body
-
-  CODE CLASS: .t-caption
+Caption:
   caption → 12px / Bold (700) / 120%    ← labels, chips, fine print
 
-UI / Button text (fixed):
-  ui/btn/lg → 20px / Medium (500) / 120%   ← --text-btn1
-  ui/btn/md → 16px / Medium (500) / 120%   ← --text-btn2
+UI / Button:
+  ui/btn/lg → 20px / Medium / 120%
+  ui/btn/md → 16px / Medium / 120%
 
-Monospace (code blocks):
+Monospace:
   mono/md → 14px / ui-monospace / Regular
   mono/sm → 12px / ui-monospace / Regular
 
-For every text style — create a specimen frame showing:
+For every text style — create a specimen frame:
   style name label | sample text | token reference annotations
 
 ✅ Phase 2 checkpoint: Confirm all text styles created with specimens.
@@ -319,6 +244,20 @@ All components MUST:
 - Include Default, Hover, Focused, Active, Disabled states
 - Include a usage note frame beside each component set
 
+BEFORE BUILDING ANY MOLECULE OR ORGANISM:
+Read the live codebase component file. Record these values before writing any use_figma code:
+  - Component file path
+  - Outer frame: width, height (or min-height), border-radius
+  - Internal card/section dimensions if the component contains sub-cards
+  - All gap and padding values used
+  - Font sizes and weights per text node
+  - Any secondary font families used (e.g. Manrope in social cards)
+
+Before building a component that contains a logo, icon, or brand asset: find that asset
+in the source design file (W3X90ArCwhgRQjTnBUvg93) or public/ folder first. Never
+substitute a text node for a visual mark. If the asset can't be imported, create a
+correctly-sized placeholder frame with the asset's exact dimensions and annotate it.
+
 --- PAGE 4: ATOMS ---
 
 1. atom/button
@@ -328,14 +267,12 @@ All components MUST:
              × Icon [None|Left|Right|Icon-only]
    Padding: SM 8px/16px | MD 12px/20px | LG 16px/24px
    Radius: radius/md (8px)
-   Font: ui/label/md (SM) | ui/label/lg (MD/LG)
 
 2. atom/input
    Variants: State [Empty|Filled|Focused|Error|Disabled]
              × Size [SM|MD|LG]
              × Type [Default|Prefix|Suffix|Icon]
    Height: SM 36px | MD 40px | LG 48px
-   Padding: 12px/16px | Radius: radius/md (8px)
 
 3. atom/tag
    Variants: Type [Default|Filled|Outline] × Size [SM|MD] × State
@@ -343,7 +280,7 @@ All components MUST:
 
 4. atom/icon
    Variants: Size [XS(12)|SM(16)|MD(20)|LG(24)|XL(32)]
-   Library: Lucide React (matches codebase icon library)
+   Library: Lucide React
 
 5. atom/avatar
    Variants: Type [Image|Initials|Placeholder]
@@ -351,9 +288,7 @@ All components MUST:
              × Shape [Circle|Square-rounded]
 
 6. atom/divider
-   Variants: Direction [Horizontal|Vertical]
-             × Style [Solid|Dashed|Dotted]
-             × Label [None|With-label]
+   Variants: Direction [Horizontal|Vertical] × Style [Solid|Dashed|Dotted] × Label [None|With-label]
 
 7. atom/chip
    Variants: Type [Skill|Category|Year|Status] × State [Default|Active|Hover]
@@ -419,7 +354,6 @@ All Auto Layout. Max-width container constraints applied.
 
 1. organism/hero/homepage
    Contains: Overline, Display headline, Body copy, CTA pair, Scroll indicator
-   Layout: Full viewport height, content vertically centered
 
 2. organism/work/grid-preview
    Contains: Section header, 3–4 project cards, View All CTA
@@ -434,18 +368,15 @@ All Auto Layout. Max-width container constraints applied.
 
 5. organism/contact/cta
    Contains: Headline, body copy, email CTA, social links
-   Layout: Full-width, centered
 
 6. organism/project/hero
    Contains: Project title, Tags, Year, Role, Cover image/video placeholder
-   Layout: Full-bleed with overlay — or stacked
 
 7. organism/project/body-section
    Variants: Text-only | Text-image | Text-image-reversed | Full-image
 
 8. organism/project/results
    Contains: 3–4 stat blocks (metric + label), Impact narrative below
-   Layout: Grid row + body text
 
 9. organism/project/related
    Contains: 2 project cards (next / related work)
@@ -456,26 +387,21 @@ All Auto Layout. Max-width container constraints applied.
 PHASE 4 — LAYOUT SYSTEM  (Page 7)
 ===========================================================
 
-Document each of the following as labeled frames on Page 7:
-
 1. Grid System
    Mobile  375px: 4-col  | 16px gutter | 16px margin
    Tablet  768px: 8-col  | 24px gutter | 32px margin
    Desktop 1280px: 12-col | 24px gutter | 80px margin
    Wide   1440px: 12-col | 24px gutter | auto margin | max-content: 1280px
 
-2. Spacing Scale
-   All spacing tokens as horizontal bars, labeled with token name and px value
+2. Spacing Scale — all tokens as horizontal bars with labels
 
 3. Z-Index Layers
    base → card → sticky → modal → toast → tooltip
-   Document as labeled stacked diagram
 
 4. Motion Guidelines
    Micro-interactions:  ease-out  | 200ms
    Page transitions:    ease-in-out | 400ms
-   Framer Motion standard easing: cubic-bezier(0.25, 0.46, 0.45, 0.94)
-   Show easing curves as visual diagrams
+   Framer Motion easing: cubic-bezier(0.25, 0.46, 0.45, 0.94)
 
 ✅ Phase 4 checkpoint: Confirm layout page complete before proceeding.
 
@@ -502,13 +428,13 @@ Section stack:
   6. organism/contact/cta
   7. molecule/footer
 
-Content to fill in:
-  Hero headline:    "Hey there, I'm Abhishek Saxena, a product designer
-                    enabling growth led design for 12+ years"
-  Hero subhead:     "I don't do pretty pixels for vanity metrics. I design
-                    systems that scale, interfaces that convert, and
-                    experiences that stick."
-  Featured work:    Microsoft Wiki Agent | Excel AI Chart Insights | Airtel Thanks 2.0
+Content:
+  Hero headline:  "Hey there, I'm Abhishek Saxena, a product designer
+                  enabling growth led design for 12+ years"
+  Hero subhead:   "I don't do pretty pixels for vanity metrics. I design
+                  systems that scale, interfaces that convert, and
+                  experiences that stick."
+  Featured work:  Microsoft Wiki Agent | Excel AI Chart Insights | Airtel Thanks 2.0
 
 --- PAGE 9: WORK ---
 
@@ -543,42 +469,32 @@ Section stack:
   6. organism/contact/cta
   7. molecule/footer
 
-Content:
-  Bio:
-    "I'm a senior product designer with 12+ years of experience, building
-    digital products that scale. Formerly at Microsoft, leading growth-led
-    design for Excel AI features. Based in India — open to global
-    opportunities. I design systems that hold up under pressure, not just
-    pixels that look good in Figma."
+Bio:
+  "I'm a senior product designer with 12+ years of experience, building
+  digital products that scale. Formerly at Microsoft, leading growth-led
+  design for Excel AI features. Based in India — open to global
+  opportunities. I design systems that hold up under pressure, not just
+  pixels that look good in Figma."
 
-  Experience (newest first):
-    Microsoft,          Senior Product Designer,    2023–present,
-      Growth-led design for Excel AI features — chart insights, defaults, recommendations
-    ThinkPlanty.com,    Lead Designer,              2020–2023,
-      End-to-end product design for B2C plant care web app, 0→1
-    GoodWorker,         Lead Designer,              2022–2023,
-      Built 0→1 design system for blue-collar hiring platform
-    Airtel,             Senior Product Designer,    2019–2020,
-      Redesigned Airtel Thanks super app — millions of DAU
-    Cheil / Samsung,    UX Designer,                2018–2019,
-      UX for Samsung India consumer products
-    Watchlyst,          Founding Designer,          2016–2018,
-      Designed and shipped watchlist + recommendation iOS/Android app
-    Avizva,             UX Designer,                2015–2018,
-      Enterprise UX for fintech and logistics clients
-    Toaster / Google,   UX Designer,                2015–2016,
-      Consumer design for Google-backed product studio
-    Dentsu / Webchuntey, Designer,                  2011–2015,
-      Digital design at a full-service agency
+Experience (newest first):
+  Microsoft,          Senior Product Designer,    2023–present
+  ThinkPlanty.com,    Lead Designer,              2020–2023
+  GoodWorker,         Lead Designer,              2022–2023
+  Airtel,             Senior Product Designer,    2019–2020
+  Cheil / Samsung,    UX Designer,                2018–2019
+  Watchlyst,          Founding Designer,          2016–2018
+  Avizva,             UX Designer,                2015–2018
+  Toaster / Google,   UX Designer,                2015–2016
+  Dentsu / Webchuntey, Designer,                  2011–2015
 
-  Skills:
-    Design:    Product Design, UX Design, Design Systems, Visual Design,
-               Motion Design, Information Architecture, Prototyping
-    Research:  Usability Testing, User Interviews, Journey Mapping,
-               Jobs To Be Done, Competitive Analysis
-    Dev:       HTML/CSS, Tailwind CSS, React basics, Framer, Figma Variables
-    AI:        Prompt Engineering, AI-augmented design workflows,
-               Microsoft Copilot integration, Generative UI patterns
+Skills:
+  Design:    Product Design, UX Design, Design Systems, Visual Design,
+             Motion Design, Information Architecture, Prototyping
+  Research:  Usability Testing, User Interviews, Journey Mapping,
+             Jobs To Be Done, Competitive Analysis
+  Dev:       HTML/CSS, Tailwind CSS, React basics, Framer, Figma Variables
+  AI:        Prompt Engineering, AI-augmented design workflows,
+             Microsoft Copilot integration, Generative UI patterns
 
 --- PAGE 11: AWARDS ---
 
@@ -588,9 +504,8 @@ Section stack:
   3. Awards grid — molecule/card/award
   4. molecule/footer
 
-Awards:
-  [Fetch from Notion Awards page: 7b1e321f25bf43e5875b73eb17ec3a9b]
-  Use real entries from Notion — do not fabricate award names.
+[Fetch from Notion Awards page: 7b1e321f25bf43e5875b73eb17ec3a9b]
+Use real entries — do not fabricate award names.
 
 --- PAGE 12: CONTACT ---
 
@@ -602,13 +517,13 @@ Section stack:
   5. molecule/footer
 
 Details:
-  Email:              abhisxn@gmail.com
-  LinkedIn:           linkedin.com/in/thatguyabhishek
-  Behance:            behance.net/thatguyabhishek
-  Dribbble:           dribbble.com/abhisheksaxena
-  Phone:              +91 9999005281
-  Availability note:  "Open to senior / director-level design roles globally.
-                      Available for freelance projects and consulting."
+  Email:     abhisxn@gmail.com
+  LinkedIn:  linkedin.com/in/thatguyabhishek
+  Behance:   behance.net/thatguyabhishek
+  Dribbble:  dribbble.com/abhisheksaxena
+  Phone:     +91 9999005281
+  Note:      "Open to senior / director-level design roles globally.
+              Available for freelance projects and consulting."
 
 ✅ Phase 5 checkpoint: Confirm all 5 pages exist at all 3 breakpoints.
 
@@ -621,28 +536,18 @@ Create 2 master frames:
   project-template/mobile  @ 375px
 
 Section order:
-  1.  organism/nav/topbar                          [sticky]
-  2.  molecule/scroll/progress                     [horizontal, sticky]
-  3.  organism/project/hero
-        ↳ [Project title] | [Tags] | [Cover image placeholder]
-  4.  organism/project/meta
-        ↳ Role | Duration | Team size | Tools used
-  5.  organism/project/body-section [Text-only]
-        ↳ Problem statement
-  6.  organism/project/body-section [Text-image]
-        ↳ Research / Discovery
-  7.  organism/project/body-section [Full-image]
-        ↳ Key visual or insight output
-  8.  organism/project/body-section [Text-image-reversed]
-        ↳ Design decisions / explorations
-  9.  organism/project/body-section [Full-image]
-        ↳ Final design — key screens
-  10. organism/project/results
-        ↳ [METRIC 1] | [METRIC 2] | [METRIC 3] | Impact narrative
-  11. molecule/quote
-        ↳ Stakeholder quote or key learning
-  12. organism/project/related
-        ↳ 2 related project cards
+  1.  organism/nav/topbar                     [sticky]
+  2.  molecule/scroll/progress                [horizontal, sticky]
+  3.  organism/project/hero                   Title | Tags | Cover image placeholder
+  4.  organism/project/meta                   Role | Duration | Team size | Tools
+  5.  organism/project/body-section           [Text-only] — Problem statement
+  6.  organism/project/body-section           [Text-image] — Research / Discovery
+  7.  organism/project/body-section           [Full-image] — Key visual
+  8.  organism/project/body-section           [Text-image-reversed] — Design decisions
+  9.  organism/project/body-section           [Full-image] — Final design screens
+  10. organism/project/results                [METRIC 1] | [METRIC 2] | [METRIC 3]
+  11. molecule/quote                          Stakeholder quote or key learning
+  12. organism/project/related                2 related project cards
   13. molecule/footer
 
 For every section:
@@ -650,147 +555,4 @@ For every section:
 - Add a usage note frame with DO / DON'T guidance
 
 ✅ Phase 6 checkpoint: Confirm template complete at both breakpoints.
-
-===========================================================
-EXECUTION RULES — NEVER VIOLATE
-===========================================================
-
-1. NAMING
-   Always use slash notation. Zero exceptions.
-   ✅ atom/button/primary   ✅ molecule/card/project   ✅ organism/hero/homepage
-   ❌ PrimaryButton          ❌ project card            ❌ Hero Section
-
-2. AUTO LAYOUT
-   Every frame uses Auto Layout. No manual x/y positioning.
-   Manual coordinates allowed only inside atomic shapes (rects, circles).
-
-3. TOKENS
-   Every color fill, spacing value, radius, and font references a
-   Variable or Text Style. Zero hardcoded hex values. Zero hardcoded px spacing.
-
-4. VARIANTS
-   Every interactive component = one Component Set containing all states.
-   Never duplicate as separate standalone components.
-
-5. LAYER NAMES
-   Every layer must be named descriptively.
-   "Frame 234", "Rectangle 12", "Group 7" are not acceptable.
-
-6. BREAKPOINTS
-   All page-level frames must exist at all 3 breakpoints before moving on.
-   Do not advance to the next page until all 3 frames are complete.
-
-7. SEQUENCE
-   Tokens → Typography → Atoms → Molecules → Organisms →
-   Layout → Pages → Project Template.
-   Never jump ahead. Never go back without flagging the reason.
-
-8. CHECKPOINTS
-   After completing each Phase, output exactly:
-   "✅ Phase [X] complete. Created: [list]. Ready for Phase [X+1]?"
-   Do not proceed until you receive explicit confirmation.
-
-9. DOCUMENTATION
-   Every component page has a usage note frame:
-   when to use | when not to use | variant-specific notes.
-
-10. COVER PAGE  (Page 1)
-    Must include:
-    - File name + brand tagline
-    - Version number + date last updated
-    - Full page index with emoji labels
-    - File status: WIP / Review / Final
-    - Total component count (update after Phase 3)
 ```
-
----
-
-## Testing Rules
-
-Run as a validation pass after all phases are complete,
-or check per-phase at each checkpoint.
-
-### Phase Validation
-
-- Variable count meets minimum: Phase 1 → 45+ variables
-- Every token has values in BOTH Light and Dark modes — flag gaps
-- Zero hardcoded hex values in the file
-- Zero hardcoded pixel values for spacing or radius
-- Naming follows slash notation with 100% consistency
-
-### Component Integrity
-
-- Every atom has minimum 3 states: Default, Hover, Disabled
-- Every component set has at least one Variant property defined
-- No detached instances — all reference a main component
-- All text layers use a Text Style (no raw font overrides)
-- All color fills reference a Variable (no local styles, no hardcoded colors)
-
-### Auto Layout Audit
-
-- No frame contains manually x/y positioned children
-- All page-level frames have vertical Auto Layout enabled
-- All padding values reference spacing tokens — not hardcoded numbers
-- Nested Auto Layout directions are intentional and documented
-
-### Breakpoint Coverage
-
-- Each page has exactly 3 frames: `/desktop`, `/tablet`, `/mobile`
-- Frame widths match spec: 1280px, 768px, 375px
-- Responsive behavior passes: text wraps, columns collapse, no overflow
-- No clipping or content cutoff at any breakpoint
-
-### Layer Hygiene
-
-- Zero unnamed layers ("Frame 234", "Rectangle 12", "Group 7")
-- No hidden layers remaining in final components
-  (move all exploration layers to Page 14: Scratch)
-- Layer depth does not exceed 8 levels without documented reason
-- All group layers converted to named frames
-
-### Documentation Coverage
-
-- Every component page has a usage note frame
-- Every organism has breakpoint annotation labels
-- Project template has blue annotations on all placeholder sections
-- Cover page version and date are current
-
-### Pre-Handoff Checklist
-
-Mark file as Final only after all items pass:
-
-- [ ] Library published — components available workspace-wide
-- [ ] All 14 pages labeled with correct emoji prefix
-- [ ] Cover page status updated: WIP → Review → Final
-- [ ] No placeholder text ([FILL IN], Lorem ipsum) in final page frames
-- [ ] Export settings defined on all image placeholder frames
-- [ ] All organisms confirmed at all 3 breakpoints
-- [ ] Component count documented on cover page
-- [ ] Figma file shared with correct access level
-
----
-
-## File Naming Convention
-
-```
-/skills
-  /figma-design-system/SKILL.md    ← this file
-  /abhishek-voice/SKILL.md
-  /case-study-rewrite/SKILL.md
-  /job-application-workflow/SKILL.md
-```
-
-The folder name is the skill name.
-`SKILL.md` is always the filename — never rename it.
-Claude Code resolves skills by folder path, not filename.
-
----
-
-## Changelog
-
-| Version | Date | Change |
-|---|---|---|
-| 1.0 | 2026-03-29 | Initial version created |
-| 1.1 | 2026-03-30 | Cleaned structure, added testing rules, file naming section |
-| 1.2 | 2026-03-30 | Filled all placeholders from Figma dark theme (node 1717:1032) + CLAUDE.md |
-| 1.3 | 2026-03-30 | Synced tokens to actual globals.css: primitives, semantic vars, radius, fluid type scale, font source |

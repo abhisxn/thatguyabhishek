@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect, useRef, useCallback } from 'react';
-import { motion, AnimatePresence, useSpring, useMotionValue, useTransform } from 'framer-motion';
+import { m, AnimatePresence, useSpring, useMotionValue, useTransform } from 'framer-motion';
 import GradientBackground from '../components/layout/GradientBackground';
 import Button from '../components/ui/Button';
 import { ArrowIcon } from '../components/ui/icons';
@@ -25,7 +25,7 @@ function WritingCard({ article }) {
   const strokeOpacity = useSpring(0.2, { stiffness: 160, damping: 24 });
 
   return (
-    <motion.div variants={fadeUp}>
+    <m.div variants={fadeUp}>
       <a
         href={article.href}
         target="_blank"
@@ -44,14 +44,14 @@ function WritingCard({ article }) {
         onMouseEnter={() => { setIsHov(true); strokeOpacity.set(0.7); }}
         onMouseLeave={() => { setIsHov(false); strokeOpacity.set(0.2); }}
       >
-        <motion.div style={{ ...STROKE_RING, opacity: strokeOpacity }} />
-        <motion.span
+        <m.div style={{ ...STROKE_RING, opacity: strokeOpacity }} />
+        <m.span
           animate={{ scale: isHov ? 1.15 : 1 }}
           transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
           style={{ fontSize: 24, lineHeight: 1, display: 'inline-block', transformOrigin: 'left center' }}
         >
           {article.emoji}
-        </motion.span>
+        </m.span>
         <div className="flex flex-col gap-2" style={{ flex: 1 }}>
           <p className="t-h5 text-fg" style={{ margin: 0 }}>
             {article.title}
@@ -72,7 +72,7 @@ function WritingCard({ article }) {
           </svg>
         </div>
       </a>
-    </motion.div>
+    </m.div>
   );
 }
 
@@ -81,7 +81,7 @@ function NumberedCard({ heading, body, index, style }) {
   const strokeOpacity = useSpring(0.2, { stiffness: 160, damping: 24 });
 
   return (
-    <motion.div variants={fadeUp} style={{ height: '100%' }}>
+    <m.div variants={fadeUp} style={{ height: '100%' }}>
       <div
         style={{
           position: 'relative', borderRadius: 16, padding: '24px',
@@ -92,7 +92,7 @@ function NumberedCard({ heading, body, index, style }) {
         onMouseEnter={() => strokeOpacity.set(0.7)}
         onMouseLeave={() => strokeOpacity.set(0.2)}
       >
-        <motion.div style={{ ...STROKE_RING, opacity: strokeOpacity }} />
+        <m.div style={{ ...STROKE_RING, opacity: strokeOpacity }} />
         <p className="t-caption tabular-nums font-bold" style={{ color: 'var(--color-coral)', letterSpacing: '0.08em', margin: 0 }}>
           {String(index + 1).padStart(2, '0')}
         </p>
@@ -103,7 +103,7 @@ function NumberedCard({ heading, body, index, style }) {
           {body}
         </p>
       </div>
-    </motion.div>
+    </m.div>
   );
 }
 
@@ -216,7 +216,7 @@ function WhatIBringCard({ item, index, textClr, mutedClr }) {
   const num = String(index + 1).padStart(2, '0');
 
   return (
-    <motion.div variants={fadeUp} style={{ height: '100%' }}>
+    <m.div variants={fadeUp} style={{ height: '100%' }}>
       {/* Outer wrapper holds the sweep ring (needs overflow:visible) */}
       <div
         style={{ position: 'relative', borderRadius: 17, height: '100%' }}
@@ -225,7 +225,7 @@ function WhatIBringCard({ item, index, textClr, mutedClr }) {
         onMouseLeave={handleMouseLeave}
       >
         {/* H — adaptive outline */}
-        <motion.div
+        <m.div
           style={{
             position: 'absolute',
             inset: 0,
@@ -254,7 +254,7 @@ function WhatIBringCard({ item, index, textClr, mutedClr }) {
           }}
         >
           {/* F — glare blob */}
-          <motion.div
+          <m.div
             style={{
               position: 'absolute',
               top: 0,
@@ -282,7 +282,7 @@ function WhatIBringCard({ item, index, textClr, mutedClr }) {
           </p>
         </div>
       </div>
-    </motion.div>
+    </m.div>
   );
 }
 
@@ -358,8 +358,8 @@ export default function AboutPage({ thinkingItems: thinkingProp = [] }) {
         {/* ── 1. HERO — 30/70 split ──────────────────────────────────── */}
         <section className="relative">
           <W className="pt-32 pb-20">
-            <motion.div variants={stagger} initial="hidden" animate="visible">
-              <motion.p variants={fadeUp} className="t-overline text-fg-muted mb-8">About</motion.p>
+            <m.div variants={stagger} initial="hidden" animate="visible">
+              <m.p variants={fadeUp} className="t-overline text-fg-muted mb-8">About</m.p>
 
               <div className="grid gap-12 items-start lg:grid-cols-[3fr_7fr]">
 
@@ -367,7 +367,7 @@ export default function AboutPage({ thinkingItems: thinkingProp = [] }) {
                   <div className="flex flex-col gap-4">
 
                     {/* Portrait + Currently card */}
-                    <motion.div variants={fadeUp}>
+                    <m.div variants={fadeUp}>
                       <div className="ui-surface ui-surface--lg flex flex-col gap-0" style={{ overflow: 'hidden' }}>
                         {/* Portrait — full width, no padding, bleeds to card edges */}
                         <div
@@ -412,15 +412,15 @@ export default function AboutPage({ thinkingItems: thinkingProp = [] }) {
                           ))}
                         </div>
                       </div>
-                    </motion.div>
+                    </m.div>
 
                   </div>
 
                   {/* RIGHT 70% — open to badge + h1 + bio + CTAs (no card) */}
-                  <motion.div variants={stagger} className="flex flex-col gap-7 lg:pt-1">
+                  <m.div variants={stagger} className="flex flex-col gap-7 lg:pt-1">
 
                     {/* Open to opportunities badge */}
-                    <motion.div variants={fadeUp}>
+                    <m.div variants={fadeUp}>
                       <span
                         style={{
                           display: 'inline-flex',
@@ -433,7 +433,7 @@ export default function AboutPage({ thinkingItems: thinkingProp = [] }) {
                         }}
                       >
                         <span style={{ position: 'relative', display: 'inline-flex', width: 8, height: 8, flexShrink: 0 }}>
-                          <motion.span
+                          <m.span
                             animate={{ scale: [1, 2.2, 1], opacity: [0.6, 0, 0.6] }}
                             transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
                             style={{
@@ -459,13 +459,13 @@ export default function AboutPage({ thinkingItems: thinkingProp = [] }) {
                           Open to opportunities
                         </span>
                       </span>
-                    </motion.div>
+                    </m.div>
 
-                    <motion.h1 variants={fadeUp} style={{ color: 'var(--fg)', marginBottom: 0 }}>
+                    <m.h1 variants={fadeUp} style={{ color: 'var(--fg)', marginBottom: 0 }}>
                       I&apos;m Abhishek. I design things that matter — and I&apos;ve been doing it long enough to know the difference between design that looks good and design that works.
-                    </motion.h1>
+                    </m.h1>
 
-                    <motion.div variants={fadeUp} className="flex flex-col gap-4 t-body1 text-fg-muted">
+                    <m.div variants={fadeUp} className="flex flex-col gap-4 t-body1 text-fg-muted">
                       <p>
                         Senior Product Designer at Microsoft. ISB Leadership &amp; AI programme.
                         12+ years across enterprise software, consumer apps, e-commerce, telecom,
@@ -478,30 +478,30 @@ export default function AboutPage({ thinkingItems: thinkingProp = [] }) {
                         people came back. That era is gone. But the mindset it gave me isn&apos;t: move fast,
                         stay curious, measure what matters, and never confuse the craft with the outcome.
                       </p>
-                    </motion.div>
+                    </m.div>
 
-                    <motion.div variants={fadeUp} className="flex flex-wrap gap-3">
+                    <m.div variants={fadeUp} className="flex flex-wrap gap-3">
                       <Button href={RESUME_URL} external variant="outline" size="lg" icon={<ArrowIcon size={16} />}>
                         Get my resumé
                       </Button>
                       <Button href={LINKEDIN_URL} external variant="filled" size="lg">
                         LinkedIn
                       </Button>
-                    </motion.div>
+                    </m.div>
 
-                  </motion.div>
+                  </m.div>
               </div>
-            </motion.div>
+            </m.div>
           </W>
         </section>
 
         {/* ── 1b. WRITING — horizontal card grid ─────────────────────── */}
         <div className="border-t border-theme">
           <W className="py-16">
-            <motion.div variants={stagger} initial="hidden" whileInView="visible" viewport={vp}>
+            <m.div variants={stagger} initial="hidden" whileInView="visible" viewport={vp}>
               <div className="flex items-end justify-between gap-4 mb-8 flex-wrap">
-                <motion.p variants={fadeUp} className="t-overline text-fg-muted">Writing</motion.p>
-                <motion.a
+                <m.p variants={fadeUp} className="t-overline text-fg-muted">Writing</m.p>
+                <m.a
                   variants={fadeUp}
                   href={NOTION_ABOUT}
                   target="_blank"
@@ -515,7 +515,7 @@ export default function AboutPage({ thinkingItems: thinkingProp = [] }) {
                   <svg width="11" height="11" viewBox="0 0 12 12" fill="none">
                     <path d="M1 11L11 1M11 1H3M11 1V9" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
                   </svg>
-                </motion.a>
+                </m.a>
               </div>
 
               <div className="grid gap-5 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
@@ -523,17 +523,17 @@ export default function AboutPage({ thinkingItems: thinkingProp = [] }) {
                   <WritingCard key={article.title} article={article} />
                 ))}
               </div>
-            </motion.div>
+            </m.div>
           </W>
         </div>
 
         {/* ── 2. PHILOSOPHY ──────────────────────────────────────────── */}
         <div style={SECTION_STYLES[1].wrap}>
           <W className="py-20">
-            <motion.div variants={stagger} initial="hidden" whileInView="visible" viewport={vp}>
-              <motion.p variants={fadeUp} className="t-overline text-fg-muted mb-8">Philosophy</motion.p>
+            <m.div variants={stagger} initial="hidden" whileInView="visible" viewport={vp}>
+              <m.p variants={fadeUp} className="t-overline text-fg-muted mb-8">Philosophy</m.p>
 
-              <motion.p
+              <m.p
                 variants={fadeUp}
                 className="t-h3 font-bold mb-10"
                 style={{ color: 'var(--fg)', lineHeight: 1.25 }}
@@ -545,9 +545,9 @@ export default function AboutPage({ thinkingItems: thinkingProp = [] }) {
                 </span>{' '}
                 Every confusing interface, every failed interaction, every abandoned cart — that&apos;s
                 someone&apos;s time and energy lost. I&apos;d like to get some of that back.
-              </motion.p>
+              </m.p>
 
-              <motion.p variants={fadeUp} className="t-body1 text-fg-muted">
+              <m.p variants={fadeUp} className="t-body1 text-fg-muted">
                 Design is the most interesting problem-solving discipline I know. It sits at the
                 intersection of psychology, business, technology, and aesthetics — and it demands
                 fluency in all four simultaneously. What I love most isn&apos;t the deliverable.
@@ -555,27 +555,27 @@ export default function AboutPage({ thinkingItems: thinkingProp = [] }) {
                 the research, run the workshops, drawn the frameworks, and suddenly the answer is
                 obvious — and you can&apos;t believe it wasn&apos;t obvious before. That moment is
                 worth everything that comes before it.
-              </motion.p>
-            </motion.div>
+              </m.p>
+            </m.div>
           </W>
         </div>
 
         {/* ── 5. WHAT I BRING ────────────────────────────────────────── */}
         <div style={SECTION_STYLES[4].wrap}>
           <W className="py-20">
-            <motion.div variants={stagger} initial="hidden" whileInView="visible" viewport={vp}>
+            <m.div variants={stagger} initial="hidden" whileInView="visible" viewport={vp}>
 
               {/* Header row */}
               <div className="flex items-end justify-between gap-4 mb-10 flex-wrap">
                 <div>
-                  <motion.p variants={fadeUp} className="t-overline mb-2" style={{ color: SECTION_STYLES[4].mutedClr }}>
+                  <m.p variants={fadeUp} className="t-overline mb-2" style={{ color: SECTION_STYLES[4].mutedClr }}>
                     What I bring
-                  </motion.p>
-                  <motion.h3 variants={fadeUp} style={{ color: SECTION_STYLES[4].textClr, margin: 0 }}>
+                  </m.p>
+                  <m.h3 variants={fadeUp} style={{ color: SECTION_STYLES[4].textClr, margin: 0 }}>
                     The 5 Things I Bring
-                  </motion.h3>
+                  </m.h3>
                 </div>
-                <motion.a
+                <m.a
                   variants={fadeUp}
                   href={NOTION_WHAT_I_BRING}
                   target="_blank"
@@ -597,7 +597,7 @@ export default function AboutPage({ thinkingItems: thinkingProp = [] }) {
                   <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
                     <path d="M1 11L11 1M11 1H3M11 1V9" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
                   </svg>
-                </motion.a>
+                </m.a>
               </div>
 
               {/* 5 cards — 3 col first row, 2 col second row */}
@@ -625,7 +625,7 @@ export default function AboutPage({ thinkingItems: thinkingProp = [] }) {
               </div>
 
               {/* Metrics strip */}
-              <motion.div
+              <m.div
                 variants={fadeUp}
                 className="grid grid-cols-3 gap-px"
                 style={{
@@ -649,21 +649,21 @@ export default function AboutPage({ thinkingItems: thinkingProp = [] }) {
                     </p>
                   </div>
                 ))}
-              </motion.div>
+              </m.div>
 
-            </motion.div>
+            </m.div>
           </W>
         </div>
 
         {/* ── 6. HOW I WORK ──────────────────────────────────────────── */}
         <div className="border-t border-theme">
           <W className="py-20">
-            <motion.div variants={stagger} initial="hidden" whileInView="visible" viewport={vp}>
-              <motion.p variants={fadeUp} className="t-overline text-fg-muted mb-2">Process</motion.p>
-              <motion.h3 variants={fadeUp} className="mb-10">How I Work</motion.h3>
+            <m.div variants={stagger} initial="hidden" whileInView="visible" viewport={vp}>
+              <m.p variants={fadeUp} className="t-overline text-fg-muted mb-2">Process</m.p>
+              <m.h3 variants={fadeUp} className="mb-10">How I Work</m.h3>
 
               {/* Top: stacked full-width description */}
-              <motion.div variants={fadeUp} className="flex flex-col gap-4 t-body1 text-fg-muted mb-12">
+              <m.div variants={fadeUp} className="flex flex-col gap-4 t-body1 text-fg-muted mb-12">
                 <p>
                   I am a design generalist by choice. I&apos;ve worked in fashion, advertising,
                   digital agencies, enterprise software, telecom, and startups. I&apos;ve been a
@@ -676,10 +676,10 @@ export default function AboutPage({ thinkingItems: thinkingProp = [] }) {
                   to ask the question nobody else was asking. Generalism isn&apos;t the absence of
                   depth. It&apos;s depth applied across a wider surface.
                 </p>
-              </motion.div>
+              </m.div>
 
               {/* Bottom: tabs + content callout */}
-              <motion.div
+              <m.div
                 variants={fadeUp}
                 onMouseEnter={() => setPaused(true)}
                 onMouseLeave={() => setPaused(false)}
@@ -720,7 +720,7 @@ export default function AboutPage({ thinkingItems: thinkingProp = [] }) {
                   }}
                 >
                   <AnimatePresence mode="wait" initial={false} custom={direction}>
-                    <motion.div
+                    <m.div
                       key={`mob-${activeWork}`}
                       custom={direction}
                       initial={{ opacity: 0, x: direction * 24 }}
@@ -738,7 +738,7 @@ export default function AboutPage({ thinkingItems: thinkingProp = [] }) {
                       <p className="t-h3" style={{ color: 'var(--fg)', margin: 0, lineHeight: 1.35, fontWeight: 600 }}>
                         {WORK_ITEMS[activeWork].desc}
                       </p>
-                    </motion.div>
+                    </m.div>
                   </AnimatePresence>
                 </div>
 
@@ -763,7 +763,7 @@ export default function AboutPage({ thinkingItems: thinkingProp = [] }) {
                       >
                         {/* Auto-progress fill on active */}
                         {i === activeWork && (
-                          <motion.span
+                          <m.span
                             key={activeWork}
                             initial={{ scaleY: 0 }}
                             animate={{ scaleY: paused ? undefined : 1 }}
@@ -804,7 +804,7 @@ export default function AboutPage({ thinkingItems: thinkingProp = [] }) {
                     }}
                   >
                     <AnimatePresence mode="wait" initial={false} custom={direction}>
-                      <motion.div
+                      <m.div
                         key={activeWork}
                         custom={direction}
                         initial={{ opacity: 0, y: direction * 20 }}
@@ -822,41 +822,41 @@ export default function AboutPage({ thinkingItems: thinkingProp = [] }) {
                         <h3 className="t-h3" style={{ color: 'var(--fg)', margin: 0, lineHeight: 1.35 }}>
                           {WORK_ITEMS[activeWork].desc}
                         </h3>
-                      </motion.div>
+                      </m.div>
                     </AnimatePresence>
                   </div>
                 </div>
-              </motion.div>
+              </m.div>
 
-            </motion.div>
+            </m.div>
           </W>
         </div>
 
         {/* ── 7. BEYOND THE WORK ─────────────────────────────────────── */}
         <div className="border-t border-theme">
           <W className="py-20">
-            <motion.div variants={stagger} initial="hidden" whileInView="visible" viewport={vp}>
-              <motion.p variants={fadeUp} className="t-overline text-fg-muted mb-2">The human behind the work</motion.p>
-              <motion.h3 variants={fadeUp} className="mb-10">Beyond the Work</motion.h3>
+            <m.div variants={stagger} initial="hidden" whileInView="visible" viewport={vp}>
+              <m.p variants={fadeUp} className="t-overline text-fg-muted mb-2">The human behind the work</m.p>
+              <m.h3 variants={fadeUp} className="mb-10">Beyond the Work</m.h3>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 items-start">
                 {BEYOND_ITEMS.map((card, i) => (
                   <NumberedCard key={card.heading} heading={card.heading} body={card.body} index={i} style={{ minHeight: 220 }} />
                 ))}
               </div>
-            </motion.div>
+            </m.div>
           </W>
         </div>
 
         {/* ── 8. BECOMING AI-NATIVE ──────────────────────────────────── */}
         <div className="border-t border-theme">
           <W className="py-20">
-            <motion.div variants={stagger} initial="hidden" whileInView="visible" viewport={vp}>
-              <motion.p variants={fadeUp} className="t-overline text-fg-muted mb-2">Current focus</motion.p>
-              <motion.h3 variants={fadeUp} className="mb-10">Becoming AI-Native</motion.h3>
+            <m.div variants={stagger} initial="hidden" whileInView="visible" viewport={vp}>
+              <m.p variants={fadeUp} className="t-overline text-fg-muted mb-2">Current focus</m.p>
+              <m.h3 variants={fadeUp} className="mb-10">Becoming AI-Native</m.h3>
 
               <div className="grid lg:grid-cols-2 gap-x-16 gap-y-6">
-                <motion.div variants={fadeUp} className="flex flex-col gap-5 t-body1 text-fg-muted">
+                <m.div variants={fadeUp} className="flex flex-col gap-5 t-body1 text-fg-muted">
                   <p>The thing about AI in product design isn&apos;t the tools. It&apos;s the shift in what&apos;s possible.</p>
                   <p>
                     At Microsoft, I didn&apos;t just design AI features. I designed for a fundamentally
@@ -866,8 +866,8 @@ export default function AboutPage({ thinkingItems: thinkingProp = [] }) {
                     They were epistemological questions: what should an AI say, when should it say it,
                     and how do you design trust with a system that can be wrong?
                   </p>
-                </motion.div>
-                <motion.div variants={fadeUp} className="flex flex-col gap-5 t-body1 text-fg-muted">
+                </m.div>
+                <m.div variants={fadeUp} className="flex flex-col gap-5 t-body1 text-fg-muted">
                   <p>
                     That&apos;s the work I find most interesting right now. I&apos;m currently deepening
                     this through the ISB Leadership &amp; AI programme — learning to think about AI not
@@ -880,11 +880,11 @@ export default function AboutPage({ thinkingItems: thinkingProp = [] }) {
                     work fluidly at the boundary of human judgment and machine intelligence.
                     That&apos;s where I&apos;m deliberately positioning myself.
                   </p>
-                </motion.div>
+                </m.div>
               </div>
 
               {/* T-shaped pull quote */}
-              <motion.div
+              <m.div
                 variants={fadeUp}
                 className="mt-14 pt-10"
                 style={{ borderTop: '1px solid var(--border)' }}
@@ -897,17 +897,17 @@ export default function AboutPage({ thinkingItems: thinkingProp = [] }) {
                   to history to science and back. Being T-shaped has led me to experience a variety of
                   design fields and has become a way for my holistic learning.&rdquo;
                 </p>
-              </motion.div>
-            </motion.div>
+              </m.div>
+            </m.div>
           </W>
         </div>
 
         {/* ── 5b. STRONG OPINIONS ────────────────────────────────────── */}
         <div style={SECTION_STYLES[2].wrap}>
           <W className="py-20">
-            <motion.div variants={stagger} initial="hidden" whileInView="visible" viewport={vp}>
-              <motion.p variants={fadeUp} className="t-overline mb-2" style={{ color: SECTION_STYLES[2].mutedClr }}>Unfiltered</motion.p>
-              <motion.h3 variants={fadeUp} className="mb-10" style={{ color: SECTION_STYLES[2].textClr }}>Strong Opinions</motion.h3>
+            <m.div variants={stagger} initial="hidden" whileInView="visible" viewport={vp}>
+              <m.p variants={fadeUp} className="t-overline mb-2" style={{ color: SECTION_STYLES[2].mutedClr }}>Unfiltered</m.p>
+              <m.h3 variants={fadeUp} className="mb-10" style={{ color: SECTION_STYLES[2].textClr }}>Strong Opinions</m.h3>
 
               <div className="grid sm:grid-cols-2 gap-x-16 gap-y-0">
                 {OPINIONS.map((opinion, i) => {
@@ -915,7 +915,7 @@ export default function AboutPage({ thinkingItems: thinkingProp = [] }) {
                   const lastRowStart = OPINIONS.length - (OPINIONS.length % colCount || colCount);
                   const isLastRow = i >= lastRowStart;
                   return (
-                    <motion.div
+                    <m.div
                       key={i}
                       variants={fadeUp}
                       className="flex gap-5 items-start py-7"
@@ -933,24 +933,24 @@ export default function AboutPage({ thinkingItems: thinkingProp = [] }) {
                       <p className="t-body1" style={{ margin: 0, lineHeight: 1.7, color: SECTION_STYLES[2].textClr }}>
                         {opinion}
                       </p>
-                    </motion.div>
+                    </m.div>
                   );
                 })}
               </div>
-            </motion.div>
+            </m.div>
           </W>
         </div>
 
         {/* ── 5c. CAREER TIMELINE ────────────────────────────────────── */}
         <div className="border-t border-theme">
           <W className="py-20">
-            <motion.div variants={stagger} initial="hidden" whileInView="visible" viewport={vp}>
-              <motion.p variants={fadeUp} className="t-overline text-fg-muted mb-2">Track record</motion.p>
-              <motion.h3 variants={fadeUp} className="mb-10">Career Timeline</motion.h3>
-              <motion.div variants={fadeUp}>
+            <m.div variants={stagger} initial="hidden" whileInView="visible" viewport={vp}>
+              <m.p variants={fadeUp} className="t-overline text-fg-muted mb-2">Track record</m.p>
+              <m.h3 variants={fadeUp} className="mb-10">Career Timeline</m.h3>
+              <m.div variants={fadeUp}>
                 <CareerTimeline />
-              </motion.div>
-            </motion.div>
+              </m.div>
+            </m.div>
           </W>
         </div>
 
@@ -958,20 +958,20 @@ export default function AboutPage({ thinkingItems: thinkingProp = [] }) {
         {[ABOUT_SECTIONS[0]].map((section) => (
           <div key={section.title} className="border-t border-theme">
             <W className="py-20">
-              <motion.div variants={stagger} initial="hidden" whileInView="visible" viewport={vp}>
-                <motion.p variants={fadeUp} className="t-overline text-fg-muted mb-8">More about me</motion.p>
+              <m.div variants={stagger} initial="hidden" whileInView="visible" viewport={vp}>
+                <m.p variants={fadeUp} className="t-overline text-fg-muted mb-8">More about me</m.p>
                 <div className="grid gap-12 items-start lg:grid-cols-[3fr_7fr]">
-                  <motion.div variants={fadeUp} className="flex flex-col gap-3 lg:pt-1">
+                  <m.div variants={fadeUp} className="flex flex-col gap-3 lg:pt-1">
                     <h3 className="t-h3" style={{ margin: 0 }}>{section.title}</h3>
-                  </motion.div>
-                  <motion.div variants={stagger} className="flex flex-col gap-6">
-                    <motion.p variants={fadeUp} className="t-h4" style={{ color: 'var(--color-coral)', margin: 0, lineHeight: 1.4, fontWeight: 600 }}>
+                  </m.div>
+                  <m.div variants={stagger} className="flex flex-col gap-6">
+                    <m.p variants={fadeUp} className="t-h4" style={{ color: 'var(--color-coral)', margin: 0, lineHeight: 1.4, fontWeight: 600 }}>
                       {section.lead}
-                    </motion.p>
-                    <motion.p variants={fadeUp} className="t-body1 text-fg-muted" style={{ lineHeight: 1.75, margin: 0, whiteSpace: 'pre-line' }}>
+                    </m.p>
+                    <m.p variants={fadeUp} className="t-body1 text-fg-muted" style={{ lineHeight: 1.75, margin: 0, whiteSpace: 'pre-line' }}>
                       {section.body}
-                    </motion.p>
-                    <motion.div variants={fadeUp}>
+                    </m.p>
+                    <m.div variants={fadeUp}>
                       <a
                         href={section.href}
                         target="_blank"
@@ -986,10 +986,10 @@ export default function AboutPage({ thinkingItems: thinkingProp = [] }) {
                           <path d="M1 11L11 1M11 1H3M11 1V9" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
                         </svg>
                       </a>
-                    </motion.div>
-                  </motion.div>
+                    </m.div>
+                  </m.div>
                 </div>
-              </motion.div>
+              </m.div>
             </W>
           </div>
         ))}
@@ -997,9 +997,9 @@ export default function AboutPage({ thinkingItems: thinkingProp = [] }) {
         {/* ── 12. WHAT I'M THINKING ──────────────────────────────────── */}
         <div className="border-t border-theme">
           <W className="py-20">
-            <motion.div variants={stagger} initial="hidden" whileInView="visible" viewport={vp}>
-              <motion.p variants={fadeUp} className="t-overline text-fg-muted mb-2">On my mind</motion.p>
-              <motion.div variants={fadeUp} className="flex items-end justify-between gap-4 mb-10">
+            <m.div variants={stagger} initial="hidden" whileInView="visible" viewport={vp}>
+              <m.p variants={fadeUp} className="t-overline text-fg-muted mb-2">On my mind</m.p>
+              <m.div variants={fadeUp} className="flex items-end justify-between gap-4 mb-10">
                 <h3 style={{ margin: 0 }}>What I&apos;m Thinking About</h3>
                 <a
                   href="https://thatguyabhishek.notion.site/About-fb861d61100943ee9356e50d28be3f03"
@@ -1022,7 +1022,7 @@ export default function AboutPage({ thinkingItems: thinkingProp = [] }) {
                     <path d="M1 11L11 1M11 1H3M11 1V9" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
                   </svg>
                 </a>
-              </motion.div>
+              </m.div>
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                 {THINKING_ITEMS.slice(0, 8).map((item, i) => (
                   <NumberedCard
@@ -1033,7 +1033,7 @@ export default function AboutPage({ thinkingItems: thinkingProp = [] }) {
                   />
                 ))}
               </div>
-            </motion.div>
+            </m.div>
           </W>
         </div>
 
@@ -1041,19 +1041,19 @@ export default function AboutPage({ thinkingItems: thinkingProp = [] }) {
         {[ABOUT_SECTIONS[1]].map((section) => (
           <div key={section.title} className="border-t border-theme">
             <W className="py-20">
-              <motion.div variants={stagger} initial="hidden" whileInView="visible" viewport={vp}>
+              <m.div variants={stagger} initial="hidden" whileInView="visible" viewport={vp}>
                 <div className="grid gap-12 items-start lg:grid-cols-[3fr_7fr]">
-                  <motion.div variants={fadeUp} className="flex flex-col gap-3 lg:pt-1">
+                  <m.div variants={fadeUp} className="flex flex-col gap-3 lg:pt-1">
                     <h3 className="t-h3" style={{ margin: 0 }}>{section.title}</h3>
-                  </motion.div>
-                  <motion.div variants={stagger} className="flex flex-col gap-6">
-                    <motion.p variants={fadeUp} className="t-h4" style={{ color: 'var(--color-coral)', margin: 0, lineHeight: 1.4, fontWeight: 600 }}>
+                  </m.div>
+                  <m.div variants={stagger} className="flex flex-col gap-6">
+                    <m.p variants={fadeUp} className="t-h4" style={{ color: 'var(--color-coral)', margin: 0, lineHeight: 1.4, fontWeight: 600 }}>
                       {section.lead}
-                    </motion.p>
-                    <motion.p variants={fadeUp} className="t-body1 text-fg-muted" style={{ lineHeight: 1.75, margin: 0, whiteSpace: 'pre-line' }}>
+                    </m.p>
+                    <m.p variants={fadeUp} className="t-body1 text-fg-muted" style={{ lineHeight: 1.75, margin: 0, whiteSpace: 'pre-line' }}>
                       {section.body}
-                    </motion.p>
-                    <motion.div variants={fadeUp}>
+                    </m.p>
+                    <m.div variants={fadeUp}>
                       <a
                         href={section.href}
                         target="_blank"
@@ -1068,10 +1068,10 @@ export default function AboutPage({ thinkingItems: thinkingProp = [] }) {
                           <path d="M1 11L11 1M11 1H3M11 1V9" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
                         </svg>
                       </a>
-                    </motion.div>
-                  </motion.div>
+                    </m.div>
+                  </m.div>
                 </div>
-              </motion.div>
+              </m.div>
             </W>
           </div>
         ))}
@@ -1079,23 +1079,23 @@ export default function AboutPage({ thinkingItems: thinkingProp = [] }) {
         {/* ── 7. SKILLS & EXPERTISE ──────────────────────────────────── */}
         <div className="border-t border-theme">
           <W className="py-20">
-            <motion.div variants={stagger} initial="hidden" whileInView="visible" viewport={vp}>
+            <m.div variants={stagger} initial="hidden" whileInView="visible" viewport={vp}>
               <div className="grid gap-12 items-start lg:grid-cols-[3fr_7fr]">
 
                 {/* Left 30% — label + h3 + subtitle */}
-                <motion.div variants={fadeUp} className="flex flex-col gap-3 lg:pt-1">
+                <m.div variants={fadeUp} className="flex flex-col gap-3 lg:pt-1">
                   <p className="t-overline text-fg-muted">Capabilities</p>
                   <h3 className="t-h3" style={{ margin: 0 }}>Skills &amp; Expertise</h3>
                   <p className="t-body2 text-fg-muted" style={{ lineHeight: 1.65, margin: 0 }}>
                     Built across 12+ years, multiple industries, and two startups.
                     T-shaped by design, not by accident.
                   </p>
-                </motion.div>
+                </m.div>
 
                 {/* Right 70% — 2×2 skill group grid */}
                 <div className="grid sm:grid-cols-2 gap-6">
                   {SKILL_GROUPS.map((group) => (
-                    <motion.div
+                    <m.div
                       key={group.label}
                       variants={fadeUp}
                       className="flex flex-col gap-4 rounded-2xl p-5"
@@ -1120,12 +1120,12 @@ export default function AboutPage({ thinkingItems: thinkingProp = [] }) {
                           </span>
                         ))}
                       </div>
-                    </motion.div>
+                    </m.div>
                   ))}
                 </div>
 
               </div>
-            </motion.div>
+            </m.div>
           </W>
         </div>
 

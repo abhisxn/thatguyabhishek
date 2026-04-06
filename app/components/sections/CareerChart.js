@@ -1,7 +1,7 @@
 'use client';
 
 import { useRef, useState, useEffect, useMemo } from 'react';
-import { motion, AnimatePresence, useInView } from 'framer-motion';
+import { m, AnimatePresence, useInView } from 'framer-motion';
 import {
   VW, VH, ML, MT, IH, IW,
   X_TICKS, H_GRID,
@@ -81,13 +81,13 @@ export default function CareerChart({ activeIdx, setActiveIdx }) {
               <stop offset="100%" stopColor="#8b5cf6" stopOpacity="0" />
             </linearGradient>
           </defs>
-          <motion.path d={activeArea} fill="url(#ct-area)" stroke="none" initial={{ opacity: 0 }} animate={{ d: activeArea, opacity: lineDrawn ? 1 : 0 }} transition={{ d: pathTransition, opacity: { duration: 0.5 } }} />
+          <m.path d={activeArea} fill="url(#ct-area)" stroke="none" initial={{ opacity: 0 }} animate={{ d: activeArea, opacity: lineDrawn ? 1 : 0 }} transition={{ d: pathTransition, opacity: { duration: 0.5 } }} />
           {H_GRID.map(v => {
             const y = (MT + IH - (v / 100) * IH).toFixed(2);
             return <line key={v} x1={0} y1={y} x2={VW} y2={y} stroke="rgba(255,255,255,0.12)" strokeWidth="1" strokeDasharray="3 5" />;
           })}
           <line x1={0} y1={MT + IH} x2={VW} y2={MT + IH} stroke="rgba(255,255,255,0.22)" strokeWidth="1" />
-          <motion.path d={activeLine} fill="none" stroke="url(#ct-line)" strokeWidth="14" strokeLinecap="round" strokeLinejoin="round" initial={{ pathLength: 0 }} animate={{ d: activeLine, pathLength: isInView ? 1 : 0 }} transition={{ d: pathTransition, pathLength: { duration: 1.4, delay: 0.5, ease: [0.22, 1, 0.36, 1] } }} />
+          <m.path d={activeLine} fill="none" stroke="url(#ct-line)" strokeWidth="14" strokeLinecap="round" strokeLinejoin="round" initial={{ pathLength: 0 }} animate={{ d: activeLine, pathLength: isInView ? 1 : 0 }} transition={{ d: pathTransition, pathLength: { duration: 1.4, delay: 0.5, ease: [0.22, 1, 0.36, 1] } }} />
           {X_TICKS.map(yr => {
             const x = xOf(yr).toFixed(2);
             const baseY = MT + IH;
@@ -103,7 +103,7 @@ export default function CareerChart({ activeIdx, setActiveIdx }) {
         ))}
 
         {/* Draggable dot */}
-        <motion.div
+        <m.div
           onPointerDown={onDotPointerDown}
           onPointerMove={onDotPointerMove}
           onPointerUp={onDotPointerUp}
@@ -115,32 +115,32 @@ export default function CareerChart({ activeIdx, setActiveIdx }) {
         >
           <div className="ct-dot-hit">
             <div className="ct-dot-ring-wrap">
-              <motion.div
+              <m.div
                 className="ct-dot-ring"
                 animate={isDragging ? { scale: 3.2, opacity: 0.35 } : { scale: [1, 2.6, 1], opacity: [0.45, 0, 0.45] }}
                 transition={isDragging ? { duration: 0.2 } : { duration: 2.4, repeat: Infinity, ease: 'easeInOut' }}
               />
             </div>
-            <motion.div
+            <m.div
               className="ct-dot-core"
               animate={{ scale: isDragging ? 1.25 : 1 }}
               transition={{ duration: 0.15 }}
               style={{ boxShadow: isDragging ? '0 0 0 4px rgba(139,92,246,0.35)' : 'none' }}
             />
           </div>
-        </motion.div>
+        </m.div>
 
         {/* Role label */}
         <div style={{ position: 'absolute', left: dotX, top: dotYPct, transform: labelTransform, zIndex: 5, pointerEvents: 'none', transition: dotTransition }}>
-          <motion.div initial={{ opacity: 0 }} animate={{ opacity: lineDrawn ? 1 : 0 }} transition={{ duration: 0.5 }}>
+          <m.div initial={{ opacity: 0 }} animate={{ opacity: lineDrawn ? 1 : 0 }} transition={{ duration: 0.5 }}>
             <AnimatePresence mode="wait">
-              <motion.div key={activeIdx} initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.2 }}>
+              <m.div key={activeIdx} initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.2 }}>
                 <div className="ct-role-popup">
                   <WordLines text={activeItem.role} />
                 </div>
-              </motion.div>
+              </m.div>
             </AnimatePresence>
-          </motion.div>
+          </m.div>
         </div>
       </div>
     </div>

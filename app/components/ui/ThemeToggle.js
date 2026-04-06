@@ -1,17 +1,14 @@
 'use client';
 
 import { useTheme } from 'next-themes';
-import { useEffect, useState } from 'react';
 
 export default function ThemeToggle() {
-  const { theme, setTheme } = useTheme();
-  const [mounted, setMounted] = useState(false);
+  const { resolvedTheme, setTheme } = useTheme();
 
-  useEffect(() => setMounted(true), []);
+  // resolvedTheme is undefined during SSR — renders placeholder until hydrated
+  if (!resolvedTheme) return <div className="w-8 h-8" />;
 
-  if (!mounted) return <div className="w-8 h-8" />;
-
-  const isDark = theme === 'dark';
+  const isDark = resolvedTheme === 'dark';
 
   return (
     <button

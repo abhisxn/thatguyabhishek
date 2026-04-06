@@ -34,7 +34,7 @@ export default function Button({
   style     = {},
 }) {
   const sizeClass = size === 'sm'
-    ? 't-btn2 pl-5 pr-3 py-3'   /* was py-2.5 (10px, not ×4) → py-3 = 12px */
+    ? 't-btn2 pl-5 pr-5 py-3'   /* was py-2.5 (10px, not ×4) → py-3 = 12px */
     : 't-btn1 px-5 py-3';        /* was py-2.5 (10px, not ×4) → py-3 = 12px */
 
   const cls = [

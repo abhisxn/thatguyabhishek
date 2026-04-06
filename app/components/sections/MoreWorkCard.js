@@ -1,13 +1,13 @@
 'use client';
 
 import Link from 'next/link';
-import { motion } from 'framer-motion';
+import { m } from 'framer-motion';
 import { fadeUp, vp } from '@/lib/motion';
 import './MoreWorkCard.css';
 
 export default function MoreWorkCard() {
   return (
-    <motion.div
+    <m.div
       variants={fadeUp}
       initial="hidden"
       whileInView="visible"
@@ -36,6 +36,6 @@ export default function MoreWorkCard() {
         </svg>
       </span>
     </Link>
-    </motion.div>
+    </m.div>
   );
 }

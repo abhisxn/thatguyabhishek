@@ -1,10 +1,10 @@
 'use client';
 
-import { motion } from 'framer-motion';
+import { m } from 'framer-motion';
 
 export default function FadeSection({ children, className = '' }) {
   return (
-    <motion.div
+    <m.div
       initial={{ opacity: 0, y: 24 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: '-80px' }}
@@ -12,6 +12,6 @@ export default function FadeSection({ children, className = '' }) {
       className={className}
     >
       {children}
-    </motion.div>
+    </m.div>
   );
 }

@@ -1,6 +1,6 @@
 'use client';
 
-import { motion } from 'framer-motion';
+import { m } from 'framer-motion';
 import GradientBackground from '../components/layout/GradientBackground';
 import Button from '../components/ui/Button';
 import { ArrowIcon } from '../components/ui/icons';
@@ -153,20 +153,20 @@ export default function AwardsPage() {
         {/* ══ HERO ══════════════════════════════════════════════════ */}
         <section>
           <W className="pt-32 pb-20">
-            <motion.div variants={stagger} initial="hidden" animate="visible">
-              <motion.p variants={fadeUp} className="t-overline mb-4" style={{ color: 'var(--fg-muted)', opacity: 0.5 }}>
+            <m.div variants={stagger} initial="hidden" animate="visible">
+              <m.p variants={fadeUp} className="t-overline mb-4" style={{ color: 'var(--fg-muted)', opacity: 0.5 }}>
                 Recognition
-              </motion.p>
+              </m.p>
 
-              <motion.h1
+              <m.h1
                 variants={fadeUp}
                 className="mb-6 max-w-[840px]"
                 style={{ textWrap: 'balance' }}
               >
                 35+ awards across design, digital &amp; advertising.
-              </motion.h1>
+              </m.h1>
 
-              <motion.p
+              <m.p
                 variants={fadeUp}
                 className="t-body1 max-w-[600px] mb-12"
                 style={{ color: 'var(--fg-muted)', opacity: 0.7 }}
@@ -174,10 +174,10 @@ export default function AwardsPage() {
                 I believe great work is always a team sport. These awards recognise contributions
                 across some of the most celebrated festivals in the industry — from Adfest to
                 Facebook Accelerator, across 15+ years of craft.
-              </motion.p>
+              </m.p>
 
               {/* Stats */}
-              <motion.div variants={fadeUp} className="flex flex-wrap gap-10">
+              <m.div variants={fadeUp} className="flex flex-wrap gap-10">
                 {[
                   { num: '35+',  label: 'Awards won'       },
                   { num: '49+',  label: 'Press mentions'   },
@@ -189,18 +189,18 @@ export default function AwardsPage() {
                     <span className="t-body3" style={{ color: 'var(--fg-muted)', opacity: 0.5 }}>{s.label}</span>
                   </div>
                 ))}
-              </motion.div>
-            </motion.div>
+              </m.div>
+            </m.div>
           </W>
         </section>
 
         {/* ══ AWARDS TIMELINE ═══════════════════════════════════════ */}
         <section style={{ borderTop: '1px solid var(--border)' }}>
           <W className="py-20">
-            <motion.div variants={stagger} initial="hidden" whileInView="visible" viewport={vp}>
+            <m.div variants={stagger} initial="hidden" whileInView="visible" viewport={vp}>
 
               {/* Section header */}
-              <motion.div
+              <m.div
                 variants={fadeUp}
                 className="flex items-center justify-between gap-4 flex-wrap mb-14"
               >
@@ -221,10 +221,10 @@ export default function AwardsPage() {
                 <Button href={NOTION_AWARDS} external size="sm" variant="outline" icon={<ArrowIcon size={13} />}>
                   Full list on Notion
                 </Button>
-              </motion.div>
+              </m.div>
 
               {/* Column header — desktop only */}
-              <motion.div
+              <m.div
                 variants={fadeUp}
                 className="hidden sm:grid mb-2 px-0"
                 style={{
@@ -235,12 +235,12 @@ export default function AwardsPage() {
                 <span className="t-overline" style={{ color: 'var(--fg-muted)', opacity: 0.35, paddingRight: '1rem' }}>Level</span>
                 <span className="t-overline" style={{ color: 'var(--fg-muted)', opacity: 0.35 }}>Project</span>
                 <span className="t-overline text-right" style={{ color: 'var(--fg-muted)', opacity: 0.35 }}>Festival / Org</span>
-              </motion.div>
+              </m.div>
 
               {/* Year groups */}
               <div className="flex flex-col gap-10">
                 {AWARD_YEARS.map(({ year, awards }) => (
-                  <motion.div key={year} variants={fadeUp}>
+                  <m.div key={year} variants={fadeUp}>
                     {/* Year marker */}
                     <div className="flex items-center gap-4 mb-3">
                       <span
@@ -264,21 +264,21 @@ export default function AwardsPage() {
                         <AwardRow key={i} {...a} />
                       ))}
                     </div>
-                  </motion.div>
+                  </m.div>
                 ))}
               </div>
 
-            </motion.div>
+            </m.div>
           </W>
         </section>
 
         {/* ══ PRESS MENTIONS ════════════════════════════════════════ */}
         <section style={{ borderTop: '1px solid var(--border)' }}>
           <W className="py-20">
-            <motion.div variants={stagger} initial="hidden" whileInView="visible" viewport={vp}>
+            <m.div variants={stagger} initial="hidden" whileInView="visible" viewport={vp}>
 
               {/* Section header */}
-              <motion.div
+              <m.div
                 variants={fadeUp}
                 className="flex items-center justify-between gap-4 flex-wrap mb-10"
               >
@@ -299,10 +299,10 @@ export default function AwardsPage() {
                 <Button href={NOTION_AWARDS} external size="sm" variant="outline" icon={<ArrowIcon size={13} />}>
                   Full list on Notion
                 </Button>
-              </motion.div>
+              </m.div>
 
               {/* Mention grid */}
-              <motion.div
+              <m.div
                 variants={fadeUp}
                 className="grid gap-3"
                 style={{ gridTemplateColumns: 'repeat(auto-fill, minmax(240px, 1fr))' }}
@@ -313,9 +313,9 @@ export default function AwardsPage() {
 
                 {/* Full list CTA tile */}
                 <FullListCard count={49 - MENTIONS.length} />
-              </motion.div>
+              </m.div>
 
-            </motion.div>
+            </m.div>
           </W>
         </section>
 

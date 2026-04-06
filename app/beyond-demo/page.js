@@ -15,7 +15,7 @@
 
 import { useState, useRef, useCallback } from 'react';
 import {
-  motion,
+  m,
   AnimatePresence,
   useMotionValue,
   useTransform,
@@ -81,7 +81,7 @@ function FlipCard({ item }) {
       onMouseEnter={() => setFlipped(true)}
       onMouseLeave={() => setFlipped(false)}
     >
-      <motion.div
+      <m.div
         animate={{ rotateY: flipped ? 180 : 0 }}
         transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
         style={{
@@ -150,7 +150,7 @@ function FlipCard({ item }) {
             </p>
           </div>
         </div>
-      </motion.div>
+      </m.div>
     </div>
   );
 }
@@ -185,7 +185,7 @@ function MagneticCard({ item }) {
   }, [x, y]);
 
   return (
-    <motion.div
+    <m.div
       ref={ref}
       style={{
         perspective: 800,
@@ -196,7 +196,7 @@ function MagneticCard({ item }) {
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={handleMouseLeave}
     >
-      <motion.div
+      <m.div
         style={{
           width: '100%',
           height: '100%',
@@ -228,7 +228,7 @@ function MagneticCard({ item }) {
         {/* Body slides up from below */}
         <AnimatePresence>
           {hovered && (
-            <motion.div
+            <m.div
               initial={{ y: 40, opacity: 0, filter: 'blur(6px)' }}
               animate={{ y: 0, opacity: 1, filter: 'blur(0px)' }}
               exit={{ y: 40, opacity: 0, filter: 'blur(6px)' }}
@@ -246,11 +246,11 @@ function MagneticCard({ item }) {
               <p style={{ fontSize: 12, color: 'var(--fg-muted)', lineHeight: 1.75, margin: 0 }}>
                 {item.body}
               </p>
-            </motion.div>
+            </m.div>
           )}
         </AnimatePresence>
-      </motion.div>
-    </motion.div>
+      </m.div>
+    </m.div>
   );
 }
 
@@ -273,7 +273,7 @@ function SpotlightCard({ item }) {
   }, []);
 
   return (
-    <motion.div
+    <m.div
       ref={ref}
       onMouseMove={handleMouseMove}
       onMouseEnter={() => setHovered(true)}
@@ -294,7 +294,7 @@ function SpotlightCard({ item }) {
       }}
     >
       {/* Spotlight layer */}
-      <motion.div
+      <m.div
         animate={{ opacity: hovered ? 1 : 0 }}
         transition={{ duration: 0.3 }}
         style={{
@@ -313,7 +313,7 @@ function SpotlightCard({ item }) {
         <p style={{ fontSize: 15, fontWeight: 600, color: 'var(--fg)', lineHeight: 1.4, margin: 0 }}>
           {item.heading}
         </p>
-        <motion.p
+        <m.p
           animate={{
             opacity: hovered ? 1 : 0,
             y: hovered ? 0 : 8,
@@ -322,9 +322,9 @@ function SpotlightCard({ item }) {
           style={{ fontSize: 12, color: 'var(--fg-muted)', lineHeight: 1.75, marginTop: 10, marginBottom: 0 }}
         >
           {item.body}
-        </motion.p>
+        </m.p>
       </div>
-    </motion.div>
+    </m.div>
   );
 }
 
@@ -378,7 +378,7 @@ function CurtainCard({ item }) {
       </div>
 
       {/* Curtain — sweeps down from top */}
-      <motion.div
+      <m.div
         initial={false}
         animate={{ clipPath: hovered ? 'inset(0% 0% 0% 0% round 16px)' : 'inset(0% 0% 100% 0% round 16px)' }}
         transition={{ duration: 0.55, ease: [0.76, 0, 0.24, 1] }}
@@ -426,15 +426,15 @@ function CurtainCard({ item }) {
           <p style={{ fontSize: 13, fontWeight: 600, color: 'rgba(255,255,255,0.92)', lineHeight: 1.4, marginBottom: 12, margin: '0 0 12px 0' }}>
             {item.heading}
           </p>
-          <motion.p
+          <m.p
             animate={{ opacity: hovered ? 1 : 0, y: hovered ? 0 : 10 }}
             transition={{ duration: 0.32, delay: hovered ? 0.18 : 0, ease: [0.22, 1, 0.36, 1] }}
             style={{ fontSize: 12, color: 'rgba(200,190,230,0.7)', lineHeight: 1.8, margin: 0 }}
           >
             {item.body}
-          </motion.p>
+          </m.p>
         </div>
-      </motion.div>
+      </m.div>
     </div>
   );
 }
@@ -454,7 +454,7 @@ function ElasticGrid() {
         const isSibling = active !== null && !isActive;
 
         return (
-          <motion.div
+          <m.div
             key={item.num}
             layout
             animate={{
@@ -486,7 +486,7 @@ function ElasticGrid() {
 
             <AnimatePresence>
               {isActive && (
-                <motion.p
+                <m.p
                   initial={{ opacity: 0, height: 0, marginTop: 0 }}
                   animate={{ opacity: 1, height: 'auto', marginTop: 12 }}
                   exit={{ opacity: 0, height: 0, marginTop: 0 }}
@@ -494,10 +494,10 @@ function ElasticGrid() {
                   style={{ fontSize: 12, color: 'var(--fg-muted)', lineHeight: 1.75, overflow: 'hidden', margin: 0 }}
                 >
                   {item.body}
-                </motion.p>
+                </m.p>
               )}
             </AnimatePresence>
-          </motion.div>
+          </m.div>
         );
       })}
     </div>
@@ -631,7 +631,7 @@ function SubtleCard({ item }) {
         }}
       >
         {/* Blur blob — center lives outside card boundary, overflow:hidden clips it */}
-        <motion.div
+        <m.div
           style={{
             position: 'absolute',
             top: 0,
@@ -694,7 +694,7 @@ function SweepCard({ item }) {
       onMouseLeave={handleMouseLeave}
     >
       {/* Sweep ring */}
-      <motion.div
+      <m.div
         style={{
           position: 'absolute',
           inset: -1,
@@ -747,7 +747,7 @@ function OutlineCard({ item }) {
       onMouseEnter={() => strokeOpacity.set(0.7)}
       onMouseLeave={() => strokeOpacity.set(0.2)}
     >
-      <motion.div style={{ position: 'absolute', inset: 0, borderRadius: 16, border: '1px solid color-mix(in srgb, var(--fg) 50%, transparent)', opacity: strokeOpacity, pointerEvents: 'none' }} />
+      <m.div style={{ position: 'absolute', inset: 0, borderRadius: 16, border: '1px solid color-mix(in srgb, var(--fg) 50%, transparent)', opacity: strokeOpacity, pointerEvents: 'none' }} />
       <div
         style={{
           borderRadius: 16,

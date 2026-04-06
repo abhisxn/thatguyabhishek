@@ -1,6 +1,6 @@
 'use client';
 
-import { motion } from 'framer-motion';
+import { m } from 'framer-motion';
 import { fadeUp, stagger } from '../../../lib/motion';
 import W from '../ui/W';
 
@@ -8,23 +8,23 @@ export default function HomeHero() {
   return (
     <section className="relative min-h-screen flex items-center">
       <W className="w-full pt-28 pb-24">
-        <motion.h1
+        <m.h1
           variants={fadeUp}
           initial="hidden"
           animate="visible"
           className="t-display mb-8 w-full"
         >
           Hey there, I&apos;m Abhishek Saxena, a product designer enabling growth led design for 12+ years
-        </motion.h1>
+        </m.h1>
 
         {/* Mobile avatar — visible below headline, hidden at lg+ */}
-        <motion.div
+        <m.div
           initial={{ opacity: 0, scale: 0.88, y: 16 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
           className="flex lg:hidden justify-center mb-10"
         >
-          <motion.div
+          <m.div
             animate={{ y: [0, -10, 0] }}
             transition={{ duration: 5.5, repeat: Infinity, ease: 'easeInOut' }}
             className="hero-avatar-float-sm"
@@ -34,20 +34,20 @@ export default function HomeHero() {
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img src="/avatar.gif" alt="Abhishek Saxena" className="hero-avatar-img-sm" />
             </div>
-          </motion.div>
-        </motion.div>
+          </m.div>
+        </m.div>
 
         <div className="grid lg:grid-cols-[1fr_480px] gap-10 items-center">
-          <motion.div variants={stagger} initial="hidden" animate="visible">
-            <motion.div variants={fadeUp} className="t-lead text-fg-muted mb-12">
+          <m.div variants={stagger} initial="hidden" animate="visible">
+            <m.div variants={fadeUp} className="t-lead text-fg-muted mb-12">
               Based in India, open to the world. I&apos;m a product designer and design leader with 12+ years
               shipping AI features, consumer apps, and enterprise systems — from Microsoft Excel to Airtel&apos;s
               100M users. I don&apos;t just design interfaces. I build design practices, lead teams, and move
               metrics that matter.{' '}
               <span className="font-semibold text-fg">Open to design leadership roles.</span>
-            </motion.div>
+            </m.div>
 
-            <motion.div variants={fadeUp} className="flex flex-col gap-3 mb-12 t-body1 text-fg">
+            <m.div variants={fadeUp} className="flex flex-col gap-3 mb-12 t-body1 text-fg">
               <p>Quick Snapshot:</p>
               <p>Senior Product Designer @ Microsoft</p>
               <p>Ex Principal Experience Designer @ Airtel</p>
@@ -66,24 +66,24 @@ export default function HomeHero() {
                   </svg>
                 </a>
               </p>
-            </motion.div>
-          </motion.div>
+            </m.div>
+          </m.div>
 
           {/* Avatar */}
-          <motion.div
+          <m.div
             initial={{ opacity: 0, scale: 0.88, y: 20 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             transition={{ duration: 0.9, delay: 0.3, ease: [0.22, 1, 0.36, 1] }}
             className="hidden lg:flex items-center justify-center z-[2]"
           >
-            <motion.div
+            <m.div
               animate={{ y: [0, -16, 0] }}
               transition={{ duration: 5.5, repeat: Infinity, ease: 'easeInOut' }}
               className="hero-avatar-float"
             >
               <div className="hero-avatar-glow" />
 
-              <motion.div
+              <m.div
                 animate={{ rotate: 360 }}
                 transition={{ duration: 22, repeat: Infinity, ease: 'linear' }}
                 className="hero-avatar-ticker-ring"
@@ -98,14 +98,14 @@ export default function HomeHero() {
                     </textPath>
                   </text>
                 </svg>
-              </motion.div>
+              </m.div>
 
               <div className="avatar-circle">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img src="/avatar.gif" alt="Abhishek Saxena" className="hero-avatar-img" />
               </div>
-            </motion.div>
-          </motion.div>
+            </m.div>
+          </m.div>
         </div>
       </W>
     </section>

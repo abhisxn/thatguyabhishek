@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { motion } from 'framer-motion';
+import { m } from 'framer-motion';
 import CareerChart from './CareerChart';
 import { TIMELINE } from '../../../data/careerData';
 
@@ -23,7 +23,7 @@ export default function CareerTimeline() {
                 onClick={() => setActiveIdx(i)}
                 className="timeline-btn"
               >
-                <motion.span
+                <m.span
                   className="ct-period-pill"
                   animate={{
                     background: isActive ? 'rgba(255,255,255,0.95)' : 'rgba(255,255,255,0.04)',
@@ -38,7 +38,7 @@ export default function CareerTimeline() {
                   transition={{ duration: 0.15 }}
                 >
                   {item.period}
-                </motion.span>
+                </m.span>
                 <span
                   className="t-body1 ct-role-text"
                   style={{ color: isActive ? 'rgba(255,255,255,1)' : 'rgba(255,255,255,0.7)' }}

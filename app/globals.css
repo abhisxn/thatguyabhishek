@@ -240,6 +240,18 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
+/* ─── Reduced motion ─────────────────────────────────────────── */
+/* Framer Motion is handled via <MotionConfig reducedMotion="user"> in Providers.
+   This rule covers CSS transitions/animations outside of Framer Motion. */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
 /* ─── Navbar / shared dark:light compat ─────────────────────── */
 [data-theme="light"] header {
   --navbar-bg-scrolled: rgba(245, 244, 240, 0.85);

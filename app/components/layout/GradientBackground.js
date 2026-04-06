@@ -34,7 +34,8 @@ export default function GradientBackground() {
   const wrapperRefs = useRef([]);
   const driftReady  = useRef([true, true, true, true]);
 
-  useEffect(() => setMounted(true), []);
+  // eslint-disable-next-line react-hooks/set-state-in-effect
+  useEffect(() => { setMounted(true); }, []); // SSR guard — intentional mount flag
 
   useEffect(() => {
     if (!mounted) return;

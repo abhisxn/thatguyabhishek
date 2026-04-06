@@ -3,10 +3,11 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import ThemeToggle from '../ui/ThemeToggle';
-import Button from '../ui/Button';
 import { ArrowIcon } from '../ui/icons';
+import Button from '../ui/Button';
 
 const RESUME_URL = 'https://drive.google.com/file/d/1QuxjEMB-PyVbgwsjjPpacY3xJ3j8eXMU/view?usp=drive_link';
+
 
 const NAV_LINKS = [
   { label: 'About', href: '/about' },
@@ -58,15 +59,7 @@ export default function Navbar() {
               </Link>
             ))}
           </nav>
-          <Button
-            href={RESUME_URL}
-            external
-            size="sm"
-            variant="outline"
-            icon={<ArrowIcon size={14} />}
-          >
-            Get my resumé
-          </Button>
+          <Button href={RESUME_URL} external size="sm" variant="outline" icon={<ArrowIcon size={14} />}>Get my resumé</Button>
           <ThemeToggle />
         </div>
 
@@ -106,16 +99,7 @@ export default function Navbar() {
               {link.label}
             </Link>
           ))}
-          <Button
-            href={RESUME_URL}
-            external
-            size="sm"
-            variant="outline"
-            icon={<ArrowIcon size={14} />}
-            className="self-start"
-          >
-            Get my resumé
-          </Button>
+          <Button href={RESUME_URL} external size="sm" variant="outline" icon={<ArrowIcon size={14} />} className="self-start">Get my resumé</Button>
         </nav>
       </div>
     </header>

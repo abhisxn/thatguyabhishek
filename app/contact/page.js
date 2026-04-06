@@ -1,6 +1,6 @@
 'use client';
 
-import { motion } from 'framer-motion';
+import { m } from 'framer-motion';
 import GradientBackground from '../components/layout/GradientBackground';
 import { ArrowIcon } from '../components/ui/icons';
 import { fadeUp, stagger, vp } from '../../lib/motion';
@@ -89,33 +89,33 @@ export default function ContactPage() {
         {/* ── HERO ── */}
         <section className="relative flex items-center">
           <W className="w-full pt-32 pb-20">
-            <motion.div variants={stagger} initial="hidden" animate="visible">
-              <motion.p variants={fadeUp} className="t-overline mb-4 text-fg-muted">
+            <m.div variants={stagger} initial="hidden" animate="visible">
+              <m.p variants={fadeUp} className="t-overline mb-4 text-fg-muted">
                 CONTACT
-              </motion.p>
-              <motion.h1 variants={fadeUp} className="mb-6 max-w-[900px]">
+              </m.p>
+              <m.h1 variants={fadeUp} className="mb-6 max-w-[900px]">
                 Let&apos;s build something meaningful together.
-              </motion.h1>
-              <motion.p variants={fadeUp} className="t-body1 max-w-[620px] mb-10 text-fg-muted">
+              </m.h1>
+              <m.p variants={fadeUp} className="t-body1 max-w-[620px] mb-10 text-fg-muted">
                 Whether you&apos;re hiring for a design leadership role, need a senior designer on a critical product, or just want to talk shop — I&apos;m all ears.
-              </motion.p>
+              </m.p>
               {/* Availability badge */}
-              <motion.div variants={fadeUp} className="inline-flex items-center gap-2 px-4 py-2 rounded-full" style={{ background: 'rgba(72,57,202,0.2)', border: '1px solid rgba(72,57,202,0.5)' }}>
+              <m.div variants={fadeUp} className="inline-flex items-center gap-2 px-4 py-2 rounded-full" style={{ background: 'rgba(72,57,202,0.2)', border: '1px solid rgba(72,57,202,0.5)' }}>
                 <span className="w-2 h-2 rounded-full bg-green-400 animate-pulse" />
                 <span className="t-body3 font-medium text-[#a5b4fc]">Open to new opportunities</span>
-              </motion.div>
-            </motion.div>
+              </m.div>
+            </m.div>
           </W>
         </section>
 
         {/* ── CONTACT CARDS ── */}
         <div className="border-t border-theme">
           <W className="py-20">
-            <motion.div variants={stagger} initial="hidden" whileInView="visible" viewport={vp}>
-              <motion.h2 variants={fadeUp} className="mb-12">📬 Get in touch</motion.h2>
+            <m.div variants={stagger} initial="hidden" whileInView="visible" viewport={vp}>
+              <m.h2 variants={fadeUp} className="mb-12">📬 Get in touch</m.h2>
               <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
                 {CONTACTS.map((c) => (
-                  <motion.a
+                  <m.a
                     key={c.label}
                     variants={fadeUp}
                     href={c.href}
@@ -132,21 +132,21 @@ export default function ContactPage() {
                     <span className="inline-flex items-center gap-2 t-body3 font-semibold text-[var(--fg)] group-hover:text-[var(--color-coral)] transition-colors duration-200">
                       {c.cta} <ArrowIcon size={12} />
                     </span>
-                  </motion.a>
+                  </m.a>
                 ))}
               </div>
-            </motion.div>
+            </m.div>
           </W>
         </div>
 
         {/* ── FAQ ── */}
         <div className="border-t border-theme">
           <W className="py-20">
-            <motion.div variants={stagger} initial="hidden" whileInView="visible" viewport={vp}>
-              <motion.h2 variants={fadeUp} className="mb-12">🤔 Common questions</motion.h2>
+            <m.div variants={stagger} initial="hidden" whileInView="visible" viewport={vp}>
+              <m.h2 variants={fadeUp} className="mb-12">🤔 Common questions</m.h2>
               <div className="flex flex-col gap-0 max-w-[800px]">
                 {FAQS.map((faq, i) => (
-                  <motion.div
+                  <m.div
                     key={i}
                     variants={fadeUp}
                     className="py-7"
@@ -154,10 +154,10 @@ export default function ContactPage() {
                   >
                     <p className="t-body1 font-bold mb-3">{faq.q}</p>
                     <p className="t-body2 text-fg-muted">{faq.a}</p>
-                  </motion.div>
+                  </m.div>
                 ))}
               </div>
-            </motion.div>
+            </m.div>
           </W>
         </div>
 
