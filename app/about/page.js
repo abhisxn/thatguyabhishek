@@ -1,14 +1,18 @@
 export const revalidate = 3600;
 
 import AboutClient from './AboutClient';
-import { getThinkingItems } from '../../lib/notion-work';
+import { getThinkingItems, getWritingArticles } from '../../lib/notion-work';
 
 export default async function AboutPage() {
   let thinkingItems = [];
+  let articles = [];
   try {
-    thinkingItems = await getThinkingItems();
+    [thinkingItems, articles] = await Promise.all([
+      getThinkingItems(),
+      getWritingArticles(),
+    ]);
   } catch {
-    // fall through with empty array — static fallback in AboutClient
+    // fall through with empty arrays — static fallbacks in AboutClient
   }
-  return <AboutClient thinkingItems={thinkingItems} />;
+  return <AboutClient thinkingItems={thinkingItems} articles={articles} />;
 }

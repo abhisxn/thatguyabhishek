@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { m, AnimatePresence, useSpring, useMotionValue, useTransform } from 'framer-motion';
+import Link from 'next/link';
 import GradientBackground from '../components/layout/GradientBackground';
 import Button from '../components/ui/Button';
 import { ArrowIcon } from '../components/ui/icons';
@@ -26,10 +27,8 @@ function WritingCard({ article }) {
 
   return (
     <m.div variants={fadeUp}>
-      <a
+      <Link
         href={article.href}
-        target="_blank"
-        rel="noopener noreferrer"
         className="no-underline flex flex-col gap-3"
         style={{
           position: 'relative',
@@ -71,7 +70,7 @@ function WritingCard({ article }) {
             <path d="M1 11L11 1M11 1H3M11 1V9" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
           </svg>
         </div>
-      </a>
+      </Link>
     </m.div>
   );
 }
@@ -326,8 +325,9 @@ const IMG_PORTRAIT = '/portrait.jpg';
 /* ─────────────────────────────────────────────────────────────────── */
 const CAROUSEL_INTERVAL = 3500;
 
-export default function AboutPage({ thinkingItems: thinkingProp = [] }) {
+export default function AboutPage({ thinkingItems: thinkingProp = [], articles: articlesProp = [] }) {
   const THINKING_ITEMS = thinkingProp.length > 0 ? thinkingProp : THINKING_FALLBACK;
+  const displayArticles = articlesProp.length > 0 ? articlesProp.slice(0, 4) : ARTICLES;
   const [activeWork, setActiveWork] = useState(0);
   const [paused, setPaused] = useState(false);
   const [direction, setDirection] = useState(1);
@@ -519,7 +519,7 @@ export default function AboutPage({ thinkingItems: thinkingProp = [] }) {
               </div>
 
               <div className="grid gap-5 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
-                {ARTICLES.map((article) => (
+                {displayArticles.map((article) => (
                   <WritingCard key={article.title} article={article} />
                 ))}
               </div>
