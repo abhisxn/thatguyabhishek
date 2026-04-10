@@ -26,9 +26,9 @@ export default function BlurDemoPage() {
 
         {/* Block 3 — 2-column card row */}
         <FadeSection>
-          <div className="grid grid-cols-2 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             <div className="rounded-lg bg-surface border border-border p-8">
-              <p className="text-sm font-medium text-foreground mb-2">Card one</p>
+              <p className="text-sm font-medium text-foreground mb-3">Card one</p>
               <p className="text-sm text-foreground-secondary leading-relaxed">
                 Surface card at standard size. Blurs in together with its sibling
                 since both share the same FadeSection wrapper.
@@ -46,7 +46,7 @@ export default function BlurDemoPage() {
 
         {/* Block 4 — Heading + paragraph */}
         <FadeSection>
-          <h2 className="text-4xl font-semibold mb-6">A second section</h2>
+          <h2 className="text-4xl font-semibold mb-8">A second section</h2>
           <p className="text-base text-foreground-secondary leading-relaxed max-w-xl">
             Scroll speed and viewport margin both affect when the animation
             triggers. The <code>margin: -80px</code> on the viewport means the
