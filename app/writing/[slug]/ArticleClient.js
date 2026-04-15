@@ -140,7 +140,8 @@ export default function ArticleClient({ article, blocks, childrenMap, otherArtic
                 width: 220,
                 flexShrink: 0,
                 position: 'sticky',
-                top: 88,
+                top: '50vh',
+                transform: 'translateY(-50%)',
                 alignSelf: 'flex-start',
               }}
             >
