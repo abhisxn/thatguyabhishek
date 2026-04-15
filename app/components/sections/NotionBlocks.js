@@ -228,11 +228,15 @@ export function NotionBlock({ block, projects, childrenMap, skipDatabase, skipDi
     case 'image': {
       const url = getImageUrl(block.image);
       if (!url) return null;
+      // Route through /api/notion-image proxy so S3 signed URLs never expire client-side
+      const proxiedUrl = block.image?.type === 'file'
+        ? `/api/notion-image?block_id=${block.id}`
+        : url;
       const caption = block.image.caption;
       return (
         <figure>
           {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src={url} alt={caption?.map((t) => t.plain_text).join('') || ''} className="w-full rounded-2xl object-cover" loading="lazy" />
+          <img src={proxiedUrl} alt={caption?.map((t) => t.plain_text).join('') || ''} className="w-full rounded-2xl object-cover" loading="lazy" />
           {caption?.length > 0 && (
             <figcaption className="t-small mt-2 text-center text-fg-muted opacity-60">
               <RichText texts={caption} />
