@@ -1,14 +1,16 @@
 'use client';
 
 import { m } from 'framer-motion';
+import { fadeUp, vp } from '@/lib/motion';
 
-export default function FadeSection({ children, className = '' }) {
+export default function FadeSection({ children, className = '', delay = 0 }) {
   return (
     <m.div
-      initial={{ opacity: 0, y: 24, filter: 'blur(8px)' }}
-      whileInView={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
-      viewport={{ once: true, margin: '-80px' }}
-      transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+      variants={fadeUp}
+      initial="hidden"
+      whileInView="visible"
+      viewport={vp}
+      transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1], delay }}
       className={className}
     >
       {children}

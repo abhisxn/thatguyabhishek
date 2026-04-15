@@ -50,18 +50,22 @@ export default async function Home() {
 
         <HomeHero />
 
+        <div className="border-t border-theme" />
+
         {cardBlocks.length > 0 && (
-          <FadeSection>
-            <div className="max-w-[1200px] mx-auto px-6 sm:px-10 lg:px-16 py-20">
+          <div className="max-w-[1200px] mx-auto px-6 sm:px-10 lg:px-16 py-20">
+            <FadeSection>
               <h2 className="mb-12">🎨 Work</h2>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-12">
-                {cardBlocks.map((b) => (
-                  <CalloutBlock key={b.id} block={b} childrenMap={childrenMap} />
-                ))}
-                <MoreWorkCard />
-              </div>
+            </FadeSection>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-12">
+              {cardBlocks.map((b, i) => (
+                <FadeSection key={b.id} delay={i * 0.1}>
+                  <CalloutBlock block={b} childrenMap={childrenMap} />
+                </FadeSection>
+              ))}
+              <MoreWorkCard />
             </div>
-          </FadeSection>
+          </div>
         )}
 
         <AboutSection />

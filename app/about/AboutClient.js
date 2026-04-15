@@ -75,7 +75,73 @@ function WritingCard({ article }) {
   );
 }
 
-/* ── Shared numbered card — used by Beyond the Work + What I'm Thinking About ── */
+/* ── 3D Flip Card — What I'm Thinking About ─────────────────────── */
+const THINKING_INITIAL = 4;
+
+function ThinkingFlipCard({ heading, body, index }) {
+  const [flipped, setFlipped] = useState(false);
+
+  return (
+    <m.div
+      initial={{ opacity: 0, y: 24, filter: 'blur(12px)' }}
+      whileInView={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
+      viewport={{ once: true, margin: '-40px' }}
+      transition={{ duration: 0.7, delay: (index % 4) * 0.08, ease: [0.22, 1, 0.36, 1] }}
+      style={{ minHeight: 280 }}
+    >
+      <div
+        style={{ perspective: '1000px', height: '100%', minHeight: 280, cursor: 'pointer' }}
+        onMouseEnter={() => setFlipped(true)}
+        onMouseLeave={() => setFlipped(false)}
+        onClick={() => setFlipped(f => !f)}
+      >
+        <div
+          style={{
+            position: 'relative', width: '100%', height: '100%',
+            transformStyle: 'preserve-3d',
+            transition: 'transform 0.55s cubic-bezier(0.22, 1, 0.36, 1)',
+            transform: flipped ? 'rotateY(180deg)' : 'rotateY(0deg)',
+          }}
+        >
+          {/* Front */}
+          <div
+            style={{
+              position: 'absolute', inset: 0, backfaceVisibility: 'hidden', WebkitBackfaceVisibility: 'hidden',
+              borderRadius: 16, padding: '32px 28px',
+              background: 'var(--surface)',
+              border: '1px solid color-mix(in srgb, var(--fg) 10%, transparent)',
+              display: 'flex', flexDirection: 'column', gap: 20,
+            }}
+          >
+            <p className="t-caption tabular-nums font-bold" style={{ color: 'var(--color-coral)', letterSpacing: '0.08em', margin: 0 }}>
+              {String(index + 1).padStart(2, '0')}
+            </p>
+            <p className="t-h5 text-fg" style={{ margin: 0, flex: 1 }}>{heading}</p>
+            <p className="t-caption text-fg-muted" style={{ margin: 0, opacity: 0.5 }}>hover to read</p>
+          </div>
+          {/* Back */}
+          <div
+            style={{
+              position: 'absolute', inset: 0, backfaceVisibility: 'hidden', WebkitBackfaceVisibility: 'hidden',
+              transform: 'rotateY(180deg)',
+              borderRadius: 16, padding: '32px 28px',
+              background: 'var(--flip-back-bg)',
+              border: '1px solid color-mix(in srgb, var(--fg) 10%, transparent)',
+              display: 'flex', flexDirection: 'column', justifyContent: 'space-between', gap: 16,
+            }}
+          >
+            <p className="t-caption tabular-nums font-bold" style={{ color: 'var(--color-coral)', letterSpacing: '0.08em', margin: 0 }}>
+              {String(index + 1).padStart(2, '0')}
+            </p>
+            <p className="t-body2 text-fg" style={{ margin: 0, lineHeight: 1.65 }}>{body}</p>
+          </div>
+        </div>
+      </div>
+    </m.div>
+  );
+}
+
+/* ── Shared numbered card — used by Beyond the Work ─────────────── */
 function NumberedCard({ heading, body, index, style }) {
   const strokeOpacity = useSpring(0.2, { stiffness: 160, damping: 24 });
 
@@ -224,16 +290,7 @@ function WhatIBringCard({ item, index, textClr, mutedClr }) {
         onMouseLeave={handleMouseLeave}
       >
         {/* H — adaptive outline */}
-        <m.div
-          style={{
-            position: 'absolute',
-            inset: 0,
-            borderRadius: 16,
-            border: '1px solid color-mix(in srgb, var(--section-solid-fg) 50%, transparent)',
-            opacity: strokeOpacity,
-            pointerEvents: 'none',
-          }}
-        />
+        <m.div style={{ ...STROKE_RING, opacity: strokeOpacity }} />
 
         {/* Card body — overflow:hidden clips the glare blob */}
         <div
@@ -241,8 +298,8 @@ function WhatIBringCard({ item, index, textClr, mutedClr }) {
           style={{
             borderRadius: 16,
             padding: '24px',
-            background: 'color-mix(in srgb, var(--section-solid-fg) 5%, transparent)',
-            border: '1px solid color-mix(in srgb, var(--section-solid-fg) 10%, transparent)',
+            background: 'var(--surface)',
+            border: '1px solid var(--border)',
             display: 'flex',
             flexDirection: 'column',
             gap: 16,
@@ -288,7 +345,6 @@ function WhatIBringCard({ item, index, textClr, mutedClr }) {
 /* ── Constants ──────────────────────────────────────────────────────── */
 const RESUME_URL        = 'https://drive.google.com/file/d/1QuxjEMB-PyVbgwsjjPpacY3xJ3j8eXMU/view?usp=drive_link';
 const NOTION_ABOUT      = 'https://thatguyabhishek.notion.site/About-fb861d61100943ee9356e50d28be3f03';
-const NOTION_WHAT_I_BRING = 'https://www.notion.so/thatguyabhishek/What-I-Bring-26af6091ff9a469eadcde9b42a80a678';
 const LINKEDIN_URL      = 'https://www.linkedin.com/in/thatguyabhishek/';
 
 const WHAT_I_BRING_ITEMS = [
@@ -329,6 +385,7 @@ export default function AboutPage({ thinkingItems: thinkingProp = [], articles: 
   const THINKING_ITEMS = thinkingProp.length > 0 ? thinkingProp : THINKING_FALLBACK;
   const displayArticles = articlesProp.length > 0 ? articlesProp.slice(0, 4) : ARTICLES;
   const [activeWork, setActiveWork] = useState(0);
+  const [thinkingExpanded, setThinkingExpanded] = useState(false);
   const [paused, setPaused] = useState(false);
   const [direction, setDirection] = useState(1);
   const intervalRef = useRef(null);
@@ -501,21 +558,21 @@ export default function AboutPage({ thinkingItems: thinkingProp = [], articles: 
             <m.div variants={stagger} initial="hidden" whileInView="visible" viewport={vp}>
               <div className="flex items-end justify-between gap-4 mb-8 flex-wrap">
                 <m.p variants={fadeUp} className="t-overline text-fg-muted">Writing</m.p>
-                <m.a
-                  variants={fadeUp}
-                  href={NOTION_ABOUT}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="no-underline t-caption font-semibold text-fg-muted inline-flex items-center gap-2"
-                  style={{ transition: 'color 0.2s' }}
-                  onMouseEnter={e => { e.currentTarget.style.color = 'var(--color-coral)'; }}
-                  onMouseLeave={e => { e.currentTarget.style.color = ''; }}
-                >
-                  All writing on Notion
-                  <svg width="11" height="11" viewBox="0 0 12 12" fill="none">
-                    <path d="M1 11L11 1M11 1H3M11 1V9" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-                  </svg>
-                </m.a>
+                <m.div variants={fadeUp}>
+                  <Button
+                    href={NOTION_ABOUT}
+                    external
+                    variant="link"
+                    size="sm"
+                    icon={
+                      <svg width="11" height="11" viewBox="0 0 12 12" fill="none">
+                        <path d="M1 11L11 1M11 1H3M11 1V9" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                      </svg>
+                    }
+                  >
+                    All writing on Notion
+                  </Button>
+                </m.div>
               </div>
 
               <div className="grid gap-5 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
@@ -575,29 +632,6 @@ export default function AboutPage({ thinkingItems: thinkingProp = [], articles: 
                     The 5 Things I Bring
                   </m.h3>
                 </div>
-                <m.a
-                  variants={fadeUp}
-                  href={NOTION_WHAT_I_BRING}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="no-underline inline-flex items-center gap-2"
-                  style={{
-                    padding: '10px 20px',
-                    borderRadius: 9999,
-                    border: '1px solid color-mix(in srgb, var(--section-solid-fg) 20%, transparent)',
-                    color: SECTION_STYLES[4].mutedClr,
-                    fontSize: 13,
-                    fontWeight: 600,
-                    transition: 'border-color 0.2s, color 0.2s',
-                  }}
-                  onMouseEnter={e => { e.currentTarget.style.borderColor = 'var(--color-coral)'; e.currentTarget.style.color = 'var(--color-coral)'; }}
-                  onMouseLeave={e => { e.currentTarget.style.borderColor = ''; e.currentTarget.style.color = ''; }}
-                >
-                  Read more on Notion
-                  <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
-                    <path d="M1 11L11 1M11 1H3M11 1V9" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-                  </svg>
-                </m.a>
               </div>
 
               {/* 5 cards — 3 col first row, 2 col second row */}
@@ -688,24 +722,15 @@ export default function AboutPage({ thinkingItems: thinkingProp = [], articles: 
                 <div className="block md:hidden overflow-x-auto -mx-6 px-6 pb-3 mb-5">
                   <div className="flex gap-2" style={{ width: 'max-content' }}>
                     {WORK_ITEMS.map((item, i) => (
-                      <button
+                      <Button
                         key={item.label}
                         onClick={() => goTo(i)}
-                        style={{
-                          background: i === activeWork ? 'var(--brand)' : 'color-mix(in srgb, var(--brand) 8%, var(--surface))',
-                          border: `1px solid ${i === activeWork ? 'var(--brand)' : 'color-mix(in srgb, var(--brand) 16%, var(--border))'}`,
-                          color: i === activeWork ? '#fff' : 'var(--fg-muted)',
-                          borderRadius: 9999,
-                          padding: '8px 16px',
-                          fontSize: '14px',
-                          fontWeight: 600,
-                          cursor: 'pointer',
-                          whiteSpace: 'nowrap',
-                          transition: 'all 0.2s ease',
-                        }}
+                        variant={i === activeWork ? 'filled-brand' : 'outline-brand'}
+                        size="sm"
+                        style={{ whiteSpace: 'nowrap' }}
                       >
                         {item.label}
-                      </button>
+                      </Button>
                     ))}
                   </div>
                 </div>
@@ -717,6 +742,7 @@ export default function AboutPage({ thinkingItems: thinkingProp = [], articles: 
                     background: 'color-mix(in srgb, var(--brand) 8%, var(--surface))',
                     border: '1px solid color-mix(in srgb, var(--brand) 20%, var(--border))',
                     overflow: 'hidden',
+                    minHeight: 160,
                   }}
                 >
                   <AnimatePresence mode="wait" initial={false} custom={direction}>
@@ -727,7 +753,7 @@ export default function AboutPage({ thinkingItems: thinkingProp = [], articles: 
                       animate={{ opacity: 1, x: 0 }}
                       exit={{ opacity: 0, x: direction * -24 }}
                       transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
-                      style={{ padding: '24px 22px' }}
+                      style={{ padding: '28px 24px' }}
                     >
                       <p
                         className="t-caption tabular-nums"
@@ -811,7 +837,7 @@ export default function AboutPage({ thinkingItems: thinkingProp = [], articles: 
                         animate={{ opacity: 1, y: 0 }}
                         exit={{ opacity: 0, y: direction * -20 }}
                         transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
-                        style={{ padding: '24px 22px' }}
+                        style={{ padding: '40px' }}
                       >
                         <p
                           className="t-caption tabular-nums"
@@ -972,20 +998,19 @@ export default function AboutPage({ thinkingItems: thinkingProp = [], articles: 
                       {section.body}
                     </m.p>
                     <m.div variants={fadeUp}>
-                      <a
+                      <Button
                         href={section.href}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="no-underline inline-flex items-center gap-2"
-                        style={{ padding: '10px 20px', borderRadius: 9999, border: '1px solid var(--border)', color: 'var(--fg-muted)', fontSize: 13, fontWeight: 600, transition: 'border-color 0.2s, color 0.2s' }}
-                        onMouseEnter={e => { e.currentTarget.style.borderColor = 'var(--color-coral)'; e.currentTarget.style.color = 'var(--color-coral)'; }}
-                        onMouseLeave={e => { e.currentTarget.style.borderColor = ''; e.currentTarget.style.color = ''; }}
+                        external
+                        variant="muted"
+                        size="sm"
+                        icon={
+                          <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+                            <path d="M1 11L11 1M11 1H3M11 1V9" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                          </svg>
+                        }
                       >
                         Read more on Notion
-                        <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
-                          <path d="M1 11L11 1M11 1H3M11 1V9" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-                        </svg>
-                      </a>
+                      </Button>
                     </m.div>
                   </m.div>
                 </div>
@@ -999,33 +1024,12 @@ export default function AboutPage({ thinkingItems: thinkingProp = [], articles: 
           <W className="py-20">
             <m.div variants={stagger} initial="hidden" whileInView="visible" viewport={vp}>
               <m.p variants={fadeUp} className="t-overline text-fg-muted mb-2">On my mind</m.p>
-              <m.div variants={fadeUp} className="flex items-end justify-between gap-4 mb-10">
+              <m.div variants={fadeUp} className="mb-10">
                 <h3 style={{ margin: 0 }}>What I&apos;m Thinking About</h3>
-                <a
-                  href="https://thatguyabhishek.notion.site/About-fb861d61100943ee9356e50d28be3f03"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="shrink-0 inline-flex items-center gap-1.5 t-caption font-semibold"
-                  style={{
-                    padding: '8px 16px',
-                    borderRadius: 9999,
-                    border: '1px solid var(--border)',
-                    color: 'var(--fg-muted)',
-                    transition: 'border-color 0.2s, color 0.2s',
-                    whiteSpace: 'nowrap',
-                  }}
-                  onMouseEnter={e => { e.currentTarget.style.borderColor = 'var(--color-coral)'; e.currentTarget.style.color = 'var(--color-coral)'; }}
-                  onMouseLeave={e => { e.currentTarget.style.borderColor = ''; e.currentTarget.style.color = ''; }}
-                >
-                  More on Notion
-                  <svg width="10" height="10" viewBox="0 0 12 12" fill="none">
-                    <path d="M1 11L11 1M11 1H3M11 1V9" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-                  </svg>
-                </a>
               </m.div>
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                {THINKING_ITEMS.slice(0, 8).map((item, i) => (
-                  <NumberedCard
+                {THINKING_ITEMS.slice(0, thinkingExpanded ? undefined : THINKING_INITIAL).map((item, i) => (
+                  <ThinkingFlipCard
                     key={item.id || item.label}
                     heading={item.title || item.label}
                     body={item.description || item.desc}
@@ -1033,6 +1037,25 @@ export default function AboutPage({ thinkingItems: thinkingProp = [], articles: 
                   />
                 ))}
               </div>
+              {THINKING_ITEMS.length > THINKING_INITIAL && (
+                <m.div variants={fadeUp} className="flex justify-center mt-8">
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => setThinkingExpanded(e => !e)}
+                    icon={
+                      <svg
+                        width="12" height="12" viewBox="0 0 12 12" fill="none"
+                        style={{ transform: thinkingExpanded ? 'rotate(180deg)' : 'rotate(0deg)', transition: 'transform 0.3s ease' }}
+                      >
+                        <path d="M2 4L6 8L10 4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                      </svg>
+                    }
+                  >
+                    {thinkingExpanded ? 'Show less' : `Show ${THINKING_ITEMS.length - THINKING_INITIAL} more`}
+                  </Button>
+                </m.div>
+              )}
             </m.div>
           </W>
         </div>
@@ -1054,20 +1077,19 @@ export default function AboutPage({ thinkingItems: thinkingProp = [], articles: 
                       {section.body}
                     </m.p>
                     <m.div variants={fadeUp}>
-                      <a
+                      <Button
                         href={section.href}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="no-underline inline-flex items-center gap-2"
-                        style={{ padding: '10px 20px', borderRadius: 9999, border: '1px solid var(--border)', color: 'var(--fg-muted)', fontSize: 13, fontWeight: 600, transition: 'border-color 0.2s, color 0.2s' }}
-                        onMouseEnter={e => { e.currentTarget.style.borderColor = 'var(--color-coral)'; e.currentTarget.style.color = 'var(--color-coral)'; }}
-                        onMouseLeave={e => { e.currentTarget.style.borderColor = ''; e.currentTarget.style.color = ''; }}
+                        external
+                        variant="muted"
+                        size="sm"
+                        icon={
+                          <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+                            <path d="M1 11L11 1M11 1H3M11 1V9" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                          </svg>
+                        }
                       >
                         Read more on Notion
-                        <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
-                          <path d="M1 11L11 1M11 1H3M11 1V9" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-                        </svg>
-                      </a>
+                      </Button>
                     </m.div>
                   </m.div>
                 </div>

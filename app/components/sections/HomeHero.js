@@ -39,20 +39,21 @@ export default function HomeHero() {
 
         <div className="grid lg:grid-cols-[1fr_480px] gap-10 items-center">
           <m.div variants={stagger} initial="hidden" animate="visible">
-            <m.div variants={fadeUp} className="t-lead text-fg-muted mb-12">
+            <m.div variants={fadeUp} className="t-body1 text-fg-muted mb-12">
               Based in India, open to the world. I&apos;m a product designer and design leader with 12+ years
               shipping AI features, consumer apps, and enterprise systems — from Microsoft Excel to Airtel&apos;s
               100M users. I don&apos;t just design interfaces. I build design practices, lead teams, and move
-              metrics that matter.{' '}
+              metrics that matter.
+              <br />
               <span className="font-semibold text-fg">Open to design leadership roles.</span>
             </m.div>
 
-            <m.div variants={fadeUp} className="flex flex-col gap-3 mb-12 t-body1 text-fg">
-              <p>Quick Snapshot:</p>
-              <p>Senior Product Designer @ Microsoft</p>
-              <p>Ex Principal Experience Designer @ Airtel</p>
-              <p>Ex Design Director UX @ Cheil, Samsung</p>
-              <p className="flex items-center gap-2">
+            <m.div variants={fadeUp} className="flex flex-col gap-2 mb-12 text-fg-muted">
+              <p className="t-body2 uppercase tracking-widest">Quick Snapshot:</p>
+              <p className="t-body2">Senior Product Designer @ Microsoft</p>
+              <p className="t-body2">Ex Principal Experience Designer @ Airtel</p>
+              <p className="t-body2">Ex Design Director UX @ Cheil, Samsung</p>
+              <p className="t-body2 flex items-center gap-2">
                 <span>💁🏻‍♂️ Latest Update</span>
                 <a
                   href="https://www.linkedin.com/in/thatguyabhishek/"
@@ -71,13 +72,14 @@ export default function HomeHero() {
 
           {/* Avatar */}
           <m.div
-            initial={{ opacity: 0, scale: 0.88, y: 20 }}
+            initial={{ opacity: 0, scale: 0.88, y: 0 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             transition={{ duration: 0.9, delay: 0.3, ease: [0.22, 1, 0.36, 1] }}
             className="hidden lg:flex items-center justify-center z-[2]"
           >
+            <div className="scale-[1.1] -translate-y-[20px]">
             <m.div
-              animate={{ y: [0, -16, 0] }}
+              animate={{ y: [0, -40, 0] }}
               transition={{ duration: 5.5, repeat: Infinity, ease: 'easeInOut' }}
               className="hero-avatar-float"
             >
@@ -105,6 +107,7 @@ export default function HomeHero() {
                 <img src="/avatar.gif" alt="Abhishek Saxena" className="hero-avatar-img" />
               </div>
             </m.div>
+            </div>
           </m.div>
         </div>
       </W>

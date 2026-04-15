@@ -3,19 +3,12 @@
 import { useRef, useCallback } from 'react';
 import { m, useMotionValue, useTransform, useSpring } from 'framer-motion';
 import Link from 'next/link';
+import { fadeUp, stagger, vp } from '@/lib/motion';
 
 /* ── Local assets ───────────────────────────────────────────── */
 const IMG_AVATAR     = '/avatar-card.png';
 const IMG_AVATAR_ICON = '/avatar-icon.png';
 const IMG_LI_LOGO    = '/linkedin-logo.svg';
-
-/* ── Animation ─────────────────────────────────────────────── */
-const fadeUp = {
-  hidden:  { opacity: 0, y: 24 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.55, ease: [0.22, 1, 0.36, 1] } },
-};
-const stagger = { hidden: {}, visible: { transition: { staggerChildren: 0.08 } } };
-const vp = { once: true, margin: '-60px' };
 
 /* ── Ticker text ────────────────────────────────────────────── */
 const TICKER_CHUNK =
@@ -29,8 +22,8 @@ function useTilt(maxDeg = 6) {
   const ref = useRef(null);
   const x = useMotionValue(0);
   const y = useMotionValue(0);
-  const rotateX = useSpring(useTransform(y, [-0.5, 0.5], [maxDeg, -maxDeg]), { stiffness: 300, damping: 30 });
-  const rotateY = useSpring(useTransform(x, [-0.5, 0.5], [-maxDeg, maxDeg]), { stiffness: 300, damping: 30 });
+  const rotateX = useSpring(useTransform(y, [-0.5, 0.5], [maxDeg, -maxDeg]), { stiffness: 600, damping: 25 });
+  const rotateY = useSpring(useTransform(x, [-0.5, 0.5], [-maxDeg, maxDeg]), { stiffness: 600, damping: 25 });
 
   const onMouseMove = useCallback((e) => {
     const rect = ref.current?.getBoundingClientRect();
@@ -68,8 +61,8 @@ function Ticker() {
 
 /* ── Main export ─────────────────────────────────────────────── */
 export default function Footer() {
-  const purpleTilt = useTilt(5);
-  const liTilt = useTilt(5);
+  const purpleTilt = useTilt(8);
+  const liTilt = useTilt(8);
 
   return (
     <footer className="border-t border-theme text-fg relative z-[1]">
@@ -102,7 +95,7 @@ export default function Footer() {
               ref={purpleTilt.ref}
               onMouseMove={purpleTilt.onMouseMove}
               onMouseLeave={purpleTilt.onMouseLeave}
-              style={{ perspective: 900, rotateX: purpleTilt.rotateX, rotateY: purpleTilt.rotateY, transformStyle: 'preserve-3d' }}
+              style={{ perspective: 700, rotateX: purpleTilt.rotateX, rotateY: purpleTilt.rotateY, transformStyle: 'preserve-3d' }}
               className="relative overflow-hidden flex-[3] rounded-2xl footer-cta-purple"
             >
               {/* Gradient blob — lower-left, mix-blend-hard-light */}
@@ -133,7 +126,7 @@ export default function Footer() {
               ref={liTilt.ref}
               onMouseMove={liTilt.onMouseMove}
               onMouseLeave={liTilt.onMouseLeave}
-              style={{ perspective: 900, rotateX: liTilt.rotateX, rotateY: liTilt.rotateY, transformStyle: 'preserve-3d' }}
+              style={{ perspective: 700, rotateX: liTilt.rotateX, rotateY: liTilt.rotateY, transformStyle: 'preserve-3d' }}
               className="bg-white flex-[2] rounded-[8px] flex flex-col gap-4 p-6 footer-li-card"
             >
               {/* Top row: avatar icon + LinkedIn logo */}

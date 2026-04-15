@@ -96,7 +96,14 @@ const websiteJsonLd = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en" suppressHydrationWarning>
-<body className={`${glory.variable} ${manrope.variable} antialiased`}>
+      <body className={`${glory.variable} ${manrope.variable} antialiased`}>
+        <Providers>
+          <SmoothScroll>
+            <Navbar />
+            {children}
+            <ConditionalFooter />
+          </SmoothScroll>
+        </Providers>
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(personJsonLd) }}
@@ -105,13 +112,6 @@ export default function RootLayout({ children }) {
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteJsonLd) }}
         />
-        <Providers>
-          <SmoothScroll>
-            <Navbar />
-            {children}
-            <ConditionalFooter />
-          </SmoothScroll>
-        </Providers>
         {process.env.NODE_ENV === 'development' && <DevLiveReload />}
       </body>
     </html>

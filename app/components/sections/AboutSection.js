@@ -12,9 +12,12 @@ export default function AboutSection() {
     <div className="border-t border-theme">
       <W className="py-20">
         <m.div variants={stagger} initial="hidden" whileInView="visible" viewport={vp}>
-          <m.h2 variants={fadeUp} className="mb-10">
-            🙋🏻‍♂️ About me
-          </m.h2>
+          <m.div variants={fadeUp} className="flex items-center justify-between mb-10">
+            <h2>🙋🏻‍♂️ About me</h2>
+            <Button href="/about" variant="link" size="sm" icon={<svg width="11" height="11" viewBox="0 0 12 12" fill="none"><path d="M1 11L11 1M11 1H3M11 1V9" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>}>
+              KNOW MORE
+            </Button>
+          </m.div>
           <div className="grid lg:grid-cols-2 gap-12 items-start">
             <m.div variants={fadeUp}>
               {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -26,15 +29,10 @@ export default function AboutSection() {
               />
             </m.div>
             <m.div variants={stagger} className="flex flex-col gap-6">
-              <m.div variants={fadeUp} className="t-lead text-fg flex flex-col gap-6">
-                <p>I started in the era before UX had rules — when digital was still figuring itself out, flash websites were a career, and the only metric that mattered was whether people came back.</p>
-                <p>That wired me differently. I think in systems. I measure in outcomes. I&apos;ve led design at a telecom giant, shipped AI features for 400M+ Excel users, and built two products from zero — one of which hit 50K downloads with no marketing budget.</p>
-                <p>I&apos;m a design generalist. That&apos;s not a hedge — it&apos;s a deliberate choice. The best design decisions I&apos;ve made came from knowing just enough about business strategy, product thinking, data, and engineering to ask the right questions before picking up Figma.</p>
-              </m.div>
-              <m.div variants={fadeUp}>
-                <Button href="https://thatguyabhishek.notion.site/About-fb861d61100943ee9356e50d28be3f03" external variant="outline">
-                  Know more
-                </Button>
+              <m.div variants={fadeUp} className="flex flex-col gap-6">
+                <p className="t-body1 text-fg-muted">I started in the era before UX had rules — when digital was still figuring itself out, flash websites were a career, and the only metric that mattered was whether people came back.</p>
+                <p className="t-body1 text-fg-muted">That wired me differently. I think in systems. I measure in outcomes. I&apos;ve led design at a telecom giant, shipped AI features for 400M+ Excel users, and built two products from zero — one of which hit 50K downloads with no marketing budget.</p>
+                <p className="t-body1 text-fg-muted">I&apos;m a design generalist. That&apos;s not a hedge — it&apos;s a deliberate choice. The best design decisions I&apos;ve made came from knowing just enough about business strategy, product thinking, data, and engineering to ask the right questions before picking up Figma.</p>
               </m.div>
             </m.div>
           </div>

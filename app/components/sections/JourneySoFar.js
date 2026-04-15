@@ -13,8 +13,8 @@ export default function JourneySoFar() {
         <m.div variants={stagger} initial="hidden" whileInView="visible" viewport={vp}>
           <m.div variants={fadeUp} className="flex items-center justify-between mb-10">
             <h2>🎢 Journey So Far</h2>
-            <Button href="https://thatguyabhishek.notion.site/About-fb861d61100943ee9356e50d28be3f03" external variant="outline">
-              Know more
+            <Button href="/about" variant="link" size="sm" icon={<svg width="11" height="11" viewBox="0 0 12 12" fill="none"><path d="M1 11L11 1M11 1H3M11 1V9" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>}>
+              KNOW MORE
             </Button>
           </m.div>
           <m.div variants={fadeUp}>

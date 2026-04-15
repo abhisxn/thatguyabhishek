@@ -28,11 +28,11 @@ export default function CareerTimeline() {
                   animate={{
                     background: isActive ? 'rgba(255,255,255,0.95)' : 'rgba(255,255,255,0.04)',
                     color: isActive ? 'var(--color-dark-blue)' : 'rgba(255,255,255,0.55)',
-                    borderColor: isActive ? 'transparent' : 'rgba(255,255,255,0.18)',
+                    borderColor: isActive ? 'rgba(255,255,255,0)' : 'rgba(255,255,255,0.18)',
                   }}
                   whileHover={{
                     background: isActive ? 'rgba(255,255,255,1)' : 'rgba(255,255,255,0.13)',
-                    borderColor: isActive ? 'transparent' : 'rgba(255,255,255,0.32)',
+                    borderColor: isActive ? 'rgba(255,255,255,0)' : 'rgba(255,255,255,0.32)',
                     scale: 1.05,
                   }}
                   transition={{ duration: 0.15 }}

@@ -40,13 +40,8 @@
   --color-brand:        #4839ca;
   --color-coral:        #ea8575;
 
-  /* ── Brand ── */
-  --color-lavender:     #e5d7e8;
-
   /* ── Neutrals ── */
-  --color-canvas:       #161b2a;   /* darkest page bg */
   --color-navy:         #19223d;
-  --color-card-dark:    #3a405d;   /* dark section / callout surface */
   --color-dark-blue:    #0b2261;
   --color-dark-teal:    #163846;
   --color-ink:          #313138;   /* near-black text */
@@ -126,29 +121,30 @@
   /* Borders */
   --border:           rgba(255, 255, 255, 0.10);
   --border-strong:    rgba(255, 255, 255, 0.22);
+  --border-hover:     rgba(255, 255, 255, 0.16);
+
+  /* Shadows */
+  --shadow-sm:        0 1px 2px rgba(0, 0, 0, 0.40);
+  --shadow-md:        0 4px 16px rgba(0, 0, 0, 0.40);
+  --shadow-lg:        0 16px 48px rgba(0, 0, 0, 0.60);
 
   /* Brand */
   --brand:            #4839ca;
   --brand-muted:      rgba(72, 57, 202, 0.15);
   --brand-border:     rgba(72, 57, 202, 0.40);
 
+  /* Flip card back */
+  --flip-back-bg:            #19223d;
+
   /* Section callout surfaces */
   --section-solid-bg:        #161b2a;
   --section-solid-fg:        #ffffff;
-  --section-solid-border:    transparent;
   --section-frosted-bg:      rgba(255, 255, 255, 0.05);
   --section-frosted-fg:      #ffffff;
   --section-frosted-border:  rgba(255, 255, 255, 0.16);
   --section-blank-bg:        transparent;
   --section-blank-fg:        var(--fg);
   --section-blank-border:    var(--border);
-  --section-col-bg:          rgba(255, 255, 255, 0.05);
-  --section-col-border:      rgba(255, 255, 255, 0.16);
-  --section-table-border:    #676767;
-
-  /* Callout solid token — navy bg in dark, white bg in light */
-  --callout-solid-bg:  #161b2a;
-  --callout-solid-fg:  #ffffff;
 
   /* Dual-theme gradient — dark: blue-purple / light: pink-green pastel */
   --gradient-dual-from: #4a2d7f;
@@ -187,29 +183,30 @@
   /* Borders */
   --border:           rgba(25, 34, 61, 0.10);
   --border-strong:    rgba(25, 34, 61, 0.22);
+  --border-hover:     rgba(25, 34, 61, 0.16);
+
+  /* Shadows */
+  --shadow-sm:        0 1px 2px rgba(0, 0, 0, 0.04);
+  --shadow-md:        0 4px 16px rgba(0, 0, 0, 0.08);
+  --shadow-lg:        0 16px 48px rgba(0, 0, 0, 0.10);
 
   /* Brand — same in both themes */
   --brand:            #4839ca;
   --brand-muted:      rgba(72, 57, 202, 0.12);
   --brand-border:     rgba(72, 57, 202, 0.35);
 
+  /* Flip card back */
+  --flip-back-bg:            #f5f4f0;
+
   /* Section callout surfaces */
   --section-solid-bg:        #ffffff;
   --section-solid-fg:        #313138;
-  --section-solid-border:    transparent;
   --section-frosted-bg:      rgba(58, 64, 93, 0.05);
   --section-frosted-fg:      #313138;
   --section-frosted-border:  rgba(58, 64, 93, 0.16);
   --section-blank-bg:        transparent;
   --section-blank-fg:        var(--fg);
   --section-blank-border:    var(--border);
-  --section-col-bg:          rgba(58, 64, 93, 0.05);
-  --section-col-border:      rgba(58, 64, 93, 0.16);
-  --section-table-border:    #c9c9c9;
-
-  /* Callout solid token — white bg in light, navy bg in dark */
-  --callout-solid-bg:  #ffffff;
-  --callout-solid-fg:  #313138;
 
   /* Dual-theme gradient — dark: blue-purple / light: pink-green pastel */
   --gradient-dual-from: #fce7f3;
@@ -276,14 +273,15 @@ body {
 
 /* ─── Button variants ────────────────────────────────────────── */
 /*
- * Four button styles, two flavors each (outline / filled).
- * Token-driven: changing --fg, --bg-solid, or --brand automatically
- * updates all buttons. No per-theme overrides needed.
+ * Button styles — token-driven, no per-theme overrides needed.
  *
  * btn-outline       fg-colored border/text  → inverts to fg-bg on hover
  * btn-filled        fg-colored bg/text      → inverts to outline on hover
  * btn-outline-brand brand border/text       → fills brand on hover
  * btn-filled-brand  brand bg                → inverts to outline on hover
+ * btn-muted         fg-muted border/text    → gentle fg fill on hover
+ * btn-white         white fill/dark text    → outline white on hover
+ * btn-coral         coral fill/dark text    → outline coral on hover
  */
 @layer components {
 
@@ -335,6 +333,58 @@ body {
     border-color: var(--brand) !important;
   }
 
+  .btn-link {
+    color: var(--fg-muted) !important;
+    background: transparent !important;
+    border: none !important;
+    padding: 0 !important;
+    text-decoration: none !important;
+    font-weight: 600 !important;
+    transition: color 0.2s ease;
+  }
+  .btn-link:hover {
+    color: var(--color-coral) !important;
+  }
+
+  /* ── muted: low-hierarchy ghost button ── */
+  .btn-muted {
+    border: 1.5px solid color-mix(in srgb, var(--fg) 20%, transparent) !important;
+    color: var(--fg-muted) !important;
+    background: transparent !important;
+    transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+  }
+  .btn-muted:hover {
+    background: color-mix(in srgb, var(--fg) 8%, transparent) !important;
+    color: var(--fg) !important;
+    border-color: color-mix(in srgb, var(--fg) 35%, transparent) !important;
+  }
+
+  /* ── white: high-contrast on dark/colored surfaces ── */
+  .btn-white {
+    background: #ffffff !important;
+    color: #161b2a !important;
+    border: 1.5px solid #ffffff !important;
+    transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+  }
+  .btn-white:hover {
+    background: transparent !important;
+    color: #ffffff !important;
+    border-color: rgba(255, 255, 255, 0.6) !important;
+  }
+
+  /* ── coral: warm accent CTA ── */
+  .btn-coral {
+    background: var(--color-coral) !important;
+    color: #ffffff !important;
+    border: 1.5px solid var(--color-coral) !important;
+    transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+  }
+  .btn-coral:hover {
+    background: transparent !important;
+    color: var(--color-coral) !important;
+    border-color: var(--color-coral) !important;
+  }
+
 }
 
 
@@ -358,8 +408,8 @@ body {
   position: absolute;
   width: 420px;
   height: 420px;
-  left: -64px;    /* was -63.5 (fractional) → -64 = 8×8 */
-  top: -64px;     /* was -60 (not ×8) → -64 = 8×8 */
+  left: -62px;    /* centers SVG (210px) on float container center x: 296/2 - 210 = -62 */
+  top: -62px;     /* centers SVG (210px) on float container center y: 296/2 - 210 = -62 */
   z-index: 20;
   pointer-events: none;
 }
@@ -372,7 +422,7 @@ body {
 }
 .avatar-circle {
   position: absolute;
-  top: -40px;
+  top: -44px;   /* (296 - 384) / 2 = -44 — truly centered in float container */
   left: 50%;
   transform: translateX(-50%);
   width: 384px;   /* was 380 (not ×8) → 384 = 8×48 */
@@ -697,7 +747,7 @@ body {
   h5 { @apply text-h5 leading-snug  font-semibold               font-glory; }
   h6 { @apply text-base             leading-snug  font-semibold font-glory; }
 
-  p  { @apply text-body2 leading-relaxed font-normal; }
+  p  { @apply text-body1 leading-relaxed font-normal; }
 
   blockquote {
     @apply border-l-2 pl-4 italic text-body3 leading-relaxed;

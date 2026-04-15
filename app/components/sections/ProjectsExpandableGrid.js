@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { m, AnimatePresence } from 'framer-motion';
 import { ProjectCard } from './ProjectCard';
 import { fadeUp, stagger, vp } from '../../../lib/motion';
+import Button from '../ui/Button';
 
 /* ── Sort: featured first (by order), then non-featured (by order) ── */
 function sortProjects(projects) {
@@ -90,23 +91,26 @@ export default function ProjectsExpandableGrid({
       {/* View All / Show Less toggle */}
       {hasMore && (
         <div className="mt-10 flex justify-center">
-          <button
+          <Button
             onClick={() => setExpanded((v) => !v)}
-            className="inline-flex items-center gap-2 px-6 py-3 rounded-full t-body3 font-semibold btn-outline"
+            variant="outline"
+            size="sm"
             aria-expanded={expanded}
+            icon={
+              <svg
+                width="14"
+                height="14"
+                viewBox="0 0 14 14"
+                fill="none"
+                aria-hidden="true"
+                style={{ transform: expanded ? 'rotate(180deg)' : 'none', transition: 'transform 0.3s ease' }}
+              >
+                <path d="M2 5l5 5 5-5" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round" stroke="currentColor" />
+              </svg>
+            }
           >
             {expanded ? 'Show Less' : viewAllLabel}
-            <svg
-              width="14"
-              height="14"
-              viewBox="0 0 14 14"
-              fill="none"
-              aria-hidden="true"
-              style={{ transform: expanded ? 'rotate(180deg)' : 'none', transition: 'transform 0.3s ease' }}
-            >
-              <path d="M2 5l5 5 5-5" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round" stroke="currentColor" />
-            </svg>
-          </button>
+          </Button>
         </div>
       )}
     </div>

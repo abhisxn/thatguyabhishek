@@ -121,7 +121,7 @@ function FlipCard({ item }) {
           </div>
         </div>
 
-        {/* Back face — fully inverted: var(--fg) bg, var(--background) text */}
+        {/* Back face — fully inverted: var(--fg) bg, var(--bg-solid) text */}
         <div
           style={{
             position: 'absolute',
@@ -142,10 +142,10 @@ function FlipCard({ item }) {
             {item.num}
           </p>
           <div>
-            <p style={{ fontSize: 13, fontWeight: 600, color: 'var(--background)', lineHeight: 1.4, marginBottom: 10 }}>
+            <p style={{ fontSize: 13, fontWeight: 600, color: 'var(--bg-solid)', lineHeight: 1.4, marginBottom: 10 }}>
               {item.heading}
             </p>
-            <p style={{ fontSize: 12, color: 'var(--background)', lineHeight: 1.75, margin: 0, opacity: 0.6 }}>
+            <p style={{ fontSize: 12, color: 'var(--bg-solid)', lineHeight: 1.75, margin: 0, opacity: 0.6 }}>
               {item.body}
             </p>
           </div>
@@ -283,7 +283,7 @@ function SpotlightCard({ item }) {
         borderRadius: 16,
         padding: '24px 22px',
         background: 'var(--surface)',
-        border: `1px solid ${hovered ? 'color-mix(in srgb, var(--accent) 40%, transparent)' : 'var(--border)'}`,
+        border: `1px solid ${hovered ? 'color-mix(in srgb, var(--brand) 40%, transparent)' : 'var(--border)'}`,
         position: 'relative',
         overflow: 'hidden',
         cursor: 'default',
@@ -300,7 +300,7 @@ function SpotlightCard({ item }) {
         style={{
           position: 'absolute',
           inset: 0,
-          background: `radial-gradient(circle 120px at ${pos.x}% ${pos.y}%, color-mix(in srgb, var(--accent) 14%, transparent) 0%, transparent 70%)`,
+          background: `radial-gradient(circle 120px at ${pos.x}% ${pos.y}%, color-mix(in srgb, var(--brand) 14%, transparent) 0%, transparent 70%)`,
           pointerEvents: 'none',
         }}
       />
@@ -466,9 +466,9 @@ function ElasticGrid() {
               borderRadius: 16,
               padding: '24px 22px',
               background: isActive
-                ? 'color-mix(in srgb, var(--accent) 8%, var(--surface))'
+                ? 'color-mix(in srgb, var(--brand) 8%, var(--surface))'
                 : 'var(--surface)',
-              border: `1px solid ${isActive ? 'color-mix(in srgb, var(--accent) 30%, transparent)' : 'var(--border)'}`,
+              border: `1px solid ${isActive ? 'color-mix(in srgb, var(--brand) 30%, transparent)' : 'var(--border)'}`,
               cursor: 'default',
               display: 'flex',
               flexDirection: 'column',
@@ -477,7 +477,7 @@ function ElasticGrid() {
             onMouseEnter={() => setActive(i)}
             onMouseLeave={() => setActive(null)}
           >
-            <p style={{ fontFamily: 'monospace', fontSize: 11, fontWeight: 700, letterSpacing: '0.1em', color: isActive ? 'var(--accent)' : 'var(--color-coral)', margin: 0, marginBottom: 16, transition: 'color 0.2s' }}>
+            <p style={{ fontFamily: 'monospace', fontSize: 11, fontWeight: 700, letterSpacing: '0.1em', color: isActive ? 'var(--brand)' : 'var(--color-coral)', margin: 0, marginBottom: 16, transition: 'color 0.2s' }}>
               {item.num}
             </p>
             <p style={{ fontSize: 15, fontWeight: 600, color: 'var(--fg)', lineHeight: 1.4, margin: 0 }}>
@@ -776,7 +776,7 @@ export default function BeyondDemo() {
     <main
       style={{
         minHeight: '100vh',
-        background: 'var(--background)',
+        background: 'var(--bg-solid)',
         padding: '80px 48px',
         maxWidth: 1100,
         margin: '0 auto',

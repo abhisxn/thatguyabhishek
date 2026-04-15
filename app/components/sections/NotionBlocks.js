@@ -4,6 +4,7 @@ import CalloutBlock, { getImageUrl } from './CalloutBlock';
 import { getCalloutType } from '../ui/card-utils';
 import EmbedBlock, { BookmarkCard } from '../ui/EmbedBlock';
 import EMBED_OVERRIDES from '../../../data/embedOverrides';
+import Button from '../ui/Button';
 
 function toEmbedUrl(url) {
   if (!url) return url;
@@ -57,7 +58,7 @@ export function NotionBlock({ block, projects, childrenMap, skipDatabase, skipDi
     case 'paragraph': {
       const texts = block.paragraph?.rich_text;
       if (!texts?.length) return <div className="h-4" />;
-      return <p className="t-body2 text-fg-muted leading-relaxed"><RichText texts={texts} /></p>;
+      return <p className="t-body1 text-fg-muted leading-relaxed"><RichText texts={texts} /></p>;
     }
 
     /* ─── Headings
@@ -122,7 +123,7 @@ export function NotionBlock({ block, projects, childrenMap, skipDatabase, skipDi
       return (
         <details className="group rounded-2xl border border-theme overflow-hidden">
           <summary
-            className="flex items-center gap-2 px-5 py-4 t-body2 font-medium cursor-pointer select-none list-none bg-surface"
+            className="flex items-center gap-2 px-5 py-4 t-body1 font-medium cursor-pointer select-none list-none bg-surface"
           >
             <svg
               className="size-4 flex-shrink-0 transition-transform duration-200 group-open:rotate-90"
@@ -146,7 +147,7 @@ export function NotionBlock({ block, projects, childrenMap, skipDatabase, skipDi
       const texts = block.to_do.rich_text;
       const checked = block.to_do.checked;
       return (
-        <label className="flex items-start gap-2.5 t-body2 text-fg-muted cursor-default">
+        <label className="flex items-start gap-2.5 t-body1 text-fg-muted cursor-default">
           <input
             type="checkbox"
             defaultChecked={checked}
@@ -309,9 +310,9 @@ export function NotionBlock({ block, projects, childrenMap, skipDatabase, skipDi
       const url = block.button?.action?.type === 'url' ? block.button.action.url : null;
       if (!url) return <span className="t-body3 font-medium text-fg-muted">{label}</span>;
       return (
-        <a href={url} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 t-body3 font-medium px-5 py-3 rounded-full transition-colors border border-theme text-fg hover:bg-surface">
+        <Button href={url} external variant="outline" size="sm">
           {label}
-        </a>
+        </Button>
       );
     }
 
@@ -421,14 +422,14 @@ export function RenderBlocks({ blocks, projects, childrenMap, skipDatabase, skip
         }
         if (item._list === 'ul') {
           return (
-            <ul key={`ul-${idx}`} className="list-disc list-outside pl-5 space-y-1.5 t-body2 text-fg-muted">
+            <ul key={`ul-${idx}`} className="list-disc list-outside pl-5 space-y-1.5 t-body1 text-fg-muted">
               {item.items.map((b) => <li key={b.id}><RichText texts={b.bulleted_list_item.rich_text} /></li>)}
             </ul>
           );
         }
         if (item._list === 'ol') {
           return (
-            <ol key={`ol-${idx}`} className="list-decimal list-outside pl-5 space-y-1.5 t-body2 text-fg-muted">
+            <ol key={`ol-${idx}`} className="list-decimal list-outside pl-5 space-y-1.5 t-body1 text-fg-muted">
               {item.items.map((b) => <li key={b.id}><RichText texts={b.numbered_list_item.rich_text} /></li>)}
             </ol>
           );

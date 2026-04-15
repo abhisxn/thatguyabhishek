@@ -1,12 +1,16 @@
 'use client';
 
+import { useState, useEffect } from 'react';
 import { useTheme } from 'next-themes';
 
 export default function ThemeToggle() {
   const { resolvedTheme, setTheme } = useTheme();
+  const [mounted, setMounted] = useState(false);
 
-  // resolvedTheme is undefined during SSR — renders placeholder until hydrated
-  if (!resolvedTheme) return <div className="w-8 h-8" />;
+  useEffect(() => setMounted(true), []);
+
+  // Render identical placeholder on server and client until mounted
+  if (!mounted) return <div className="w-8 h-8" />;
 
   const isDark = resolvedTheme === 'dark';
 

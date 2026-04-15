@@ -258,24 +258,14 @@ export default function StyleGuide() {
                   </div>
                 </div>
                 <div>
-                  <Label>Brand primitives</Label>
-                  <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-6 gap-3">
-                    <Swatch label="--color-navy"         value="#19223d" />
-                    <Swatch label="--color-purple-card"  value="#4a2d7f" />
-                    <Swatch label="--color-dark-blue"    value="#0b2261" />
-                    <Swatch label="--color-dark-teal"    value="#163846" />
-                    <Swatch label="--color-lavender"     value="#e5d7e8" border="1px solid rgba(0,0,0,0.1)" />
-                  </div>
-                </div>
-                <div>
                   <Label>Neutral primitives</Label>
                   <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
-                    <Swatch label="--color-canvas"      value="#161b2a" />
                     <Swatch label="--color-navy"         value="#19223d" />
-                    <Swatch label="--color-card-dark"    value="#3a405d" />
+                    <Swatch label="--color-dark-blue"    value="#0b2261" />
+                    <Swatch label="--color-dark-teal"    value="#163846" />
+                    <Swatch label="--color-purple-card"  value="#4a2d7f" />
                     <Swatch label="--color-ink"          value="#313138" />
                     <Swatch label="--color-parchment"    value="#f5f4f0" border="1px solid rgba(0,0,0,0.1)" />
-                    <Swatch label="--color-purple-card"  value="#4a2d7f" />
                   </div>
                 </div>
                 <div>
@@ -295,7 +285,9 @@ export default function StyleGuide() {
                     <Swatch label="--surface-1"       value="var(--surface-1)"       border="1px solid var(--border)" />
                     <Swatch label="--surface-2"       value="var(--surface-2)"       border="1px solid var(--border)" />
                     <Swatch label="--surface-inverse" value="var(--surface-inverse)" border="1px solid var(--border)" />
-                    <Swatch label="--border-strong"   value="var(--border-strong)"   border="1px solid var(--border)" />
+                    <Swatch label="--border"          value="var(--border)"          border="1px solid var(--border)" />
+                    <Swatch label="--border-hover"    value="var(--border-hover)"    border="1px solid var(--border-hover)" />
+                    <Swatch label="--border-strong"   value="var(--border-strong)"   border="1px solid var(--border-strong)" />
                   </div>
                 </div>
                 <div>
@@ -325,7 +317,7 @@ export default function StyleGuide() {
                     <div className="flex flex-col gap-2 p-5 rounded-2xl" style={{ background: 'var(--section-solid-bg)', border: '1px solid transparent' }}>
                       <p className="t-caption font-mono font-semibold text-white">solid</p>
                       <div className="flex flex-col gap-0.5 mt-1">
-                        {['--section-solid-bg','--section-solid-fg','--section-solid-border'].map((t) => (
+                        {['--section-solid-bg','--section-solid-fg'].map((t) => (
                           <code key={t} className="t-caption font-mono opacity-60 text-white">{t}</code>
                         ))}
                       </div>
@@ -440,6 +432,20 @@ export default function StyleGuide() {
                       <Button key={v} variant={v} size="sm">{v}</Button>
                     ))}
                   </div>
+                </div>
+                <div>
+                  <Label>link — section usage (sm, all-caps, arrow)</Label>
+                  <div className="flex flex-wrap gap-6 items-center">
+                    <Button variant="link" size="sm" icon={<svg width="11" height="11" viewBox="0 0 12 12" fill="none"><path d="M1 11L11 1M11 1H3M11 1V9" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>}>KNOW MORE</Button>
+                  </div>
+                  <p className="t-caption text-[var(--fg-muted)] mt-2">Available variant — no border, fg-muted, coral hover.</p>
+                </div>
+                <div>
+                  <Label>outline sm — section usage (all-caps, arrow)</Label>
+                  <div className="flex flex-wrap gap-6 items-center">
+                    <Button variant="outline" size="sm" icon={<svg width="11" height="11" viewBox="0 0 12 12" fill="none"><path d="M1 11L11 1M11 1H3M11 1V9" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>}>KNOW MORE</Button>
+                  </div>
+                  <p className="t-caption text-[var(--fg-muted)] mt-2">Used in AboutSection, HelpSection, JourneySoFar section headers</p>
                 </div>
               </div>
             </Section>

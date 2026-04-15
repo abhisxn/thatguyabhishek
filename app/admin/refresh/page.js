@@ -82,7 +82,7 @@ export default function AdminRefreshPage() {
   return (
     <div
       className="min-h-screen flex items-center justify-center p-8"
-      style={{ background: 'var(--background)', color: 'var(--fg)' }}
+      style={{ background: 'var(--bg-solid)', color: 'var(--fg)' }}
     >
       <div className="w-full max-w-lg">
 

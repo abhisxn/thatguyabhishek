@@ -4,12 +4,7 @@ import Link from 'next/link';
 import { m, LazyMotion, domAnimation } from 'framer-motion';
 import { RenderBlocks } from '../../components/sections/NotionBlocks';
 import GradientBackground from '../../components/layout/GradientBackground';
-
-const fadeUp = {
-  hidden:  { opacity: 0, y: 24 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: [0.22, 1, 0.36, 1] } },
-};
-const stagger = { hidden: {}, visible: { transition: { staggerChildren: 0.09 } } };
+import { fadeUp, stagger, vp } from '@/lib/motion';
 
 /* ── Estimated reading time ───────────────────────────────────────── */
 function estimateReadTime(blocks) {
@@ -155,7 +150,7 @@ export default function ArticleClient({ article, blocks, childrenMap, otherArtic
                 }}
               >
                 <p
-                  className="t-body2 text-fg"
+                  className="t-body1 text-fg-muted"
                   style={{ margin: 0, fontStyle: 'italic', lineHeight: 1.6, opacity: 0.9 }}
                 >
                   {article.desc}
@@ -215,7 +210,7 @@ export default function ArticleClient({ article, blocks, childrenMap, otherArtic
                 variants={stagger}
                 initial="hidden"
                 whileInView="visible"
-                viewport={{ once: true, margin: '-60px' }}
+                viewport={vp}
               >
                 <m.p variants={fadeUp} className="t-overline text-fg-muted" style={{ marginBottom: 24 }}>
                   More writing
