@@ -52,15 +52,13 @@ function SidebarItem({ slug, text, level, isActive }) {
       />
 
       <span
+        className={isL2 ? 't-caption' : 't-body2'}
         style={{
           display: '-webkit-box',
           WebkitLineClamp: 2,
           WebkitBoxOrient: 'vertical',
           overflow: 'hidden',
-          fontSize: isL2 ? 11 : 12,
-          lineHeight: 1.45,
           fontWeight: isActive ? 500 : 400,
-          letterSpacing: isL2 ? 0 : '0.005em',
           color: isActive
             ? CORAL
             : hovered
