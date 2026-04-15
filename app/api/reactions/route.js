@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { cookies } from 'next/headers';
-import { getReactions, setReaction, REACTIONS } from '@/lib/reactions';
+import { getReactions, setReaction } from '@/lib/reactions';
+import { REACTIONS } from '@/lib/reaction-types';
 
 const VALID_KEYS = new Set(REACTIONS.map((r) => r.key));
 
