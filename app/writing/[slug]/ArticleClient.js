@@ -120,137 +120,152 @@ export default function ArticleClient({ article, blocks, childrenMap, otherArtic
     <LazyMotion features={domAnimation}>
       <GradientBackground />
 
-      <ArticleSidebar headings={headings} activeSlug={activeSlug} />
+      {/* Mobile / tablet: fixed progress bar */}
       <ArticleProgressBar headings={headings} activeSlug={activeSlug} progress={progress} />
 
       <div className="relative" style={{ zIndex: 1 }}>
 
-        {/* ── Article header ─────────────────────────────────────── */}
+        {/* ── Two-column layout — 1280px total ───────────────────── */}
         <div
           style={{
-            maxWidth: 800,
+            maxWidth: 1280,
             margin: '0 auto',
-            padding: 'clamp(80px, 10vw, 120px) 24px 0',
+            padding: '0 32px',
           }}
         >
-          <m.div
-            variants={stagger}
-            initial="hidden"
-            animate="visible"
+          <div
+            className="flex items-start"
+            style={{
+              gap: 56,
+              paddingTop: 'clamp(80px, 10vw, 120px)',
+            }}
           >
-            {/* Back link */}
-            <m.div variants={fadeUp}>
-              <Link
-                href="/about"
-                className="inline-flex items-center gap-2 t-caption text-fg-muted no-underline mb-10"
-                style={{
-                  transition: 'color 0.2s ease',
-                }}
-                onMouseEnter={(e) => { e.currentTarget.style.color = 'var(--fg)'; }}
-                onMouseLeave={(e) => { e.currentTarget.style.color = ''; }}
-              >
-                <BackArrow />
-                Back to writing
-              </Link>
-            </m.div>
 
-            {/* Emoji */}
-            <m.div
-              variants={fadeUp}
-              style={{ fontSize: 'clamp(48px, 8vw, 72px)', lineHeight: 1, marginBottom: 24 }}
+            {/* ── Left: persistent sticky sidebar (xl+) ──────────── */}
+            <aside
+              className="hidden xl:block"
+              style={{
+                width: 220,
+                flexShrink: 0,
+                position: 'sticky',
+                top: 88,
+                alignSelf: 'flex-start',
+              }}
             >
-              {article.emoji}
-            </m.div>
+              <ArticleSidebar headings={headings} activeSlug={activeSlug} />
+            </aside>
 
-            {/* Overline — topic + read time */}
-            <m.p
-              variants={fadeUp}
-              className="t-overline text-fg-muted"
-              style={{ marginBottom: 16, letterSpacing: '0.12em' }}
-            >
-              {hasTopic ? `${article.topic[0]} · ` : ''}{readTime} min read
-            </m.p>
+            {/* ── Right: article content ─────────────────────────── */}
+            <div style={{ flex: 1, minWidth: 0 }}>
 
-            {/* Title */}
-            <m.h1
-              variants={fadeUp}
-              className="t-h1 text-fg"
-              style={{ marginBottom: 0, lineHeight: 1.1 }}
-            >
-              {article.title}
-            </m.h1>
+              {/* Article header */}
+              <m.div variants={stagger} initial="hidden" animate="visible">
 
-            {/* Hook pull-quote */}
-            {article.desc && (
-              <m.blockquote
-                variants={fadeUp}
-                style={{
-                  margin: '32px 0 0',
-                  padding: '20px 24px',
-                  borderLeft: '3px solid var(--brand)',
-                  background: 'var(--brand-muted)',
-                  borderRadius: '0 12px 12px 0',
-                }}
-              >
-                <p
-                  className="t-body1 text-fg-muted"
-                  style={{ margin: 0, fontStyle: 'italic', lineHeight: 1.6, opacity: 0.9 }}
+                {/* Back link */}
+                <m.div variants={fadeUp}>
+                  <Link
+                    href="/about"
+                    className="inline-flex items-center gap-2 t-caption text-fg-muted no-underline mb-10"
+                    style={{ transition: 'color 0.2s ease' }}
+                    onMouseEnter={(e) => { e.currentTarget.style.color = 'var(--fg)'; }}
+                    onMouseLeave={(e) => { e.currentTarget.style.color = ''; }}
+                  >
+                    <BackArrow />
+                    Back to writing
+                  </Link>
+                </m.div>
+
+                {/* Emoji */}
+                <m.div
+                  variants={fadeUp}
+                  style={{ fontSize: 'clamp(48px, 8vw, 72px)', lineHeight: 1, marginBottom: 24 }}
                 >
-                  {article.desc}
-                </p>
-              </m.blockquote>
-            )}
-          </m.div>
+                  {article.emoji}
+                </m.div>
+
+                {/* Overline — topic + read time */}
+                <m.p
+                  variants={fadeUp}
+                  className="t-overline text-fg-muted"
+                  style={{ marginBottom: 16, letterSpacing: '0.12em' }}
+                >
+                  {hasTopic ? `${article.topic[0]} · ` : ''}{readTime} min read
+                </m.p>
+
+                {/* Title */}
+                <m.h1
+                  variants={fadeUp}
+                  className="t-h1 text-fg"
+                  style={{ marginBottom: 0, lineHeight: 1.1 }}
+                >
+                  {article.title}
+                </m.h1>
+
+                {/* Hook pull-quote */}
+                {article.desc && (
+                  <m.blockquote
+                    variants={fadeUp}
+                    style={{
+                      margin: '32px 0 0',
+                      padding: '20px 24px',
+                      borderLeft: '3px solid var(--brand)',
+                      background: 'var(--brand-muted)',
+                      borderRadius: '0 12px 12px 0',
+                    }}
+                  >
+                    <p
+                      className="t-body1 text-fg-muted"
+                      style={{ margin: 0, fontStyle: 'italic', lineHeight: 1.6, opacity: 0.9 }}
+                    >
+                      {article.desc}
+                    </p>
+                  </m.blockquote>
+                )}
+              </m.div>
+
+              {/* Divider */}
+              <m.div
+                id="article-divider"
+                initial={{ scaleX: 0, opacity: 0 }}
+                animate={{ scaleX: 1, opacity: 1 }}
+                transition={{ delay: 0.5, duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+                style={{ margin: '40px 0 0', transformOrigin: 'left center' }}
+              >
+                <div style={{ height: 1, background: 'var(--border-strong)', width: '100%' }} />
+              </m.div>
+
+              {/* Article body */}
+              <m.div
+                initial={{ opacity: 0, y: 16 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.35, duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+                style={{ padding: '48px 0 80px' }}
+              >
+                {blocks.length > 0 ? (
+                  <div className="flex flex-col gap-5">
+                    <RenderBlocks blocks={blocks} childrenMap={childrenMap} tocHeadings={headings} />
+                  </div>
+                ) : (
+                  <p className="t-body2 text-fg-muted" style={{ opacity: 0.5 }}>
+                    Article content coming soon.
+                  </p>
+                )}
+              </m.div>
+
+            </div>
+          </div>
         </div>
 
-        {/* ── Divider ────────────────────────────────────────────── */}
-        <m.div
-          id="article-divider"
-          initial={{ scaleX: 0, opacity: 0 }}
-          animate={{ scaleX: 1, opacity: 1 }}
-          transition={{ delay: 0.5, duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
-          style={{
-            maxWidth: 800,
-            margin: '40px auto 0',
-            padding: '0 24px',
-            transformOrigin: 'left center',
-          }}
-        >
-          <div style={{ height: 1, background: 'var(--border-strong)', width: '100%' }} />
-        </m.div>
-
-        {/* ── Article body ───────────────────────────────────────── */}
-        <m.div
-          initial={{ opacity: 0, y: 16 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.35, duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
-          style={{
-            maxWidth: 800,
-            margin: '0 auto',
-            padding: '48px 24px 80px',
-          }}
-        >
-          {blocks.length > 0 ? (
-            <div className="flex flex-col gap-5">
-              <RenderBlocks blocks={blocks} childrenMap={childrenMap} tocHeadings={headings} />
-            </div>
-          ) : (
-            <p className="t-body2 text-fg-muted" style={{ opacity: 0.5 }}>
-              Article content coming soon.
-            </p>
-          )}
-        </m.div>
-
-        {/* ── More writing ───────────────────────────────────────── */}
+        {/* ── More writing ─────────────────────────────────────────── */}
         {otherArticles.length > 0 && (
           <div
             id="more-writing"
             style={{
               borderTop: '1px solid var(--border)',
-              padding: 'clamp(48px, 8vw, 80px) 24px',
+              padding: 'clamp(48px, 8vw, 80px) 32px',
             }}
           >
-            <div style={{ maxWidth: 800, margin: '0 auto' }}>
+            <div style={{ maxWidth: 1280, margin: '0 auto' }}>
               <m.div
                 variants={stagger}
                 initial="hidden"
@@ -263,7 +278,7 @@ export default function ArticleClient({ article, blocks, childrenMap, otherArtic
                 <div
                   style={{
                     display: 'grid',
-                    gridTemplateColumns: 'repeat(auto-fill, minmax(180px, 1fr))',
+                    gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))',
                     gap: 16,
                   }}
                 >

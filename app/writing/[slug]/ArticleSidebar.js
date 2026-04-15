@@ -1,7 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
-import { AnimatePresence, m } from 'framer-motion';
+import { useState } from 'react';
 
 const CORAL = 'var(--color-coral)';
 
@@ -23,22 +22,19 @@ function SidebarItem({ slug, text, level, isActive }) {
         textAlign: 'left',
         background: 'none',
         border: 'none',
-        padding: isL2
-          ? '4px 10px 4px 22px'
-          : '5px 10px 5px 12px',
+        padding: isL2 ? '4px 10px 4px 22px' : '5px 10px 5px 12px',
         marginBottom: isL2 ? 2 : 4,
         cursor: 'pointer',
         borderRadius: 6,
-        transition: 'background 0.25s ease',
-        // Warm coral pill when active
         backgroundColor: isActive
           ? 'color-mix(in srgb, var(--color-coral) 10%, transparent)'
           : hovered
           ? 'color-mix(in srgb, var(--color-coral) 5%, transparent)'
           : 'transparent',
+        transition: 'background-color 0.25s ease',
       }}
     >
-      {/* Active left mark — hairline coral */}
+      {/* Active hairline left mark */}
       <span
         aria-hidden="true"
         style={{
@@ -57,7 +53,10 @@ function SidebarItem({ slug, text, level, isActive }) {
 
       <span
         style={{
-          display: 'block',
+          display: '-webkit-box',
+          WebkitLineClamp: 2,
+          WebkitBoxOrient: 'vertical',
+          overflow: 'hidden',
           fontSize: isL2 ? 11 : 12,
           lineHeight: 1.45,
           fontWeight: isActive ? 500 : 400,
@@ -69,11 +68,6 @@ function SidebarItem({ slug, text, level, isActive }) {
             : 'var(--fg-muted)',
           opacity: isActive ? 1 : isL2 ? 0.45 : 0.55,
           transition: 'color 0.25s ease, opacity 0.25s ease',
-          // Slight right-truncation so long headings don't overflow
-          overflow: 'hidden',
-          display: '-webkit-box',
-          WebkitLineClamp: 2,
-          WebkitBoxOrient: 'vertical',
         }}
       >
         {text}
@@ -84,82 +78,36 @@ function SidebarItem({ slug, text, level, isActive }) {
 
 /* ── Sidebar ─────────────────────────────────────────────────────── */
 export default function ArticleSidebar({ headings, activeSlug }) {
-  const [visible, setVisible] = useState(false);
-
-  // Show after article-divider scrolls out of view
-  useEffect(() => {
-    const divider = document.getElementById('article-divider');
-    if (!divider) return;
-    const observer = new IntersectionObserver(
-      ([entry]) => setVisible(!entry.isIntersecting),
-      { rootMargin: '0px' }
-    );
-    observer.observe(divider);
-    return () => observer.disconnect();
-  }, []);
-
-  // Hide when "More writing" footer enters view
-  useEffect(() => {
-    const footer = document.getElementById('more-writing');
-    if (!footer) return;
-    const observer = new IntersectionObserver(
-      ([entry]) => { if (entry.isIntersecting) setVisible(false); }
-    );
-    observer.observe(footer);
-    return () => observer.disconnect();
-  }, []);
-
   if (!headings.length) return null;
 
   return (
-    <AnimatePresence>
-      {visible && (
-        <m.nav
-          key="article-sidebar"
-          initial={{ opacity: 0, x: -6 }}
-          animate={{ opacity: 1, x: 0 }}
-          exit={{ opacity: 0, x: -6 }}
-          transition={{ duration: 0.35, ease: [0.25, 0.46, 0.45, 0.94] }}
-          aria-label="Article sections"
-          className="hidden xl:block"
-          style={{
-            position: 'fixed',
-            left: 'calc(50vw - 400px - 196px)',
-            top: 160,
-            width: 176,
-            zIndex: 30,
-          }}
-        >
-          {/* Label */}
-          <p
-            style={{
-              fontSize: 10,
-              fontWeight: 500,
-              letterSpacing: '0.12em',
-              textTransform: 'uppercase',
-              color: 'var(--fg-muted)',
-              opacity: 0.35,
-              marginBottom: 10,
-              paddingLeft: 12,
-            }}
-          >
-            In this piece
-          </p>
+    <nav aria-label="Article sections">
+      <p
+        style={{
+          fontSize: 10,
+          fontWeight: 500,
+          letterSpacing: '0.12em',
+          textTransform: 'uppercase',
+          color: 'var(--fg-muted)',
+          opacity: 0.35,
+          marginBottom: 10,
+          paddingLeft: 12,
+        }}
+      >
+        In this piece
+      </p>
 
-          {/* Items */}
-          <div>
-            {headings.map(({ slug, text, level }) => (
-              <SidebarItem
-                key={slug}
-                slug={slug}
-                text={text}
-                level={level}
-                isActive={slug === activeSlug}
-              />
-            ))}
-          </div>
-        </m.nav>
-      )}
-    </AnimatePresence>
+      <div>
+        {headings.map(({ slug, text, level }) => (
+          <SidebarItem
+            key={slug}
+            slug={slug}
+            text={text}
+            level={level}
+            isActive={slug === activeSlug}
+          />
+        ))}
+      </div>
+    </nav>
   );
 }
