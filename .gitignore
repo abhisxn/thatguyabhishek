@@ -43,3 +43,9 @@ data/pages.json
 *.tsbuildinfo
 next-env.d.ts
 .worktrees/
+
+# graphify output
+graphify-out/
+
+# vexp index
+.vexp/
