@@ -40,6 +40,121 @@ function TotalCount({ total, loading }) {
   );
 }
 
+/* ── Reaction bar (pill strip) ────────────────────────────────── */
+
+function ReactionBar({ counts, userReaction, onReact, loading }) {
+  if (loading) {
+    return (
+      <div className="flex flex-wrap gap-2 mb-6">
+        {REACTIONS.map((r) => (
+          <div
+            key={r.key}
+            className="h-9 w-20 rounded-full"
+            style={{
+              background: 'var(--surface-2)',
+              animation: 'pulse 1.5s ease-in-out infinite',
+            }}
+          />
+        ))}
+      </div>
+    );
+  }
+
+  return (
+    <div className="flex flex-wrap gap-2 mb-6">
+      {REACTIONS.map((r) => {
+        const selected = userReaction === r.key;
+        return (
+          <m.button
+            key={r.key}
+            onClick={() => onReact(r.key)}
+            whileTap={{ scale: 1.12 }}
+            aria-label={`React with ${r.label}`}
+            aria-pressed={selected}
+            className="inline-flex items-center gap-1.5 t-caption font-medium rounded-full px-4 h-9"
+            style={{
+              border: `1px solid ${selected ? 'var(--brand)' : 'var(--border)'}`,
+              background: selected ? 'var(--brand-muted)' : 'var(--surface-1)',
+              color: selected ? 'var(--brand)' : 'var(--fg-muted)',
+              cursor: 'pointer',
+              transition: 'border-color 0.15s ease, background 0.15s ease, color 0.15s ease',
+            }}
+          >
+            <span>{r.emoji}</span>
+            {/* Label hidden below md breakpoint */}
+            <span className="hidden md:inline">{r.label}</span>
+            <span style={{ fontVariantNumeric: 'tabular-nums' }}>
+              {formatCount(counts[r.key] ?? 0)}
+            </span>
+          </m.button>
+        );
+      })}
+    </div>
+  );
+}
+
+/* ── Reaction cards (emoji grid) ─────────────────────────────── */
+
+function ReactionCards({ counts, userReaction, onReact, loading }) {
+  if (loading) {
+    return (
+      <div className="grid grid-cols-3 md:grid-cols-5 gap-3">
+        {REACTIONS.map((r) => (
+          <div
+            key={r.key}
+            className="h-[100px] rounded-[var(--radius-card)]"
+            style={{
+              background: 'var(--surface-2)',
+              animation: 'pulse 1.5s ease-in-out infinite',
+            }}
+          />
+        ))}
+      </div>
+    );
+  }
+
+  return (
+    <div className="grid grid-cols-3 md:grid-cols-5 gap-3">
+      {REACTIONS.map((r) => {
+        const selected = userReaction === r.key;
+        return (
+          <m.button
+            key={r.key}
+            onClick={() => onReact(r.key)}
+            whileTap={{ scale: 1.06 }}
+            aria-label={`React with ${r.label}`}
+            aria-pressed={selected}
+            className="flex flex-col items-center justify-center gap-2 py-5 rounded-[var(--radius-card)]"
+            style={{
+              border: `1px solid ${selected ? 'var(--brand)' : 'var(--border)'}`,
+              background: selected ? 'var(--brand-muted)' : 'var(--surface-1)',
+              cursor: 'pointer',
+              transition: 'border-color 0.15s ease, background 0.15s ease',
+            }}
+          >
+            <span className="text-4xl leading-none">{r.emoji}</span>
+            <span
+              className="t-caption"
+              style={{ color: selected ? 'var(--brand)' : 'var(--fg-muted)' }}
+            >
+              {r.label}
+            </span>
+            <span
+              className="t-caption font-semibold"
+              style={{
+                color: selected ? 'var(--brand)' : 'var(--fg)',
+                fontVariantNumeric: 'tabular-nums',
+              }}
+            >
+              {formatCount(counts[r.key] ?? 0)}
+            </span>
+          </m.button>
+        );
+      })}
+    </div>
+  );
+}
+
 /* ── Main component ───────────────────────────────────────────── */
 
 export default function ArticleReactions({ slug }) {
@@ -116,7 +231,22 @@ export default function ArticleReactions({ slug }) {
           <TotalCount total={total} loading={loading} />
         </m.div>
 
-        {/* ReactionBar and ReactionCards will be added in Tasks 6 and 7 */}
+        <m.div variants={fadeUp}>
+          <ReactionBar
+            counts={counts}
+            userReaction={userReaction}
+            onReact={handleReact}
+            loading={loading}
+          />
+        </m.div>
+        <m.div variants={fadeUp}>
+          <ReactionCards
+            counts={counts}
+            userReaction={userReaction}
+            onReact={handleReact}
+            loading={loading}
+          />
+        </m.div>
       </m.div>
     </LazyMotion>
   );
