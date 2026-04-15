@@ -3,10 +3,90 @@
 import { useState, useEffect } from 'react';
 import { AnimatePresence, m } from 'framer-motion';
 
+const CORAL = 'var(--color-coral)';
+
+/* ── Single sidebar item ─────────────────────────────────────────── */
+function SidebarItem({ slug, text, level, isActive }) {
+  const [hovered, setHovered] = useState(false);
+  const isL2 = level === 2;
+
+  return (
+    <button
+      aria-label={`Scroll to ${text}`}
+      onClick={() => document.getElementById(slug)?.scrollIntoView({ behavior: 'smooth' })}
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
+      style={{
+        position: 'relative',
+        display: 'block',
+        width: '100%',
+        textAlign: 'left',
+        background: 'none',
+        border: 'none',
+        padding: isL2
+          ? '4px 10px 4px 22px'
+          : '5px 10px 5px 12px',
+        marginBottom: isL2 ? 2 : 4,
+        cursor: 'pointer',
+        borderRadius: 6,
+        transition: 'background 0.25s ease',
+        // Warm coral pill when active
+        backgroundColor: isActive
+          ? 'color-mix(in srgb, var(--color-coral) 10%, transparent)'
+          : hovered
+          ? 'color-mix(in srgb, var(--color-coral) 5%, transparent)'
+          : 'transparent',
+      }}
+    >
+      {/* Active left mark — hairline coral */}
+      <span
+        aria-hidden="true"
+        style={{
+          position: 'absolute',
+          left: 0,
+          top: '50%',
+          transform: 'translateY(-50%)',
+          width: 2,
+          height: isActive ? '70%' : '0%',
+          background: CORAL,
+          borderRadius: 2,
+          opacity: isActive ? 1 : 0,
+          transition: 'height 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94), opacity 0.25s ease',
+        }}
+      />
+
+      <span
+        style={{
+          display: 'block',
+          fontSize: isL2 ? 11 : 12,
+          lineHeight: 1.45,
+          fontWeight: isActive ? 500 : 400,
+          letterSpacing: isL2 ? 0 : '0.005em',
+          color: isActive
+            ? CORAL
+            : hovered
+            ? 'color-mix(in srgb, var(--color-coral) 60%, var(--fg-muted))'
+            : 'var(--fg-muted)',
+          opacity: isActive ? 1 : isL2 ? 0.45 : 0.55,
+          transition: 'color 0.25s ease, opacity 0.25s ease',
+          // Slight right-truncation so long headings don't overflow
+          overflow: 'hidden',
+          display: '-webkit-box',
+          WebkitLineClamp: 2,
+          WebkitBoxOrient: 'vertical',
+        }}
+      >
+        {text}
+      </span>
+    </button>
+  );
+}
+
+/* ── Sidebar ─────────────────────────────────────────────────────── */
 export default function ArticleSidebar({ headings, activeSlug }) {
   const [visible, setVisible] = useState(false);
 
-  // Show after the article divider scrolls out of view
+  // Show after article-divider scrolls out of view
   useEffect(() => {
     const divider = document.getElementById('article-divider');
     if (!divider) return;
@@ -36,10 +116,10 @@ export default function ArticleSidebar({ headings, activeSlug }) {
       {visible && (
         <m.nav
           key="article-sidebar"
-          initial={{ opacity: 0, x: -8 }}
+          initial={{ opacity: 0, x: -6 }}
           animate={{ opacity: 1, x: 0 }}
-          exit={{ opacity: 0, x: -8 }}
-          transition={{ duration: 0.3, ease: [0.25, 0.46, 0.45, 0.94] }}
+          exit={{ opacity: 0, x: -6 }}
+          transition={{ duration: 0.35, ease: [0.25, 0.46, 0.45, 0.94] }}
           aria-label="Article sections"
           className="hidden xl:block"
           style={{
@@ -50,82 +130,33 @@ export default function ArticleSidebar({ headings, activeSlug }) {
             zIndex: 30,
           }}
         >
+          {/* Label */}
           <p
             style={{
               fontSize: 10,
-              letterSpacing: '0.1em',
+              fontWeight: 500,
+              letterSpacing: '0.12em',
               textTransform: 'uppercase',
               color: 'var(--fg-muted)',
-              opacity: 0.5,
-              marginBottom: 14,
+              opacity: 0.35,
+              marginBottom: 10,
+              paddingLeft: 12,
             }}
           >
-            On this page
+            In this piece
           </p>
 
-          <div style={{ position: 'relative', paddingLeft: 16 }}>
-            {/* Vertical track rail */}
-            <div
-              style={{
-                position: 'absolute',
-                left: 3,
-                top: 0,
-                bottom: 0,
-                width: 1,
-                background: 'var(--border)',
-              }}
-            />
-
-            {headings.map(({ slug, text, level }) => {
-              const isActive = slug === activeSlug;
-              const isL2 = level === 2;
-              return (
-                <button
-                  key={slug}
-                  aria-label={`Scroll to ${text}`}
-                  onClick={() =>
-                    document.getElementById(slug)?.scrollIntoView({ behavior: 'smooth' })
-                  }
-                  style={{
-                    position: 'relative',
-                    display: 'block',
-                    width: '100%',
-                    textAlign: 'left',
-                    background: 'none',
-                    border: 'none',
-                    padding: isL2 ? '0 0 8px 12px' : '0 0 12px',
-                    cursor: 'pointer',
-                  }}
-                >
-                  {/* Accent bar */}
-                  <div
-                    style={{
-                      position: 'absolute',
-                      left: isL2 ? -4 : -16,
-                      top: 4,
-                      width: isActive ? 3 : 2,
-                      height: isActive ? 14 : 10,
-                      background: isActive ? 'var(--brand)' : 'var(--border-strong)',
-                      borderRadius: 2,
-                      transition: 'all 0.2s ease',
-                    }}
-                  />
-                  <span
-                    style={{
-                      fontSize: isL2 ? 11 : 12,
-                      fontWeight: isActive ? 600 : 400,
-                      color: isActive ? 'var(--brand)' : 'var(--fg-muted)',
-                      opacity: isActive ? 1 : isL2 ? 0.3 : 0.4,
-                      lineHeight: 1.4,
-                      transition: 'color 0.2s ease, opacity 0.2s ease, font-weight 0.2s ease',
-                      display: 'block',
-                    }}
-                  >
-                    {text}
-                  </span>
-                </button>
-              );
-            })}
+          {/* Items */}
+          <div>
+            {headings.map(({ slug, text, level }) => (
+              <SidebarItem
+                key={slug}
+                slug={slug}
+                text={text}
+                level={level}
+                isActive={slug === activeSlug}
+              />
+            ))}
           </div>
         </m.nav>
       )}
