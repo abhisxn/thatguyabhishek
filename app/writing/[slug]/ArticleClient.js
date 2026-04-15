@@ -5,6 +5,7 @@ import { m, LazyMotion, domAnimation } from 'framer-motion';
 import { RenderBlocks } from '../../components/sections/NotionBlocks';
 import GradientBackground from '../../components/layout/GradientBackground';
 import { fadeUp, stagger, vp } from '@/lib/motion';
+import ArticleReactions from '@/app/components/sections/ArticleReactions';
 
 /* ── Estimated reading time ───────────────────────────────────────── */
 function estimateReadTime(blocks) {
@@ -196,6 +197,11 @@ export default function ArticleClient({ article, blocks, childrenMap, otherArtic
             </p>
           )}
         </m.div>
+
+        {/* ── Reactions ──────────────────────────────────────────── */}
+        <div style={{ borderTop: '1px solid var(--border)', maxWidth: 720, margin: '0 auto', padding: '0 24px' }}>
+          <ArticleReactions slug={article.slug} />
+        </div>
 
         {/* ── More writing ───────────────────────────────────────── */}
         {otherArticles.length > 0 && (
