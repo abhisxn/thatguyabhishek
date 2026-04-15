@@ -6,6 +6,8 @@ import { m, LazyMotion, domAnimation } from 'framer-motion';
 import { RenderBlocks } from '../../components/sections/NotionBlocks';
 import GradientBackground from '../../components/layout/GradientBackground';
 import { fadeUp, stagger, vp } from '@/lib/motion';
+import ArticleSidebar from './ArticleSidebar';
+import ArticleProgressBar from './ArticleProgressBar';
 
 /* ── Article TOC + scroll progress hook ──────────────────────────── */
 function useArticleToc(headings) {
@@ -117,6 +119,9 @@ export default function ArticleClient({ article, blocks, childrenMap, otherArtic
   return (
     <LazyMotion features={domAnimation}>
       <GradientBackground />
+
+      <ArticleSidebar headings={headings} activeSlug={activeSlug} />
+      <ArticleProgressBar headings={headings} activeSlug={activeSlug} progress={progress} />
 
       <div className="relative" style={{ zIndex: 1 }}>
 
