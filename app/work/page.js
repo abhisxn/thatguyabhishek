@@ -37,7 +37,7 @@ export default async function WorkPage() {
   return (
     <>
       <GradientBackground />
-      <main className="relative min-h-screen pt-16" style={{ color: 'var(--fg)', zIndex: 1 }}>
+      <main className="relative min-h-screen pt-16 z-[1]" style={{ color: 'var(--fg)' }}>
 
         {error ? (
           <div className="px-6 sm:px-10 lg:px-16 py-16 max-w-[1200px] mx-auto">
