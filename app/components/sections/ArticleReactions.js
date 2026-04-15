@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect, useCallback } from 'react';
-import { m, LazyMotion, domAnimation } from 'framer-motion';
+import { m, LazyMotion, domAnimation, useAnimation } from 'framer-motion';
 import { stagger, fadeUp, vp } from '@/lib/motion';
 import { REACTIONS } from '@/lib/reaction-types';
 
@@ -16,25 +16,43 @@ function emptyCountsObj() {
   return Object.fromEntries(REACTIONS.map((r) => [r.key, 0]));
 }
 
+/* ── Animated reaction button (spring pulse on click) ─────────── */
+
+function ReactionButton({ children, onClick, className, style, ariaLabel, ariaPressed }) {
+  const controls = useAnimation();
+
+  const handleClick = () => {
+    controls.start({
+      scale: [1, 1.12, 1],
+      transition: { type: 'spring', duration: 0.35, bounce: 0.5 },
+    });
+    onClick();
+  };
+
+  return (
+    <m.button
+      animate={controls}
+      onClick={handleClick}
+      aria-label={ariaLabel}
+      aria-pressed={ariaPressed}
+      className={className}
+      style={style}
+    >
+      {children}
+    </m.button>
+  );
+}
+
 /* ── Total count line ─────────────────────────────────────────── */
 
 function TotalCount({ total, loading }) {
   if (loading) {
     return (
-      <div
-        className="h-4 w-[120px] rounded-md mb-5"
-        style={{
-          background: 'var(--surface-2)',
-          animation: 'pulse 1.5s ease-in-out infinite',
-        }}
-      />
+      <div className="h-4 w-[120px] rounded-md mb-5 animate-pulse bg-[var(--surface-2)]" />
     );
   }
   return (
-    <p
-      className="t-caption text-fg-muted mb-5"
-      style={{ letterSpacing: '0.06em' }}
-    >
+    <p className="t-caption text-fg-muted mb-5" style={{ letterSpacing: '0.06em' }}>
       {total === 0 ? 'Be the first to react' : `${formatCount(total)} reactions`}
     </p>
   );
@@ -47,14 +65,7 @@ function ReactionBar({ counts, userReaction, onReact, loading }) {
     return (
       <div className="flex flex-wrap gap-2 mb-6">
         {REACTIONS.map((r) => (
-          <div
-            key={r.key}
-            className="h-9 w-20 rounded-full"
-            style={{
-              background: 'var(--surface-2)',
-              animation: 'pulse 1.5s ease-in-out infinite',
-            }}
-          />
+          <div key={r.key} className="h-9 w-20 rounded-full animate-pulse bg-[var(--surface-2)]" />
         ))}
       </div>
     );
@@ -65,28 +76,32 @@ function ReactionBar({ counts, userReaction, onReact, loading }) {
       {REACTIONS.map((r) => {
         const selected = userReaction === r.key;
         return (
-          <m.button
+          <ReactionButton
             key={r.key}
             onClick={() => onReact(r.key)}
-            whileTap={{ scale: 1.12 }}
-            aria-label={`React with ${r.label}`}
-            aria-pressed={selected}
-            className="inline-flex items-center gap-1.5 t-caption font-medium rounded-full px-4 h-9"
-            style={{
-              border: `1px solid ${selected ? 'var(--brand)' : 'var(--border)'}`,
-              background: selected ? 'var(--brand-muted)' : 'var(--surface-1)',
-              color: selected ? 'var(--brand)' : 'var(--fg-muted)',
-              cursor: 'pointer',
-              transition: 'border-color 0.15s ease, background 0.15s ease, color 0.15s ease',
-            }}
+            ariaLabel={`React with ${r.label}`}
+            ariaPressed={selected}
+            className={[
+              'inline-flex items-center gap-1.5 t-caption font-medium rounded-full px-4 h-9',
+              'border transition-colors duration-150 cursor-pointer',
+              selected
+                ? 'border-[var(--brand)] bg-[var(--brand-muted)] text-[var(--brand)]'
+                : 'border-[var(--border)] bg-[var(--surface-1)] text-[var(--fg-muted)]',
+            ].join(' ')}
           >
             <span>{r.emoji}</span>
             {/* Label hidden below md breakpoint */}
             <span className="hidden md:inline">{r.label}</span>
-            <span style={{ fontVariantNumeric: 'tabular-nums' }}>
+            <m.span
+              key={counts[r.key]}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.15 }}
+              style={{ fontVariantNumeric: 'tabular-nums' }}
+            >
               {formatCount(counts[r.key] ?? 0)}
-            </span>
-          </m.button>
+            </m.span>
+          </ReactionButton>
         );
       })}
     </div>
@@ -102,11 +117,7 @@ function ReactionCards({ counts, userReaction, onReact, loading }) {
         {REACTIONS.map((r) => (
           <div
             key={r.key}
-            className="h-[100px] rounded-[var(--radius-card)]"
-            style={{
-              background: 'var(--surface-2)',
-              animation: 'pulse 1.5s ease-in-out infinite',
-            }}
+            className="h-[100px] rounded-[var(--radius-card)] animate-pulse bg-[var(--surface-2)]"
           />
         ))}
       </div>
@@ -118,37 +129,34 @@ function ReactionCards({ counts, userReaction, onReact, loading }) {
       {REACTIONS.map((r) => {
         const selected = userReaction === r.key;
         return (
-          <m.button
+          <ReactionButton
             key={r.key}
             onClick={() => onReact(r.key)}
-            whileTap={{ scale: 1.06 }}
-            aria-label={`React with ${r.label}`}
-            aria-pressed={selected}
-            className="flex flex-col items-center justify-center gap-2 py-5 rounded-[var(--radius-card)]"
-            style={{
-              border: `1px solid ${selected ? 'var(--brand)' : 'var(--border)'}`,
-              background: selected ? 'var(--brand-muted)' : 'var(--surface-1)',
-              cursor: 'pointer',
-              transition: 'border-color 0.15s ease, background 0.15s ease',
-            }}
+            ariaLabel={`React with ${r.label}`}
+            ariaPressed={selected}
+            className={[
+              'flex flex-col items-center justify-center gap-2 py-5 rounded-[var(--radius-card)]',
+              'border transition-colors duration-150 cursor-pointer',
+              selected
+                ? 'border-[var(--brand)] bg-[var(--brand-muted)]'
+                : 'border-[var(--border)] bg-[var(--surface-1)]',
+            ].join(' ')}
           >
             <span className="text-4xl leading-none">{r.emoji}</span>
-            <span
-              className="t-caption"
-              style={{ color: selected ? 'var(--brand)' : 'var(--fg-muted)' }}
-            >
+            <span className={`t-caption ${selected ? 'text-[var(--brand)]' : 'text-fg-muted'}`}>
               {r.label}
             </span>
-            <span
-              className="t-caption font-semibold"
-              style={{
-                color: selected ? 'var(--brand)' : 'var(--fg)',
-                fontVariantNumeric: 'tabular-nums',
-              }}
+            <m.span
+              key={counts[r.key]}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.15 }}
+              className={`t-body3 font-semibold ${selected ? 'text-[var(--brand)]' : 'text-fg'}`}
+              style={{ fontVariantNumeric: 'tabular-nums' }}
             >
               {formatCount(counts[r.key] ?? 0)}
-            </span>
-          </m.button>
+            </m.span>
+          </ReactionButton>
         );
       })}
     </div>
@@ -239,6 +247,7 @@ export default function ArticleReactions({ slug }) {
             loading={loading}
           />
         </m.div>
+
         <m.div variants={fadeUp}>
           <ReactionCards
             counts={counts}
