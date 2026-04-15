@@ -60,8 +60,8 @@ function SidebarItem({ slug, text, isActive }) {
           color: isActive
             ? CORAL
             : hovered
-            ? 'color-mix(in srgb, var(--color-coral) 60%, var(--fg-muted))'
-            : 'var(--fg-muted)',
+            ? 'color-mix(in srgb, var(--color-coral) 60%, var(--fg))'
+            : 'var(--fg)',
           opacity: isActive ? 1 : 0.55,
           transition: 'color 0.25s ease, opacity 0.25s ease',
         }}
@@ -83,7 +83,7 @@ export default function ArticleSidebar({ headings, activeSlug }) {
           fontWeight: 500,
           letterSpacing: '0.12em',
           textTransform: 'uppercase',
-          color: 'var(--fg-muted)',
+          color: 'var(--fg)',
           opacity: 0.35,
           marginBottom: 10,
           paddingLeft: 12,
