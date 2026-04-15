@@ -6,10 +6,15 @@ const VALID_KEYS = new Set(REACTIONS.map((r) => r.key));
 
 export async function GET(request) {
   const { searchParams } = new URL(request.url);
-  const slug = searchParams.get('slug');
+  const rawSlug = searchParams.get('slug');
+  const slug = rawSlug?.trim() ?? '';
 
-  if (!slug || typeof slug !== 'string' || slug.trim() === '') {
+  if (!slug) {
     return NextResponse.json({ error: 'Missing slug' }, { status: 400 });
+  }
+
+  if (!/^[a-z0-9-]+$/.test(slug)) {
+    return NextResponse.json({ error: 'Invalid slug' }, { status: 400 });
   }
 
   const cookieStore = await cookies();
