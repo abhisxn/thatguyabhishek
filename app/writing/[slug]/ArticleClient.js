@@ -220,9 +220,9 @@ export default function ArticleClient({ article, blocks, childrenMap, otherArtic
               {/* ── Reactions — end of article card grid ──────────── */}
               <div ref={cardsRef} style={{ borderTop: '1px solid var(--border)', padding: '48px 0' }}>
                 <m.div variants={stagger} initial="hidden" whileInView="visible" viewport={vp}>
-                  <m.h2 variants={fadeUp} className="t-h2 text-fg" style={{ marginBottom: 8 }}>
+                  <m.h3 variants={fadeUp} className="t-h3 text-fg" style={{ marginBottom: 8 }}>
                     How do you feel about this article?
-                  </m.h2>
+                  </m.h3>
                   <m.div variants={fadeUp}>
                     <TotalCount total={total} loading={loading} />
                   </m.div>
@@ -245,12 +245,10 @@ export default function ArticleClient({ article, blocks, childrenMap, otherArtic
         {otherArticles.length > 0 && (
           <div
             id="more-writing"
-            style={{
-              borderTop: '1px solid var(--border)',
-              padding: 'clamp(48px, 8vw, 80px) 32px',
-            }}
+            className="border-t border-[var(--border)]"
+            style={{ padding: 'clamp(48px, 8vw, 80px) 0' }}
           >
-            <div style={{ maxWidth: 1280, margin: '0 auto' }}>
+            <div className="max-w-[1200px] mx-auto px-6 sm:px-10 lg:px-16">
               <m.div
                 variants={stagger}
                 initial="hidden"
