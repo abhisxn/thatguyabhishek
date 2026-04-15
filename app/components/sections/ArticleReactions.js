@@ -22,12 +22,9 @@ function TotalCount({ total, loading }) {
   if (loading) {
     return (
       <div
+        className="h-4 w-[120px] rounded-md mb-5"
         style={{
-          height: 16,
-          width: 120,
-          borderRadius: 8,
           background: 'var(--surface-2)',
-          marginBottom: 20,
           animation: 'pulse 1.5s ease-in-out infinite',
         }}
       />
@@ -35,8 +32,8 @@ function TotalCount({ total, loading }) {
   }
   return (
     <p
-      className="t-caption text-fg-muted"
-      style={{ marginBottom: 20, letterSpacing: '0.06em' }}
+      className="t-caption text-fg-muted mb-5"
+      style={{ letterSpacing: '0.06em' }}
     >
       {total === 0 ? 'Be the first to react' : `${formatCount(total)} reactions`}
     </p>
@@ -51,6 +48,7 @@ export default function ArticleReactions({ slug }) {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    if (!slug) return;
     fetch(`/api/reactions?slug=${encodeURIComponent(slug)}`)
       .then((r) => r.json())
       .then((data) => {
@@ -112,7 +110,7 @@ export default function ArticleReactions({ slug }) {
         initial="hidden"
         whileInView="visible"
         viewport={vp}
-        style={{ padding: '48px 0' }}
+        className="py-12"
       >
         <m.div variants={fadeUp}>
           <TotalCount total={total} loading={loading} />
