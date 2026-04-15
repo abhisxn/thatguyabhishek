@@ -26,13 +26,13 @@ export default function CareerTimeline() {
                 <m.span
                   className="ct-period-pill"
                   animate={{
-                    background: isActive ? 'rgba(255,255,255,0.95)' : 'rgba(255,255,255,0.04)',
-                    color: isActive ? 'var(--color-dark-blue)' : 'rgba(255,255,255,0.55)',
-                    borderColor: isActive ? 'rgba(255,255,255,0)' : 'rgba(255,255,255,0.18)',
+                    background: isActive ? 'var(--surface-inverse)' : 'var(--surface-0)',
+                    color: isActive ? 'var(--color-dark-blue)' : 'var(--fg-muted)',
+                    borderColor: isActive ? 'transparent' : 'var(--border)',
                   }}
                   whileHover={{
-                    background: isActive ? 'rgba(255,255,255,1)' : 'rgba(255,255,255,0.13)',
-                    borderColor: isActive ? 'rgba(255,255,255,0)' : 'rgba(255,255,255,0.32)',
+                    background: isActive ? 'var(--surface-inverse)' : 'var(--surface-1)',
+                    borderColor: isActive ? 'transparent' : 'var(--border-strong)',
                     scale: 1.05,
                   }}
                   transition={{ duration: 0.15 }}
@@ -41,10 +41,10 @@ export default function CareerTimeline() {
                 </m.span>
                 <span
                   className="t-body1 ct-role-text"
-                  style={{ color: isActive ? 'rgba(255,255,255,1)' : 'rgba(255,255,255,0.7)' }}
+                  style={{ color: isActive ? 'var(--fg)' : 'var(--fg-muted)' }}
                 >
                   <span className="font-semibold">{item.role}</span>
-                  <span className="font-normal" style={{ color: isActive ? 'rgba(255,255,255,0.45)' : 'rgba(255,255,255,0.4)' }}>
+                  <span className="font-normal" style={{ color: 'var(--fg-disabled)' }}>
                     {' '}@ {item.org}
                   </span>
                 </span>
