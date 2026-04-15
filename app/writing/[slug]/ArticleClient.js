@@ -133,10 +133,7 @@ export default function ArticleClient({ article, blocks, childrenMap, otherArtic
                 <m.div variants={fadeUp}>
                   <Link
                     href="/about"
-                    className="inline-flex items-center gap-2 t-caption text-fg-muted no-underline mb-10"
-                    style={{ transition: 'color 0.2s ease' }}
-                    onMouseEnter={(e) => { e.currentTarget.style.color = 'var(--fg)'; }}
-                    onMouseLeave={(e) => { e.currentTarget.style.color = ''; }}
+                    className="inline-flex items-center gap-2 t-caption text-fg-muted hover:text-fg no-underline mb-10 transition-colors duration-200"
                   >
                     <BackArrow />
                     Back to writing

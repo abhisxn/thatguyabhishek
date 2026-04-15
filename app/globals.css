@@ -39,6 +39,7 @@
   /* ── Accent ── */
   --color-brand:        #4839ca;
   --color-coral:        #ea8575;
+  --color-coral-muted:  rgba(234, 133, 117, 0.14);
 
   /* ── Neutrals ── */
   --color-navy:         #19223d;
@@ -251,14 +252,6 @@ body {
   font-family: var(--font-glory-var, 'Glory', sans-serif);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-}
-
-/* ─── Focus visible — WCAG 2.2 ──────────────────────────────── */
-/* Provides a visible focus ring on all interactive elements for keyboard
-   navigation. Meets WCAG 2.2 SC 2.4.11 (≥3:1 contrast, non-offset). */
-:focus-visible {
-  outline: 2px solid var(--brand);
-  outline-offset: 2px;
 }
 
 /* ─── Reduced motion ─────────────────────────────────────────── */
