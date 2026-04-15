@@ -5,8 +5,26 @@ import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import { getWritingArticles, getArticleBySlug, getArticleBlocks } from '../../../lib/notion-work';
 import ArticleClient from './ArticleClient';
+import { slugify } from '@/lib/slugify';
 
 const BASE_URL = 'https://thatguyabhishek.com';
+
+function extractHeadings(blocks) {
+  const seen = {};
+  return blocks
+    .filter((b) => b.type === 'heading_1')
+    .map((b) => {
+      const text = b.heading_1.rich_text.map((t) => t.plain_text).join('');
+      let slug = slugify(text);
+      if (seen[slug] !== undefined) {
+        seen[slug] += 1;
+        slug = `${slug}-${seen[slug]}`;
+      } else {
+        seen[slug] = 0;
+      }
+      return { id: b.id, text, slug };
+    });
+}
 
 export async function generateStaticParams() {
   try {
@@ -67,6 +85,7 @@ export default async function ArticlePage({ params }) {
   }
 
   const otherArticles = allArticles.filter((a) => a.slug !== slug).slice(0, 3);
+  const headings = extractHeadings(blocksData.blocks);
 
   return (
     <ArticleClient
@@ -74,6 +93,7 @@ export default async function ArticlePage({ params }) {
       blocks={blocksData.blocks}
       childrenMap={blocksData.childrenMap}
       otherArticles={otherArticles}
+      headings={headings}
     />
   );
 }
