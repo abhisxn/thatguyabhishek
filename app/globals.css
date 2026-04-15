@@ -111,6 +111,7 @@
   --fg:               #ffffff;
   --fg-muted:         rgba(255, 255, 255, 0.70);
   --fg-disabled:      rgba(255, 255, 255, 0.30);
+  --fg-on-inverse:    var(--color-dark-blue);  /* text on --surface-inverse (white pill) */
 
   /* Background */
   --bg:               transparent;          /* gradient blob canvas */
@@ -177,6 +178,7 @@
   --fg:               #313138;
   --fg-muted:         rgba(49, 49, 56, 0.70);
   --fg-disabled:      rgba(49, 49, 56, 0.30);
+  --fg-on-inverse:    var(--color-dark-blue);  /* text on --surface-inverse (white pill) */
 
   /* Background */
   --bg:               #f5f4f0;

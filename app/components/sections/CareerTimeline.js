@@ -27,7 +27,7 @@ export default function CareerTimeline() {
                   className="ct-period-pill"
                   animate={{
                     background: isActive ? 'var(--surface-inverse)' : 'var(--surface-0)',
-                    color: isActive ? 'var(--color-dark-blue)' : 'var(--fg-muted)',
+                    color: isActive ? 'var(--fg-on-inverse)' : 'var(--fg-muted)',
                     borderColor: isActive ? 'transparent' : 'var(--border)',
                   }}
                   whileHover={{
