@@ -1,8 +1,8 @@
-import RichText from '../ui/RichText';
-import { ProjectsCarousel } from './ProjectCard';
+import RichText from './RichText';
+import { ProjectsCarousel } from '../sections/ProjectCard';
 import CalloutBlock, { getImageUrl } from './CalloutBlock';
 import { getCalloutType } from '../ui/card-utils';
-import EmbedBlock, { BookmarkCard } from '../ui/EmbedBlock';
+import EmbedBlock, { BookmarkCard } from './EmbedBlock';
 import EMBED_OVERRIDES from '@/data/embedOverrides';
 import Button from '../ui/Button';
 import { slugify } from '@/lib/slugify';

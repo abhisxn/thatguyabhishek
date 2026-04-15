@@ -7,7 +7,7 @@ import AboutSection from './components/sections/AboutSection';
 import JourneySoFar from './components/sections/JourneySoFar';
 import HelpSection from './components/sections/HelpSection';
 import FadeSection from './components/ui/FadeSection';
-import CalloutBlock from './components/sections/CalloutBlock';
+import CalloutBlock from './components/blocks/CalloutBlock';
 import MoreWorkCard from './components/sections/MoreWorkCard';
 import { getHomePageData } from '@/lib/notion-work';
 import { getCalloutType } from './components/ui/card-utils';

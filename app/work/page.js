@@ -3,9 +3,9 @@ export const revalidate = 3600;
 
 import GradientBackground from '@/app/components/layout/GradientBackground';
 import FadeSection from '@/app/components/ui/FadeSection';
-import CalloutBlock from '@/app/components/sections/CalloutBlock';
+import CalloutBlock from '@/app/components/blocks/CalloutBlock';
 import { getWorkPageData } from '@/lib/notion-work';
-import { RenderBlocks } from '@/app/components/sections/NotionBlocks';
+import { RenderBlocks } from '@/app/components/blocks/NotionBlocks';
 import ProjectsExpandableGrid from '@/app/components/sections/ProjectsExpandableGrid';
 import { getCalloutType } from '@/app/components/ui/card-utils';
 import projectsJson from '@/data/projects.json';

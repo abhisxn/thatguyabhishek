@@ -1,5 +1,5 @@
-import { RenderBlocks } from './NotionBlocks';
-import RichText from '../ui/RichText';
+import { RenderBlocks } from '../blocks/NotionBlocks';
+import RichText from '../blocks/RichText';
 import { SECTION_STYLES, styleIndexFromColor } from '@/lib/section-styles';
 import FadeSection from '../ui/FadeSection';
 

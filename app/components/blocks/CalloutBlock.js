@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import RichText from '../ui/RichText';
+import RichText from './RichText';
 import { getCalloutType, calloutColorToBg, styleForNotion, CALLOUT_BG } from '../ui/card-utils';
 import Card from '../ui/Card';
 import LinkCalloutCard from '../ui/LinkCalloutCard';

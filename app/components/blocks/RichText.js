@@ -3,7 +3,7 @@
  * underline, color annotations, and inline links.
  *
  * Usage:
- *   import RichText from '@/app/components/ui/RichText';
+ *   import RichText from '@/app/components/blocks/RichText';
  *   <RichText texts={block.paragraph.rich_text} />
  */
 
