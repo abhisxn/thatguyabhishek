@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect, useCallback } from 'react';
-import { m, LazyMotion, domAnimation, useAnimation } from 'framer-motion';
+import { m, LazyMotion, domAnimation } from 'framer-motion';
 import { stagger, fadeUp, vp } from '@/lib/motion';
 import { REACTIONS } from '@/lib/reaction-types';
 
@@ -16,33 +16,6 @@ function emptyCountsObj() {
   return Object.fromEntries(REACTIONS.map((r) => [r.key, 0]));
 }
 
-/* ── Animated reaction button (spring pulse on click) ─────────── */
-
-function ReactionButton({ children, onClick, className, style, ariaLabel, ariaPressed }) {
-  const controls = useAnimation();
-
-  const handleClick = () => {
-    controls.start({
-      scale: [1, 1.12, 1],
-      transition: { type: 'spring', duration: 0.35, bounce: 0.5 },
-    });
-    onClick();
-  };
-
-  return (
-    <m.button
-      animate={controls}
-      onClick={handleClick}
-      aria-label={ariaLabel}
-      aria-pressed={ariaPressed}
-      className={className}
-      style={style}
-    >
-      {children}
-    </m.button>
-  );
-}
-
 /* ── Total count line ─────────────────────────────────────────── */
 
 function TotalCount({ total, loading }) {
@@ -52,7 +25,7 @@ function TotalCount({ total, loading }) {
     );
   }
   return (
-    <p className="t-caption text-fg-muted mb-5" style={{ letterSpacing: '0.06em' }}>
+    <p className="t-caption text-fg-muted mb-5 tracking-[0.06em]">
       {total === 0 ? 'Be the first to react' : `${formatCount(total)} reactions`}
     </p>
   );
@@ -76,13 +49,15 @@ function ReactionBar({ counts, userReaction, onReact, loading }) {
       {REACTIONS.map((r) => {
         const selected = userReaction === r.key;
         return (
-          <ReactionButton
+          <m.button
             key={r.key}
             onClick={() => onReact(r.key)}
-            ariaLabel={`React with ${r.label}`}
-            ariaPressed={selected}
+            whileTap={{ scale: 1.12 }}
+            transition={{ type: 'spring', stiffness: 400, damping: 12 }}
+            aria-label={`React with ${r.label}`}
+            aria-pressed={selected}
             className={[
-              'inline-flex items-center gap-1.5 t-caption font-medium rounded-full px-4 h-9',
+              'inline-flex items-center gap-2 t-caption font-medium rounded-full px-4 h-9',
               'border transition-colors duration-150 cursor-pointer',
               selected
                 ? 'border-[var(--brand)] bg-[var(--brand-muted)] text-[var(--brand)]'
@@ -101,7 +76,7 @@ function ReactionBar({ counts, userReaction, onReact, loading }) {
             >
               {formatCount(counts[r.key] ?? 0)}
             </m.span>
-          </ReactionButton>
+          </m.button>
         );
       })}
     </div>
@@ -117,7 +92,7 @@ function ReactionCards({ counts, userReaction, onReact, loading }) {
         {REACTIONS.map((r) => (
           <div
             key={r.key}
-            className="h-[100px] rounded-[var(--radius-card)] animate-pulse bg-[var(--surface-2)]"
+            className="h-24 rounded-[var(--radius-card)] animate-pulse bg-[var(--surface-2)]"
           />
         ))}
       </div>
@@ -129,11 +104,13 @@ function ReactionCards({ counts, userReaction, onReact, loading }) {
       {REACTIONS.map((r) => {
         const selected = userReaction === r.key;
         return (
-          <ReactionButton
+          <m.button
             key={r.key}
             onClick={() => onReact(r.key)}
-            ariaLabel={`React with ${r.label}`}
-            ariaPressed={selected}
+            whileTap={{ scale: 1.12 }}
+            transition={{ type: 'spring', stiffness: 400, damping: 12 }}
+            aria-label={`React with ${r.label}`}
+            aria-pressed={selected}
             className={[
               'flex flex-col items-center justify-center gap-2 py-5 rounded-[var(--radius-card)]',
               'border transition-colors duration-150 cursor-pointer',
@@ -156,7 +133,7 @@ function ReactionCards({ counts, userReaction, onReact, loading }) {
             >
               {formatCount(counts[r.key] ?? 0)}
             </m.span>
-          </ReactionButton>
+          </m.button>
         );
       })}
     </div>
@@ -173,7 +150,10 @@ export default function ArticleReactions({ slug }) {
   useEffect(() => {
     if (!slug) return;
     fetch(`/api/reactions?slug=${encodeURIComponent(slug)}`)
-      .then((r) => r.json())
+      .then((r) => {
+        if (!r.ok) throw new Error('fetch error');
+        return r.json();
+      })
       .then((data) => {
         setCounts(data.counts ?? emptyCountsObj());
         setUserReaction(data.userReaction ?? null);
@@ -199,19 +179,23 @@ export default function ArticleReactions({ slug }) {
       });
       setUserReaction(next);
 
-      // Persist to server
+      // Persist to server — revert optimistic update on failure
       fetch('/api/reactions', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ slug, reaction: next }),
       })
-        .then((r) => r.json())
+        .then((r) => {
+          if (!r.ok) throw new Error('server error');
+          return r.json();
+        })
         .then((data) => {
           setCounts(data.counts ?? emptyCountsObj());
           setUserReaction(data.userReaction ?? null);
         })
         .catch(() => {
-          // Revert optimistic update
+          // Revert optimistic update (note: if user clicks again while this
+          // request is in-flight, the revert will race with the newer state)
           setCounts((c) => {
             const reverted = { ...c };
             if (next) reverted[next] = Math.max(0, (reverted[next] ?? 0) - 1);
