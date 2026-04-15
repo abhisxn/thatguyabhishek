@@ -1,10 +1,47 @@
 'use client';
 
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { m, LazyMotion, domAnimation } from 'framer-motion';
 import { RenderBlocks } from '../../components/sections/NotionBlocks';
 import GradientBackground from '../../components/layout/GradientBackground';
 import { fadeUp, stagger, vp } from '@/lib/motion';
+
+/* ── Article TOC + scroll progress hook ──────────────────────────── */
+function useArticleToc(headings) {
+  const [activeSlug, setActiveSlug] = useState(headings[0]?.slug ?? null);
+  const [progress, setProgress] = useState(0);
+
+  useEffect(() => {
+    const onScroll = () => {
+      const scrollable = document.documentElement.scrollHeight - window.innerHeight;
+      setProgress(scrollable > 0 ? Math.min(100, Math.round((window.scrollY / scrollable) * 100)) : 0);
+    };
+    window.addEventListener('scroll', onScroll, { passive: true });
+    onScroll();
+    return () => window.removeEventListener('scroll', onScroll);
+  }, []);
+
+  useEffect(() => {
+    if (!headings.length) return;
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const visible = entries
+          .filter((e) => e.isIntersecting)
+          .sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top)[0];
+        if (visible) setActiveSlug(visible.target.id);
+      },
+      { rootMargin: '0px 0px -65% 0px' }
+    );
+    headings.forEach(({ slug }) => {
+      const el = document.getElementById(slug);
+      if (el) observer.observe(el);
+    });
+    return () => observer.disconnect();
+  }, [headings]);
+
+  return { activeSlug, progress };
+}
 
 /* ── Estimated reading time ───────────────────────────────────────── */
 function estimateReadTime(blocks) {
@@ -72,8 +109,9 @@ function MiniArticleCard({ article }) {
 }
 
 /* ── Main component ───────────────────────────────────────────────── */
-export default function ArticleClient({ article, blocks, childrenMap, otherArticles }) {
+export default function ArticleClient({ article, blocks, childrenMap, otherArticles, headings = [] }) {
   const readTime = estimateReadTime(blocks);
+  const { activeSlug, progress } = useArticleToc(headings);
   const hasTopic = article.topic?.length > 0;
 
   return (
@@ -162,6 +200,7 @@ export default function ArticleClient({ article, blocks, childrenMap, otherArtic
 
         {/* ── Divider ────────────────────────────────────────────── */}
         <m.div
+          id="article-divider"
           initial={{ scaleX: 0, opacity: 0 }}
           animate={{ scaleX: 1, opacity: 1 }}
           transition={{ delay: 0.5, duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
@@ -200,6 +239,7 @@ export default function ArticleClient({ article, blocks, childrenMap, otherArtic
         {/* ── More writing ───────────────────────────────────────── */}
         {otherArticles.length > 0 && (
           <div
+            id="more-writing"
             style={{
               borderTop: '1px solid var(--border)',
               padding: 'clamp(48px, 8vw, 80px) 24px',
