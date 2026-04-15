@@ -43,7 +43,7 @@ export default function ArticleProgressBar({ headings, activeSlug, progress }) {
             left: 0,
             right: 0,
             zIndex: 40,
-            background: 'rgba(10,10,15,0.85)',
+            background: 'color-mix(in srgb, var(--bg-solid) 85%, transparent)',
             backdropFilter: 'blur(12px)',
             WebkitBackdropFilter: 'blur(12px)',
             borderBottom: '1px solid var(--border)',
@@ -85,7 +85,7 @@ export default function ArticleProgressBar({ headings, activeSlug, progress }) {
               style={{
                 height: '100%',
                 width: `${progress}%`,
-                background: 'linear-gradient(90deg, #6366f1, #818cf8)',
+                background: 'var(--brand-gradient)',
                 transition: 'width 0.15s linear',
               }}
             />

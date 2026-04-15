@@ -52,7 +52,7 @@ function toEmbedUrl(url) {
 }
 
 
-export function NotionBlock({ block, projects, childrenMap, skipDatabase, skipDivider, compact }) {
+export function NotionBlock({ block, projects, childrenMap, skipDatabase, skipDivider, compact, tocHeadings }) {
   switch (block.type) {
 
     /* ─── Paragraph ─── */
@@ -72,7 +72,8 @@ export function NotionBlock({ block, projects, childrenMap, skipDatabase, skipDi
      * ─── */
     case 'heading_1': {
       const h1texts = block.heading_1?.rich_text ?? [];
-      const h1slug = slugify(h1texts.map((t) => t.plain_text).join(''));
+      const tocEntry = tocHeadings?.find((h) => h.id === block.id);
+      const h1slug = tocEntry?.slug ?? slugify(h1texts.map((t) => t.plain_text).join(''));
       return (
         <h2
           id={h1slug}
@@ -391,7 +392,7 @@ export function NotionBlock({ block, projects, childrenMap, skipDatabase, skipDi
   }
 }
 
-export function RenderBlocks({ blocks, projects, childrenMap, skipDatabase, skipDivider, compact, outerClassName = '', cardCols = 'sm:grid-cols-2', gap = 'gap-6' }) {
+export function RenderBlocks({ blocks, projects, childrenMap, skipDatabase, skipDivider, compact, outerClassName = '', cardCols = 'sm:grid-cols-2', gap = 'gap-6', tocHeadings }) {
   const grouped = [];
   let i = 0;
   while (i < blocks.length) {
@@ -453,6 +454,7 @@ export function RenderBlocks({ blocks, projects, childrenMap, skipDatabase, skip
             skipDatabase={skipDatabase}
             skipDivider={skipDivider}
             compact={compact}
+            tocHeadings={tocHeadings}
           />
         );
       })}

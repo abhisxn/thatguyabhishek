@@ -81,6 +81,7 @@ export default function ArticleSidebar({ headings, activeSlug }) {
               return (
                 <button
                   key={slug}
+                  aria-label={`Scroll to ${text}`}
                   onClick={() =>
                     document.getElementById(slug)?.scrollIntoView({ behavior: 'smooth' })
                   }

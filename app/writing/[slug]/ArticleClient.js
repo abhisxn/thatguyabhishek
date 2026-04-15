@@ -232,7 +232,7 @@ export default function ArticleClient({ article, blocks, childrenMap, otherArtic
         >
           {blocks.length > 0 ? (
             <div className="flex flex-col gap-5">
-              <RenderBlocks blocks={blocks} childrenMap={childrenMap} />
+              <RenderBlocks blocks={blocks} childrenMap={childrenMap} tocHeadings={headings} />
             </div>
           ) : (
             <p className="t-body2 text-fg-muted" style={{ opacity: 0.5 }}>
