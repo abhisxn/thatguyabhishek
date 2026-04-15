@@ -7,22 +7,20 @@ import { REACTIONS } from '@/lib/reaction-types';
 
 /* ── Helpers ──────────────────────────────────────────────────── */
 
-function formatCount(n) {
+export function formatCount(n) {
   if (typeof n !== 'number') return '0';
   return n.toLocaleString();
 }
 
-function emptyCountsObj() {
+export function emptyCountsObj() {
   return Object.fromEntries(REACTIONS.map((r) => [r.key, 0]));
 }
 
 /* ── Total count line ─────────────────────────────────────────── */
 
-function TotalCount({ total, loading }) {
+export function TotalCount({ total, loading }) {
   if (loading) {
-    return (
-      <div className="h-4 w-[120px] rounded-md mb-5 animate-pulse bg-[var(--surface-2)]" />
-    );
+    return <div className="h-4 w-[120px] rounded-md mb-5 animate-pulse bg-[var(--surface-2)]" />;
   }
   return (
     <p className="t-caption text-fg-muted mb-5 tracking-[0.06em]">
@@ -31,12 +29,12 @@ function TotalCount({ total, loading }) {
   );
 }
 
-/* ── Reaction bar (pill strip) ────────────────────────────────── */
+/* ── Shared pill buttons ──────────────────────────────────────── */
 
-function ReactionBar({ counts, userReaction, onReact, loading }) {
+export function ArticleReactionPills({ counts, userReaction, onReact, loading, inverse = false }) {
   if (loading) {
     return (
-      <div className="flex flex-wrap gap-2 mb-6">
+      <div className="flex flex-wrap gap-2">
         {REACTIONS.map((r) => (
           <div key={r.key} className="h-9 w-20 rounded-full animate-pulse bg-[var(--surface-2)]" />
         ))}
@@ -45,7 +43,7 @@ function ReactionBar({ counts, userReaction, onReact, loading }) {
   }
 
   return (
-    <div className="flex flex-wrap gap-2 mb-6">
+    <div className="flex flex-wrap gap-2">
       {REACTIONS.map((r) => {
         const selected = userReaction === r.key;
         return (
@@ -60,12 +58,13 @@ function ReactionBar({ counts, userReaction, onReact, loading }) {
               'inline-flex items-center gap-2 t-caption font-medium rounded-full px-4 h-9',
               'border transition-colors duration-150 cursor-pointer',
               selected
-                ? 'border-[var(--brand)] bg-[var(--brand-muted)] text-[var(--brand)]'
-                : 'border-[var(--border)] bg-[var(--surface-1)] text-[var(--fg-muted)]',
+                ? 'border-[var(--color-coral)] bg-[var(--color-coral-muted)] text-[var(--color-coral)]'
+                : inverse
+                  ? 'border-[var(--bg-solid)]/20 bg-[var(--bg-solid)]/10 text-[var(--bg-solid)]'
+                  : 'border-[var(--border)] bg-[var(--surface-1)] text-[var(--fg-muted)]',
             ].join(' ')}
           >
             <span>{r.emoji}</span>
-            {/* Label hidden below md breakpoint */}
             <span className="hidden md:inline">{r.label}</span>
             <m.span
               key={counts[r.key]}
@@ -85,7 +84,7 @@ function ReactionBar({ counts, userReaction, onReact, loading }) {
 
 /* ── Reaction cards (emoji grid) ─────────────────────────────── */
 
-function ReactionCards({ counts, userReaction, onReact, loading }) {
+export function ArticleReactionCards({ counts, userReaction, onReact, loading }) {
   if (loading) {
     return (
       <div className="grid grid-cols-3 md:grid-cols-5 gap-3">
@@ -115,12 +114,12 @@ function ReactionCards({ counts, userReaction, onReact, loading }) {
               'flex flex-col items-center justify-center gap-2 py-5 rounded-[var(--radius-card)]',
               'border transition-colors duration-150 cursor-pointer',
               selected
-                ? 'border-[var(--brand)] bg-[var(--brand-muted)]'
+                ? 'border-[var(--color-coral)] bg-[var(--color-coral-muted)]'
                 : 'border-[var(--border)] bg-[var(--surface-1)]',
             ].join(' ')}
           >
             <span className="text-4xl leading-none">{r.emoji}</span>
-            <span className={`t-caption ${selected ? 'text-[var(--brand)]' : 'text-fg-muted'}`}>
+            <span className={`t-caption ${selected ? 'text-[var(--color-coral)]' : 'text-fg-muted'}`}>
               {r.label}
             </span>
             <m.span
@@ -128,7 +127,7 @@ function ReactionCards({ counts, userReaction, onReact, loading }) {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ duration: 0.15 }}
-              className={`t-body3 font-semibold ${selected ? 'text-[var(--brand)]' : 'text-fg'}`}
+              className={`t-body3 font-semibold ${selected ? 'text-[var(--color-coral)]' : 'text-fg'}`}
               style={{ fontVariantNumeric: 'tabular-nums' }}
             >
               {formatCount(counts[r.key] ?? 0)}
@@ -140,9 +139,9 @@ function ReactionCards({ counts, userReaction, onReact, loading }) {
   );
 }
 
-/* ── Main component ───────────────────────────────────────────── */
+/* ── Reactions state hook — shared by article page ────────────── */
 
-export default function ArticleReactions({ slug }) {
+export function useReactions(slug) {
   const [counts, setCounts] = useState(emptyCountsObj());
   const [userReaction, setUserReaction] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -170,7 +169,6 @@ export default function ArticleReactions({ slug }) {
       const prev = userReaction;
       const next = prev === type ? null : type;
 
-      // Optimistic update
       setCounts((c) => {
         const updated = { ...c };
         if (prev) updated[prev] = Math.max(0, (updated[prev] ?? 0) - 1);
@@ -179,7 +177,6 @@ export default function ArticleReactions({ slug }) {
       });
       setUserReaction(next);
 
-      // Persist to server — revert optimistic update on failure
       fetch('/api/reactions', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -194,8 +191,6 @@ export default function ArticleReactions({ slug }) {
           setUserReaction(data.userReaction ?? null);
         })
         .catch(() => {
-          // Revert optimistic update (note: if user clicks again while this
-          // request is in-flight, the revert will race with the newer state)
           setCounts((c) => {
             const reverted = { ...c };
             if (next) reverted[next] = Math.max(0, (reverted[next] ?? 0) - 1);
@@ -209,6 +204,13 @@ export default function ArticleReactions({ slug }) {
   );
 
   const total = Object.values(counts).reduce((a, b) => a + b, 0);
+  return { counts, userReaction, loading, handleReact, total };
+}
+
+/* ── Default export — self-contained, used by style guide ─────── */
+
+export default function ArticleReactions({ slug }) {
+  const { counts, userReaction, loading, handleReact, total } = useReactions(slug);
 
   return (
     <LazyMotion features={domAnimation}>
@@ -219,21 +221,14 @@ export default function ArticleReactions({ slug }) {
         viewport={vp}
         className="py-12"
       >
+        <m.h2 variants={fadeUp} className="t-h2 text-fg mb-2">
+          How do you feel about this article?
+        </m.h2>
         <m.div variants={fadeUp}>
           <TotalCount total={total} loading={loading} />
         </m.div>
-
         <m.div variants={fadeUp}>
-          <ReactionBar
-            counts={counts}
-            userReaction={userReaction}
-            onReact={handleReact}
-            loading={loading}
-          />
-        </m.div>
-
-        <m.div variants={fadeUp}>
-          <ReactionCards
+          <ArticleReactionCards
             counts={counts}
             userReaction={userReaction}
             onReact={handleReact}
