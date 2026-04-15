@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { AnimatePresence, m } from 'framer-motion';
 
 const CORAL = 'var(--color-coral)';
@@ -76,24 +76,28 @@ function SidebarItem({ slug, text, isActive }) {
 /* ── Sidebar ─────────────────────────────────────────────────────── */
 export default function ArticleSidebar({ headings, activeSlug }) {
   const [visible, setVisible] = useState(false);
-
-  // Show after 200px scroll
-  useEffect(() => {
-    const onScroll = () => setVisible(window.scrollY > 200);
-    window.addEventListener('scroll', onScroll, { passive: true });
-    onScroll();
-    return () => window.removeEventListener('scroll', onScroll);
-  }, []);
+  const footerInView = useRef(false);
 
   // Hide when "More writing" footer enters view
   useEffect(() => {
     const footer = document.getElementById('more-writing');
     if (!footer) return;
-    const observer = new IntersectionObserver(
-      ([entry]) => { if (entry.isIntersecting) setVisible(false); }
-    );
+    const observer = new IntersectionObserver(([entry]) => {
+      footerInView.current = entry.isIntersecting;
+      if (entry.isIntersecting) setVisible(false);
+    });
     observer.observe(footer);
     return () => observer.disconnect();
+  }, []);
+
+  // Show after 200px scroll (gated by footer visibility)
+  useEffect(() => {
+    const onScroll = () => {
+      if (!footerInView.current) setVisible(window.scrollY > 200);
+    };
+    window.addEventListener('scroll', onScroll, { passive: true });
+    onScroll();
+    return () => window.removeEventListener('scroll', onScroll);
   }, []);
 
   if (!headings.length) return null;
