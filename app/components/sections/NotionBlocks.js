@@ -86,7 +86,17 @@ export function NotionBlock({ block, projects, childrenMap, skipDatabase, skipDi
     }
     case 'heading_2': {
       const h2texts = block.heading_2?.rich_text ?? [];
-      return <h3 className={`${compact ? 't-h4' : 't-h3'} mt-3 text-[var(--fg)]`}><RichText texts={h2texts} /></h3>;
+      const tocEntry2 = tocHeadings?.find((h) => h.id === block.id);
+      const h2slug = tocEntry2?.slug ?? slugify(h2texts.map((t) => t.plain_text).join(''));
+      return (
+        <h3
+          id={h2slug}
+          data-toc
+          className={`${compact ? 't-h4' : 't-h3'} mt-3 text-[var(--fg)]`}
+        >
+          <RichText texts={h2texts} />
+        </h3>
+      );
     }
     case 'heading_3': {
       const h3texts = block.heading_3?.rich_text ?? [];

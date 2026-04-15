@@ -44,9 +44,9 @@ export default function ArticleSidebar({ headings, activeSlug }) {
           className="hidden xl:block"
           style={{
             position: 'fixed',
-            left: 'calc(50vw - 360px - 184px)',
+            left: 'calc(50vw - 400px - 196px)',
             top: 160,
-            width: 160,
+            width: 176,
             zIndex: 30,
           }}
         >
@@ -76,8 +76,9 @@ export default function ArticleSidebar({ headings, activeSlug }) {
               }}
             />
 
-            {headings.map(({ slug, text }) => {
+            {headings.map(({ slug, text, level }) => {
               const isActive = slug === activeSlug;
+              const isL2 = level === 2;
               return (
                 <button
                   key={slug}
@@ -92,7 +93,7 @@ export default function ArticleSidebar({ headings, activeSlug }) {
                     textAlign: 'left',
                     background: 'none',
                     border: 'none',
-                    padding: '0 0 12px',
+                    padding: isL2 ? '0 0 8px 12px' : '0 0 12px',
                     cursor: 'pointer',
                   }}
                 >
@@ -100,7 +101,7 @@ export default function ArticleSidebar({ headings, activeSlug }) {
                   <div
                     style={{
                       position: 'absolute',
-                      left: -16,
+                      left: isL2 ? -4 : -16,
                       top: 4,
                       width: isActive ? 3 : 2,
                       height: isActive ? 14 : 10,
@@ -111,10 +112,10 @@ export default function ArticleSidebar({ headings, activeSlug }) {
                   />
                   <span
                     style={{
-                      fontSize: 12,
+                      fontSize: isL2 ? 11 : 12,
                       fontWeight: isActive ? 600 : 400,
                       color: isActive ? 'var(--brand)' : 'var(--fg-muted)',
-                      opacity: isActive ? 1 : 0.4,
+                      opacity: isActive ? 1 : isL2 ? 0.3 : 0.4,
                       lineHeight: 1.4,
                       transition: 'color 0.2s ease, opacity 0.2s ease, font-weight 0.2s ease',
                       display: 'block',

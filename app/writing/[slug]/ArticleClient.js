@@ -128,7 +128,7 @@ export default function ArticleClient({ article, blocks, childrenMap, otherArtic
         {/* ── Article header ─────────────────────────────────────── */}
         <div
           style={{
-            maxWidth: 720,
+            maxWidth: 800,
             margin: '0 auto',
             padding: 'clamp(80px, 10vw, 120px) 24px 0',
           }}
@@ -210,7 +210,7 @@ export default function ArticleClient({ article, blocks, childrenMap, otherArtic
           animate={{ scaleX: 1, opacity: 1 }}
           transition={{ delay: 0.5, duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
           style={{
-            maxWidth: 720,
+            maxWidth: 800,
             margin: '40px auto 0',
             padding: '0 24px',
             transformOrigin: 'left center',
@@ -225,7 +225,7 @@ export default function ArticleClient({ article, blocks, childrenMap, otherArtic
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.35, duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
           style={{
-            maxWidth: 720,
+            maxWidth: 800,
             margin: '0 auto',
             padding: '48px 24px 80px',
           }}
@@ -250,7 +250,7 @@ export default function ArticleClient({ article, blocks, childrenMap, otherArtic
               padding: 'clamp(48px, 8vw, 80px) 24px',
             }}
           >
-            <div style={{ maxWidth: 720, margin: '0 auto' }}>
+            <div style={{ maxWidth: 800, margin: '0 auto' }}>
               <m.div
                 variants={stagger}
                 initial="hidden"
