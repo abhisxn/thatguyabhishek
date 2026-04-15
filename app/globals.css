@@ -99,6 +99,11 @@
  *   Status    --color-{success|warning|error|info}[-bg]
  * ══════════════════════════════════════════════════════════════ */
 
+/* ── Theme-independent tokens ─────────────────────────────── */
+:root {
+  --brand-gradient: linear-gradient(90deg, #6366f1, #818cf8); /* accent progress bar gradient */
+}
+
 /* ── Dark theme (default) ─────────────────────────────────── */
 :root,
 [data-theme="dark"] {
@@ -150,6 +155,10 @@
   /* Dual-theme gradient — dark: blue-purple / light: pink-green pastel */
   --gradient-dual-from: #4a2d7f;
   --gradient-dual-to:   #0b1f3a;
+
+  /* Gradients */
+  --section-accent-gradient-from: var(--color-purple-card);
+  --section-accent-gradient-to:   var(--color-dark-navy);
 
   /* Status */
   --color-success:     #448361;
@@ -212,6 +221,10 @@
   /* Dual-theme gradient — dark: blue-purple / light: pink-green pastel */
   --gradient-dual-from: #fce7f3;
   --gradient-dual-to:   #d1fae5;
+
+  /* Gradients */
+  --section-accent-gradient-from: var(--color-purple-card);
+  --section-accent-gradient-to:   var(--color-dark-navy);
 
   /* Status — same hues, work on both themes */
   --color-success:     #448361;
