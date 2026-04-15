@@ -154,7 +154,7 @@
 
   /* Dual-theme gradient — dark: blue-purple / light: pink-green pastel */
   --gradient-dual-from: #4a2d7f;
-  --gradient-dual-to:   #0b1f3a;
+  --gradient-dual-to:   var(--color-dark-navy);
 
   /* Gradients */
   --section-accent-gradient-from: var(--color-purple-card);
