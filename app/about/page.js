@@ -1,7 +1,7 @@
 export const revalidate = 3600;
 
 import AboutClient from './AboutClient';
-import { getThinkingItems, getWritingArticles } from '../../lib/notion-work';
+import { getThinkingItems, getWritingArticles } from '@/lib/notion-work';
 
 export default async function AboutPage() {
   let thinkingItems = [];

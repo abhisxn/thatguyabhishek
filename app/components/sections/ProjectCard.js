@@ -1,8 +1,8 @@
 import Link from 'next/link';
 import Card from '../ui/Card';
 import { styleForNotion } from '../ui/card-utils';
-import { getTitle, getDescription, getSummary, getTags, getCoverUrl } from '../../../lib/notion-work';
-import { slugify } from '../../../lib/slugify';
+import { getTitle, getDescription, getSummary, getTags, getCoverUrl } from '@/lib/notion-work';
+import { slugify } from '@/lib/slugify';
 
 /* ── Shared thumbnail resolver ───────────────────────────────────────────────
  * Single source of truth used by ProjectCard (and therefore both ProjectsGrid

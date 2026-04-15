@@ -7,7 +7,7 @@ import {
   X_TICKS, H_GRID,
   xOf, yOf, xPct, buildLinePath, buildAreaPath, nearestIdx,
   TIMELINE,
-} from '../../../data/careerData';
+} from '@/data/careerData';
 
 function WordLines({ text }) {
   return (

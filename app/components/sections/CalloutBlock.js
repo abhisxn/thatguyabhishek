@@ -3,8 +3,8 @@ import RichText from '../ui/RichText';
 import { getCalloutType, calloutColorToBg, styleForNotion, CALLOUT_BG } from '../ui/card-utils';
 import Card from '../ui/Card';
 import LinkCalloutCard from '../ui/LinkCalloutCard';
-import { slugify } from '../../../lib/slugify';
-import projectsJson from '../../../data/projects.json';
+import { slugify } from '@/lib/slugify';
+import projectsJson from '@/data/projects.json';
 
 /* ── Helpers ──────────────────────────────────────────────────────────────── */
 

@@ -7,11 +7,11 @@ import GradientBackground from '../components/layout/GradientBackground';
 import Button from '../components/ui/Button';
 import { ArrowIcon } from '../components/ui/icons';
 
-import { WORK_ITEMS, SKILL_GROUPS, ARTICLES, ABOUT_SECTIONS, THINKING_ITEMS as THINKING_FALLBACK, OPINIONS, BEYOND_ITEMS } from '../../data/about';
+import { WORK_ITEMS, SKILL_GROUPS, ARTICLES, ABOUT_SECTIONS, THINKING_ITEMS as THINKING_FALLBACK, OPINIONS, BEYOND_ITEMS } from '@/data/about';
 import CareerTimeline from '../components/sections/CareerTimeline';
-import { fadeUp, stagger, vp } from '../../lib/motion';
+import { fadeUp, stagger, vp } from '@/lib/motion';
 import W from '../components/ui/W';
-import { SECTION_STYLES } from '../../lib/section-styles';
+import { SECTION_STYLES } from '@/lib/section-styles';
 
 /* ── Shared stroke ring — always inside the card div (borderRadius: inherit) ── */
 const STROKE_RING = {

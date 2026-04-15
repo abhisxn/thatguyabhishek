@@ -3,7 +3,7 @@
 import { m } from 'framer-motion';
 import GradientBackground from '../components/layout/GradientBackground';
 import { ArrowIcon } from '../components/ui/icons';
-import { fadeUp, stagger, vp } from '../../lib/motion';
+import { fadeUp, stagger, vp } from '@/lib/motion';
 import W from '../components/ui/W';
 
 const CONTACTS = [

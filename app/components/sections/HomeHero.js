@@ -1,7 +1,7 @@
 'use client';
 
 import { m } from 'framer-motion';
-import { fadeUp, stagger } from '../../../lib/motion';
+import { fadeUp, stagger } from '@/lib/motion';
 import W from '../ui/W';
 
 export default function HomeHero() {

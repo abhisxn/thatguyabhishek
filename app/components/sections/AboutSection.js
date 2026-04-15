@@ -2,7 +2,7 @@
 
 import { m } from 'framer-motion';
 import Button from '../ui/Button';
-import { fadeUp, stagger, vp } from '../../../lib/motion';
+import { fadeUp, stagger, vp } from '@/lib/motion';
 import W from '../ui/W';
 
 const IMG_ABOUT = '/about-photo.jpg';

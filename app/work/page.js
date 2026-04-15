@@ -4,11 +4,11 @@ export const revalidate = 3600;
 import GradientBackground from '../components/layout/GradientBackground';
 import FadeSection from '../components/ui/FadeSection';
 import CalloutBlock from '../components/sections/CalloutBlock';
-import { getWorkPageData } from '../../lib/notion-work';
+import { getWorkPageData } from '@/lib/notion-work';
 import { RenderBlocks } from '../components/sections/NotionBlocks';
 import ProjectsExpandableGrid from '../components/sections/ProjectsExpandableGrid';
 import { getCalloutType } from '../components/ui/card-utils';
-import projectsJson from '../../data/projects.json';
+import projectsJson from '@/data/projects.json';
 
 export default async function WorkPage() {
   let proseBlocks = [];

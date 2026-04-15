@@ -4,8 +4,8 @@ import { m } from 'framer-motion';
 import GradientBackground from '../components/layout/GradientBackground';
 import Button from '../components/ui/Button';
 import { ArrowIcon } from '../components/ui/icons';
-import { AWARD_YEARS, MENTIONS, getTierStyle } from '../../data/awards';
-import { fadeUp, vp } from '../../lib/motion';
+import { AWARD_YEARS, MENTIONS, getTierStyle } from '@/data/awards';
+import { fadeUp, vp } from '@/lib/motion';
 import W from '../components/ui/W';
 
 /* ─── Notion link ─────────────────────────────────────────────── */

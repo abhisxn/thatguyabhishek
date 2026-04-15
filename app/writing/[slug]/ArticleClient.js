@@ -3,8 +3,8 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { m, LazyMotion, domAnimation } from 'framer-motion';
-import { RenderBlocks } from '../../components/sections/NotionBlocks';
-import GradientBackground from '../../components/layout/GradientBackground';
+import { RenderBlocks } from '@/app/components/sections/NotionBlocks';
+import GradientBackground from '@/app/components/layout/GradientBackground';
 import { fadeUp, stagger, vp } from '@/lib/motion';
 import ArticleSidebar from './ArticleSidebar';
 import ArticleProgressBar from './ArticleProgressBar';

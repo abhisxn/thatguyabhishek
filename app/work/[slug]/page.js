@@ -1,16 +1,16 @@
 import { Suspense } from 'react';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
-import projectsJson from '../../../data/projects.json';
-import GradientBackground from '../../components/layout/GradientBackground';
-import { SectionedBlocks } from '../../components/sections/ProjectSections';
-import ProjectsExpandableGrid from '../../components/sections/ProjectsExpandableGrid';
-import { getProjectPageData } from '../../../lib/notion-project';
-import { findProjectBySlug } from '../../../lib/notion-work';
-import W from '../../components/ui/W';
-import DevBlockMap from '../../components/dev/DevBlockMap';
-import ProjectPageHero from '../../components/sections/ProjectPageHero';
-import FadeSection from '../../components/ui/FadeSection';
+import projectsJson from '@/data/projects.json';
+import GradientBackground from '@/app/components/layout/GradientBackground';
+import { SectionedBlocks } from '@/app/components/sections/ProjectSections';
+import ProjectsExpandableGrid from '@/app/components/sections/ProjectsExpandableGrid';
+import { getProjectPageData } from '@/lib/notion-project';
+import { findProjectBySlug } from '@/lib/notion-work';
+import W from '@/app/components/ui/W';
+import DevBlockMap from '@/app/components/dev/DevBlockMap';
+import ProjectPageHero from '@/app/components/sections/ProjectPageHero';
+import FadeSection from '@/app/components/ui/FadeSection';
 
 // ISR: revalidate every hour — Notion signed image URLs expire after ~1 hour
 export const revalidate = 3600;

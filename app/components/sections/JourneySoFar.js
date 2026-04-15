@@ -3,7 +3,7 @@
 import { m } from 'framer-motion';
 import Button from '../ui/Button';
 import CareerTimeline from './CareerTimeline';
-import { fadeUp, stagger, vp } from '../../../lib/motion';
+import { fadeUp, stagger, vp } from '@/lib/motion';
 import W from '../ui/W';
 
 export default function JourneySoFar() {

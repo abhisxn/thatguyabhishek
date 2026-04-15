@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import { m, AnimatePresence } from 'framer-motion';
 import { ProjectCard } from './ProjectCard';
-import { fadeUp, stagger, vp } from '../../../lib/motion';
+import { fadeUp, stagger, vp } from '@/lib/motion';
 import Button from '../ui/Button';
 
 /* ── Sort: featured first (by order), then non-featured (by order) ── */

@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import notion from '../../../lib/notion';
+import notion from '@/lib/notion';
 
 // Re-fetch from Notion just before the S3 signed URL expires (1hr TTL)
 export const revalidate = 3500;

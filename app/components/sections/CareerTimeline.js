@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import { m } from 'framer-motion';
 import CareerChart from './CareerChart';
-import { TIMELINE } from '../../../data/careerData';
+import { TIMELINE } from '@/data/careerData';
 
 export default function CareerTimeline() {
   const [activeIdx, setActiveIdx] = useState(0);

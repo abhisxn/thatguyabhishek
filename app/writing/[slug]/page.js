@@ -3,7 +3,7 @@ export const dynamicParams = true;
 
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
-import { getWritingArticles, getArticleBySlug, getArticleBlocks } from '../../../lib/notion-work';
+import { getWritingArticles, getArticleBySlug, getArticleBlocks } from '@/lib/notion-work';
 import ArticleClient from './ArticleClient';
 import { slugify } from '@/lib/slugify';
 

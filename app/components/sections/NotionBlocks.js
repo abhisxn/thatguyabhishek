@@ -3,7 +3,7 @@ import { ProjectsCarousel } from './ProjectCard';
 import CalloutBlock, { getImageUrl } from './CalloutBlock';
 import { getCalloutType } from '../ui/card-utils';
 import EmbedBlock, { BookmarkCard } from '../ui/EmbedBlock';
-import EMBED_OVERRIDES from '../../../data/embedOverrides';
+import EMBED_OVERRIDES from '@/data/embedOverrides';
 import Button from '../ui/Button';
 import { slugify } from '@/lib/slugify';
 
