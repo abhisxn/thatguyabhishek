@@ -68,41 +68,19 @@ function BackArrow() {
   );
 }
 
-function ExternalArrow() {
-  return <ArrowIcon size={11} />;
-}
-
 /* ── Small writing card used in "more writing" footer grid ───────── */
 function MiniArticleCard({ article }) {
   return (
     <Link
       href={article.href}
-      className="group flex flex-col gap-2 no-underline"
-      style={{
-        padding: '20px',
-        background: 'var(--surface-1)',
-        border: '1px solid var(--border)',
-        borderRadius: 'var(--radius-card)',
-        transition: 'border-color 0.2s ease, background 0.2s ease',
-      }}
-      onMouseEnter={(e) => {
-        e.currentTarget.style.borderColor = 'var(--border-strong)';
-        e.currentTarget.style.background = 'var(--surface-2)';
-      }}
-      onMouseLeave={(e) => {
-        e.currentTarget.style.borderColor = 'var(--border)';
-        e.currentTarget.style.background = 'var(--surface-1)';
-      }}
+      className="flex flex-col gap-2 no-underline p-5 bg-[var(--surface-1)] border border-[var(--border)] rounded-[var(--radius-card)] transition-[border-color,background] duration-200 hover:border-[var(--border-strong)] hover:bg-[var(--surface-2)]"
     >
-      <span style={{ fontSize: 22 }}>{article.emoji}</span>
-      <p className="t-body3 font-semibold text-fg" style={{ margin: 0, lineHeight: 1.35 }}>
+      <span className="text-2xl">{article.emoji}</span>
+      <p className="t-body3 font-semibold text-fg m-0 leading-[1.35]">
         {article.title}
       </p>
-      <span
-        className="t-caption text-fg-muted inline-flex items-center gap-1 mt-auto"
-        style={{ opacity: 0.7 }}
-      >
-        Read <ExternalArrow />
+      <span className="t-caption text-fg-muted inline-flex items-center gap-1 mt-auto opacity-70">
+        Read <ArrowIcon size={11} />
       </span>
     </Link>
   );
@@ -121,35 +99,22 @@ export default function ArticleClient({ article, blocks, childrenMap, otherArtic
       {/* Mobile / tablet: fixed progress bar */}
       <ArticleProgressBar headings={headings} activeSlug={activeSlug} progress={progress} />
 
-      <div className="relative" style={{ zIndex: 1 }}>
+      <div className="relative z-[1]">
 
         {/* ── Two-column layout — 1200px total ───────────────────── */}
         <div className="max-w-[1200px] mx-auto px-6 sm:px-10 lg:px-16">
           <div
-            className="flex items-start"
-            style={{
-              gap: 56,
-              paddingTop: 'clamp(80px, 10vw, 120px)',
-            }}
+            className="flex items-start gap-14"
+            style={{ paddingTop: 'clamp(80px, 10vw, 120px)' }}
           >
 
             {/* ── Left: persistent sticky sidebar (xl+) ──────────── */}
-            <aside
-              className="hidden xl:block"
-              style={{
-                width: 220,
-                flexShrink: 0,
-                position: 'sticky',
-                top: '50vh',
-                transform: 'translateY(-50%)',
-                alignSelf: 'flex-start',
-              }}
-            >
+            <aside className="hidden xl:block w-[220px] shrink-0 sticky top-[50vh] -translate-y-1/2 self-start">
               <ArticleSidebar headings={headings} activeSlug={activeSlug} />
             </aside>
 
             {/* ── Right: article content ─────────────────────────── */}
-            <div style={{ flex: 1, minWidth: 0 }}>
+            <div className="flex-1 min-w-0">
 
               {/* Article header */}
               <m.div variants={stagger} initial="hidden" animate="visible">
@@ -158,10 +123,7 @@ export default function ArticleClient({ article, blocks, childrenMap, otherArtic
                 <m.div variants={fadeUp}>
                   <Link
                     href="/about"
-                    className="inline-flex items-center gap-2 t-caption text-fg-muted no-underline mb-10"
-                    style={{ transition: 'color 0.2s ease' }}
-                    onMouseEnter={(e) => { e.currentTarget.style.color = 'var(--fg)'; }}
-                    onMouseLeave={(e) => { e.currentTarget.style.color = ''; }}
+                    className="inline-flex items-center gap-2 t-caption text-fg-muted no-underline mb-10 transition-colors duration-200 hover:text-fg"
                   >
                     <BackArrow />
                     Back to writing
@@ -171,26 +133,19 @@ export default function ArticleClient({ article, blocks, childrenMap, otherArtic
                 {/* Emoji */}
                 <m.div
                   variants={fadeUp}
-                  style={{ fontSize: 'clamp(48px, 8vw, 72px)', lineHeight: 1, marginBottom: 24 }}
+                  className="leading-none mb-6"
+                  style={{ fontSize: 'clamp(48px, 8vw, 72px)' }}
                 >
                   {article.emoji}
                 </m.div>
 
                 {/* Overline — topic + read time */}
-                <m.p
-                  variants={fadeUp}
-                  className="t-overline text-fg-muted"
-                  style={{ marginBottom: 16, letterSpacing: '0.12em' }}
-                >
+                <m.p variants={fadeUp} className="t-overline text-fg-muted mb-4">
                   {hasTopic ? `${article.topic[0]} · ` : ''}{readTime} min read
                 </m.p>
 
                 {/* Title */}
-                <m.h1
-                  variants={fadeUp}
-                  className="t-h1 text-fg"
-                  style={{ marginBottom: 0, lineHeight: 1.1 }}
-                >
+                <m.h1 variants={fadeUp} className="t-h1 text-fg mb-0 leading-[1.1]">
                   {article.title}
                 </m.h1>
 
@@ -198,18 +153,10 @@ export default function ArticleClient({ article, blocks, childrenMap, otherArtic
                 {article.desc && (
                   <m.blockquote
                     variants={fadeUp}
-                    style={{
-                      margin: '32px 0 0',
-                      padding: '20px 24px',
-                      borderLeft: '3px solid var(--brand)',
-                      background: 'var(--brand-muted)',
-                      borderRadius: '0 12px 12px 0',
-                    }}
+                    className="mt-8 px-6 py-5 bg-brand-muted rounded-r-xl"
+                    style={{ borderLeft: '3px solid var(--brand)' }}
                   >
-                    <p
-                      className="t-body1 text-fg-muted"
-                      style={{ margin: 0, fontStyle: 'italic', lineHeight: 1.6, opacity: 0.9 }}
-                    >
+                    <p className="t-body1 text-fg-muted m-0 italic leading-relaxed opacity-90">
                       {article.desc}
                     </p>
                   </m.blockquote>
@@ -222,9 +169,9 @@ export default function ArticleClient({ article, blocks, childrenMap, otherArtic
                 initial={{ scaleX: 0, opacity: 0 }}
                 animate={{ scaleX: 1, opacity: 1 }}
                 transition={{ delay: 0.5, duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
-                style={{ margin: '40px 0 0', transformOrigin: 'left center' }}
+                className="mt-10 origin-left"
               >
-                <div style={{ height: 1, background: 'var(--border-strong)', width: '100%' }} />
+                <div className="h-px w-full" style={{ background: 'var(--border-strong)' }} />
               </m.div>
 
               {/* Article body */}
@@ -232,21 +179,21 @@ export default function ArticleClient({ article, blocks, childrenMap, otherArtic
                 initial={{ opacity: 0, y: 16 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.35, duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
-                style={{ padding: '48px 0 80px' }}
+                className="pt-12 pb-20"
               >
                 {blocks.length > 0 ? (
                   <div className="flex flex-col gap-5">
                     <RenderBlocks blocks={blocks} childrenMap={childrenMap} tocHeadings={headings} />
                   </div>
                 ) : (
-                  <p className="t-body2 text-fg-muted" style={{ opacity: 0.5 }}>
+                  <p className="t-body2 text-fg-muted opacity-50">
                     Article content coming soon.
                   </p>
                 )}
               </m.div>
 
               {/* Reactions */}
-              <div style={{ borderTop: '1px solid var(--border)', marginTop: 0, paddingTop: 0 }}>
+              <div className="border-t border-theme">
                 <ArticleReactions slug={article.slug} />
               </div>
 
@@ -258,27 +205,17 @@ export default function ArticleClient({ article, blocks, childrenMap, otherArtic
         {otherArticles.length > 0 && (
           <div
             id="more-writing"
-            style={{
-              borderTop: '1px solid var(--border)',
-              padding: 'clamp(48px, 8vw, 80px) 0',
-            }}
+            className="border-t border-theme"
+            style={{ padding: 'clamp(48px, 8vw, 80px) 0' }}
           >
             <div className="max-w-[1200px] mx-auto px-6 sm:px-10 lg:px-16">
-              <m.div
-                variants={stagger}
-                initial="hidden"
-                whileInView="visible"
-                viewport={vp}
-              >
-                <m.p variants={fadeUp} className="t-overline text-fg-muted" style={{ marginBottom: 24 }}>
+              <m.div variants={stagger} initial="hidden" whileInView="visible" viewport={vp}>
+                <m.p variants={fadeUp} className="t-overline text-fg-muted mb-6">
                   More writing
                 </m.p>
                 <div
-                  style={{
-                    display: 'grid',
-                    gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))',
-                    gap: 16,
-                  }}
+                  className="grid gap-4"
+                  style={{ gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))' }}
                 >
                   {otherArticles.map((a) => (
                     <m.div key={a.id} variants={fadeUp}>
