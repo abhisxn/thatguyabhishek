@@ -12,10 +12,9 @@ const BASE_URL = 'https://thatguyabhishek.com';
 function extractHeadings(blocks) {
   const seen = {};
   return blocks
-    .filter((b) => b.type === 'heading_1' || b.type === 'heading_2')
+    .filter((b) => b.type === 'heading_1')
     .map((b) => {
-      const level = b.type === 'heading_1' ? 1 : 2;
-      const text = b[b.type].rich_text.map((t) => t.plain_text).join('');
+      const text = b.heading_1.rich_text.map((t) => t.plain_text).join('');
       let slug = slugify(text);
       if (seen[slug] !== undefined) {
         seen[slug] += 1;
@@ -23,7 +22,7 @@ function extractHeadings(blocks) {
       } else {
         seen[slug] = 0;
       }
-      return { id: b.id, text, slug, level };
+      return { id: b.id, text, slug };
     });
 }
 

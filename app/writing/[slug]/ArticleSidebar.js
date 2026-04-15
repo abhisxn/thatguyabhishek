@@ -4,10 +4,8 @@ import { useState } from 'react';
 
 const CORAL = 'var(--color-coral)';
 
-/* ── Single sidebar item ─────────────────────────────────────────── */
-function SidebarItem({ slug, text, level, isActive }) {
+function SidebarItem({ slug, text, isActive }) {
   const [hovered, setHovered] = useState(false);
-  const isL2 = level === 2;
 
   return (
     <button
@@ -22,8 +20,8 @@ function SidebarItem({ slug, text, level, isActive }) {
         textAlign: 'left',
         background: 'none',
         border: 'none',
-        padding: isL2 ? '4px 10px 4px 22px' : '5px 10px 5px 12px',
-        marginBottom: isL2 ? 2 : 4,
+        padding: '5px 10px 5px 12px',
+        marginBottom: 4,
         cursor: 'pointer',
         borderRadius: 6,
         backgroundColor: isActive
@@ -52,7 +50,7 @@ function SidebarItem({ slug, text, level, isActive }) {
       />
 
       <span
-        className={isL2 ? 't-caption' : 't-body2'}
+        className="t-body2"
         style={{
           display: '-webkit-box',
           WebkitLineClamp: 2,
@@ -64,7 +62,7 @@ function SidebarItem({ slug, text, level, isActive }) {
             : hovered
             ? 'color-mix(in srgb, var(--color-coral) 60%, var(--fg-muted))'
             : 'var(--fg-muted)',
-          opacity: isActive ? 1 : isL2 ? 0.45 : 0.55,
+          opacity: isActive ? 1 : 0.55,
           transition: 'color 0.25s ease, opacity 0.25s ease',
         }}
       >
@@ -74,7 +72,6 @@ function SidebarItem({ slug, text, level, isActive }) {
   );
 }
 
-/* ── Sidebar ─────────────────────────────────────────────────────── */
 export default function ArticleSidebar({ headings, activeSlug }) {
   if (!headings.length) return null;
 
@@ -96,12 +93,11 @@ export default function ArticleSidebar({ headings, activeSlug }) {
       </p>
 
       <div>
-        {headings.map(({ slug, text, level }) => (
+        {headings.map(({ slug, text }) => (
           <SidebarItem
             key={slug}
             slug={slug}
             text={text}
-            level={level}
             isActive={slug === activeSlug}
           />
         ))}
