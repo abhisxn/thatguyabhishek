@@ -8,6 +8,8 @@ import GradientBackground from '@/app/components/layout/GradientBackground';
 import { fadeUp, stagger, vp } from '@/lib/motion';
 import ArticleSidebar from './ArticleSidebar';
 import ArticleProgressBar from './ArticleProgressBar';
+import ArticleReactions from '@/app/components/sections/ArticleReactions';
+import { ArrowIcon } from '@/app/components/ui/icons';
 
 /* ── Article TOC + scroll progress hook ──────────────────────────── */
 function useArticleToc(headings) {
@@ -67,11 +69,7 @@ function BackArrow() {
 }
 
 function ExternalArrow() {
-  return (
-    <svg width="11" height="11" viewBox="0 0 12 12" fill="none" aria-hidden="true">
-      <path d="M1 11L11 1M11 1H3M11 1V9" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-    </svg>
-  );
+  return <ArrowIcon size={11} />;
 }
 
 /* ── Small writing card used in "more writing" footer grid ───────── */
@@ -245,6 +243,11 @@ export default function ArticleClient({ article, blocks, childrenMap, otherArtic
                   </p>
                 )}
               </m.div>
+
+              {/* Reactions */}
+              <div style={{ borderTop: '1px solid var(--border)', marginTop: 0, paddingTop: 0 }}>
+                <ArticleReactions slug={article.slug} />
+              </div>
 
             </div>
           </div>

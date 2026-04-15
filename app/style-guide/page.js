@@ -12,6 +12,8 @@ import Select from '@/app/components/ui/Select';
 import { CARD_SIZES, CARD_STYLES } from '@/app/components/ui/card-utils';
 import { LinkCalloutCardUI } from '@/app/components/ui/LinkCalloutCard';
 import StyleNav from '@/app/components/ui/StyleNav';
+import ArticleReactions from '@/app/components/sections/ArticleReactions';
+import { ArrowIcon } from '@/app/components/ui/icons';
 
 /* ── Section wrapper ─────────────────────────────────────────── */
 function Section({ id, title, subtitle, children }) {
@@ -436,14 +438,14 @@ export default function StyleGuide() {
                 <div>
                   <Label>link — section usage (sm, all-caps, arrow)</Label>
                   <div className="flex flex-wrap gap-6 items-center">
-                    <Button variant="link" size="sm" icon={<svg width="11" height="11" viewBox="0 0 12 12" fill="none"><path d="M1 11L11 1M11 1H3M11 1V9" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>}>KNOW MORE</Button>
+                    <Button variant="link" size="sm" icon={<ArrowIcon size={11} />}>KNOW MORE</Button>
                   </div>
                   <p className="t-caption text-[var(--fg-muted)] mt-2">Available variant — no border, fg-muted, coral hover.</p>
                 </div>
                 <div>
                   <Label>outline sm — section usage (all-caps, arrow)</Label>
                   <div className="flex flex-wrap gap-6 items-center">
-                    <Button variant="outline" size="sm" icon={<svg width="11" height="11" viewBox="0 0 12 12" fill="none"><path d="M1 11L11 1M11 1H3M11 1V9" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>}>KNOW MORE</Button>
+                    <Button variant="outline" size="sm" icon={<ArrowIcon size={11} />}>KNOW MORE</Button>
                   </div>
                   <p className="t-caption text-[var(--fg-muted)] mt-2">Used in AboutSection, HelpSection, JourneySoFar section headers</p>
                 </div>
@@ -1298,6 +1300,51 @@ function Card() {
                         <code className="t-caption font-mono font-semibold" style={{ color: 'var(--brand)' }}>Option {option}</code>
                         <p className="t-caption font-semibold text-fg" style={{ margin: 0 }}>{name}</p>
                         <p className="t-caption text-fg-muted" style={{ margin: 0, lineHeight: 1.6 }}>{desc}</p>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+              </div>
+            </Section>
+
+            {/* ── Reactions ── */}
+            <Section id="reactions" title="Article Reactions" subtitle="Interactions">
+              <div className="flex flex-col gap-10">
+
+                <div>
+                  <Label>Live component — shared counts via Vercel KV (slug: style-guide-demo)</Label>
+                  <p className="t-caption text-fg-muted mb-4">Bar (pill strip) above, card grid below. Click any reaction to test selection, swap, and deselect.</p>
+                  <div style={{ border: '1px solid var(--border)', borderRadius: 'var(--radius-card)', padding: '0 24px', overflow: 'hidden' }}>
+                    <ArticleReactions slug="style-guide-demo" />
+                  </div>
+                </div>
+
+                <div>
+                  <Label>Responsive behaviour</Label>
+                  <div className="grid sm:grid-cols-2 gap-4">
+                    <div className="p-4 rounded-xl" style={{ border: '1px solid var(--border)' }}>
+                      <p className="t-caption font-semibold text-fg mb-2">Desktop (≥ 768px)</p>
+                      <p className="t-caption text-fg-muted leading-relaxed">Bar pills show emoji + label + count. Cards render 5 columns.</p>
+                    </div>
+                    <div className="p-4 rounded-xl" style={{ border: '1px solid var(--border)' }}>
+                      <p className="t-caption font-semibold text-fg mb-2">Mobile (&lt; 768px)</p>
+                      <p className="t-caption text-fg-muted leading-relaxed">Bar pills show emoji + count only (label hidden via hidden md:inline). Cards collapse to 3 columns.</p>
+                    </div>
+                  </div>
+                </div>
+
+                <div>
+                  <Label>States</Label>
+                  <div className="grid sm:grid-cols-3 gap-4">
+                    {[
+                      { label: 'Default', desc: 'No reaction selected. All pills and cards show with muted border and surface background.' },
+                      { label: 'Selected', desc: 'One reaction active. Brand-coloured border + muted brand fill. Label and count turn brand colour.' },
+                      { label: 'Loading', desc: 'Skeleton pills (bar) and skeleton cards pulse with animate-pulse until API responds.' },
+                    ].map(({ label, desc }) => (
+                      <div key={label} className="p-4 rounded-xl" style={{ border: '1px solid var(--border)' }}>
+                        <p className="t-caption font-semibold text-fg mb-2">{label}</p>
+                        <p className="t-caption text-fg-muted leading-relaxed">{desc}</p>
                       </div>
                     ))}
                   </div>

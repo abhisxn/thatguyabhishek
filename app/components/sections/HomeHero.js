@@ -3,6 +3,7 @@
 import { m } from 'framer-motion';
 import { fadeUp, stagger } from '@/lib/motion';
 import W from '../ui/W';
+import { ArrowIcon } from '@/app/components/ui/icons';
 
 export default function HomeHero() {
   return (
@@ -62,9 +63,7 @@ export default function HomeHero() {
                   className="inline-flex items-center gap-1 underline text-[var(--color-coral)]"
                 >
                   Click here
-                  <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-                    <path d="M2 12L12 2M12 2H4M12 2V10" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round"/>
-                  </svg>
+                  <ArrowIcon size={14} />
                 </a>
               </p>
             </m.div>

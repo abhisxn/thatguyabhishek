@@ -64,11 +64,9 @@ function WritingCard({ article }) {
           style={{ marginTop: 4, color: isHov ? 'var(--color-coral)' : 'var(--fg-muted)', transition: 'color 0.2s ease' }}
         >
           <span>Read</span>
-          <svg width="11" height="11" viewBox="0 0 12 12" fill="none"
-            style={{ opacity: isHov ? 1 : 0.45, transform: isHov ? 'translate(2px, -2px)' : 'translate(0,0)', transition: 'opacity 0.2s ease, transform 0.2s ease' }}
-          >
-            <path d="M1 11L11 1M11 1H3M11 1V9" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-          </svg>
+          <span style={{ opacity: isHov ? 1 : 0.45, transform: isHov ? 'translate(2px, -2px)' : 'translate(0,0)', transition: 'opacity 0.2s ease, transform 0.2s ease', display: 'inline-flex' }}>
+            <ArrowIcon size={11} />
+          </span>
         </div>
       </Link>
     </m.div>
@@ -564,11 +562,7 @@ export default function AboutPage({ thinkingItems: thinkingProp = [], articles: 
                     external
                     variant="link"
                     size="sm"
-                    icon={
-                      <svg width="11" height="11" viewBox="0 0 12 12" fill="none">
-                        <path d="M1 11L11 1M11 1H3M11 1V9" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-                      </svg>
-                    }
+                    icon={<ArrowIcon size={11} />}
                   >
                     All writing on Notion
                   </Button>
@@ -1003,11 +997,7 @@ export default function AboutPage({ thinkingItems: thinkingProp = [], articles: 
                         external
                         variant="muted"
                         size="sm"
-                        icon={
-                          <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
-                            <path d="M1 11L11 1M11 1H3M11 1V9" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-                          </svg>
-                        }
+                        icon={<ArrowIcon size={12} />}
                       >
                         Read more on Notion
                       </Button>
@@ -1082,11 +1072,7 @@ export default function AboutPage({ thinkingItems: thinkingProp = [], articles: 
                         external
                         variant="muted"
                         size="sm"
-                        icon={
-                          <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
-                            <path d="M1 11L11 1M11 1H3M11 1V9" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-                          </svg>
-                        }
+                        icon={<ArrowIcon size={12} />}
                       >
                         Read more on Notion
                       </Button>

@@ -4,6 +4,7 @@ import { m } from 'framer-motion';
 import Button from '../ui/Button';
 import { fadeUp, stagger, vp } from '@/lib/motion';
 import W from '../ui/W';
+import { ArrowIcon } from '@/app/components/ui/icons';
 
 const IMG_ABOUT = '/about-photo.jpg';
 
@@ -14,7 +15,7 @@ export default function AboutSection() {
         <m.div variants={stagger} initial="hidden" whileInView="visible" viewport={vp}>
           <m.div variants={fadeUp} className="flex items-center justify-between mb-10">
             <h2>🙋🏻‍♂️ About me</h2>
-            <Button href="/about" variant="link" size="sm" icon={<svg width="11" height="11" viewBox="0 0 12 12" fill="none"><path d="M1 11L11 1M11 1H3M11 1V9" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>}>
+            <Button href="/about" variant="link" size="sm" icon={<ArrowIcon size={11} />}>
               KNOW MORE
             </Button>
           </m.div>
