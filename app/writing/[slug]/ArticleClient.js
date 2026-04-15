@@ -125,14 +125,8 @@ export default function ArticleClient({ article, blocks, childrenMap, otherArtic
 
       <div className="relative" style={{ zIndex: 1 }}>
 
-        {/* ── Two-column layout — 1280px total ───────────────────── */}
-        <div
-          style={{
-            maxWidth: 1280,
-            margin: '0 auto',
-            padding: '0 32px',
-          }}
-        >
+        {/* ── Two-column layout — 1200px total ───────────────────── */}
+        <div className="max-w-[1200px] mx-auto px-6 sm:px-10 lg:px-16">
           <div
             className="flex items-start"
             style={{
@@ -262,10 +256,10 @@ export default function ArticleClient({ article, blocks, childrenMap, otherArtic
             id="more-writing"
             style={{
               borderTop: '1px solid var(--border)',
-              padding: 'clamp(48px, 8vw, 80px) 32px',
+              padding: 'clamp(48px, 8vw, 80px) 0',
             }}
           >
-            <div style={{ maxWidth: 1280, margin: '0 auto' }}>
+            <div className="max-w-[1200px] mx-auto px-6 sm:px-10 lg:px-16">
               <m.div
                 variants={stagger}
                 initial="hidden"
