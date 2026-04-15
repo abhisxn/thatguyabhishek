@@ -12,7 +12,7 @@ export default function HomeSectionShell({ heading, ctaHref, ctaLabel = 'KNOW MO
       <W className="py-20">
         <m.div variants={stagger} initial="hidden" whileInView="visible" viewport={vp}>
           <m.div variants={fadeUp} className="flex items-center justify-between mb-10">
-            <h2>{heading}</h2>
+            <h2 className="t-h2 text-fg">{heading}</h2>
             {ctaHref && (
               <Button href={ctaHref} variant="link" size="sm" icon={<ArrowIcon size={11} />}>
                 {ctaLabel}
