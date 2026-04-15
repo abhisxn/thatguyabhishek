@@ -3,6 +3,7 @@
 import { useRef, useCallback } from 'react';
 import { m, useMotionValue, useTransform, useSpring } from 'framer-motion';
 import Link from 'next/link';
+import Image from 'next/image';
 import { fadeUp, stagger, vp } from '@/lib/motion';
 
 /* ── Local assets ───────────────────────────────────────────── */
@@ -104,8 +105,7 @@ export default function Footer() {
               <div aria-hidden="true" className="footer-cta-blob-pink" />
 
               {/* Avatar — bottom-right */}
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src={IMG_AVATAR} alt="" aria-hidden="true" loading="lazy" className="footer-cta-avatar" />
+              <Image src={IMG_AVATAR} alt="" aria-hidden="true" width={288} height={288} className="footer-cta-avatar" />
               {/* Content — padding-based so it never overlaps on narrow screens */}
               <div className="footer-cta-content">
                 <p className="footer-cta-heading footer-cta-heading--muted">
@@ -132,11 +132,9 @@ export default function Footer() {
               {/* Top row: avatar icon + LinkedIn logo */}
               <div className="flex items-start justify-between">
                 <div className="w-[88px] h-[88px] p-2 rounded-full overflow-hidden shrink-0 footer-li-icon-wrap">
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img src={IMG_AVATAR_ICON} alt="" aria-hidden="true" loading="lazy" className="w-full h-full object-cover" />
+                  <Image src={IMG_AVATAR_ICON} alt="" aria-hidden="true" width={135} height={135} className="w-full h-full object-cover" />
                 </div>
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src={IMG_LI_LOGO} alt="LinkedIn" loading="lazy" className="footer-li-logo" />
+                <Image src={IMG_LI_LOGO} alt="LinkedIn" width={96} height={24} className="footer-li-logo" />
               </div>
               {/* Name + bio + button */}
               <div className="flex flex-col gap-3 flex-1">

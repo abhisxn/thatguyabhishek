@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import ThemeToggle from '../ui/ThemeToggle';
 import { ArrowIcon } from '../ui/icons';
 import Button from '../ui/Button';
@@ -42,8 +43,7 @@ export default function Navbar() {
     >
       <div className="max-w-[1200px] mx-auto px-6 sm:px-10 lg:px-16 h-16 flex items-center justify-between">
         <Link href="/" className="flex items-center hover:opacity-70 transition-opacity duration-200">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src="/logo.svg" alt="thatguyabhishek" className="h-12 w-auto" />
+          <Image src="/logo.svg" alt="thatguyabhishek" width={118} height={50} className="h-12 w-auto" />
         </Link>
 
         {/* Desktop */}
