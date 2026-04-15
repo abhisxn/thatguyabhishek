@@ -5,6 +5,7 @@ import { getCalloutType } from '../ui/card-utils';
 import EmbedBlock, { BookmarkCard } from '../ui/EmbedBlock';
 import EMBED_OVERRIDES from '../../../data/embedOverrides';
 import Button from '../ui/Button';
+import { slugify } from '@/lib/slugify';
 
 function toEmbedUrl(url) {
   if (!url) return url;
@@ -71,7 +72,16 @@ export function NotionBlock({ block, projects, childrenMap, skipDatabase, skipDi
      * ─── */
     case 'heading_1': {
       const h1texts = block.heading_1?.rich_text ?? [];
-      return <h2 className={`${compact ? 't-h3' : 't-h2'} mt-4 text-[var(--fg)]`}><RichText texts={h1texts} /></h2>;
+      const h1slug = slugify(h1texts.map((t) => t.plain_text).join(''));
+      return (
+        <h2
+          id={h1slug}
+          data-toc
+          className={`${compact ? 't-h3' : 't-h2'} mt-4 text-[var(--fg)]`}
+        >
+          <RichText texts={h1texts} />
+        </h2>
+      );
     }
     case 'heading_2': {
       const h2texts = block.heading_2?.rich_text ?? [];
