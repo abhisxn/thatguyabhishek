@@ -1,4 +1,4 @@
-import projects from '../data/projects.json';
+import projects from '@/data/projects.json';
 
 const BASE_URL = 'https://thatguyabhishek.com';
 
