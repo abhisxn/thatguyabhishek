@@ -1,13 +1,13 @@
 // ISR: revalidate every hour — Notion signed image URLs expire after ~1 hour
 export const revalidate = 3600;
 
-import GradientBackground from '../components/layout/GradientBackground';
-import FadeSection from '../components/ui/FadeSection';
-import CalloutBlock from '../components/sections/CalloutBlock';
+import GradientBackground from '@/app/components/layout/GradientBackground';
+import FadeSection from '@/app/components/ui/FadeSection';
+import CalloutBlock from '@/app/components/sections/CalloutBlock';
 import { getWorkPageData } from '@/lib/notion-work';
-import { RenderBlocks } from '../components/sections/NotionBlocks';
-import ProjectsExpandableGrid from '../components/sections/ProjectsExpandableGrid';
-import { getCalloutType } from '../components/ui/card-utils';
+import { RenderBlocks } from '@/app/components/sections/NotionBlocks';
+import ProjectsExpandableGrid from '@/app/components/sections/ProjectsExpandableGrid';
+import { getCalloutType } from '@/app/components/ui/card-utils';
 import projectsJson from '@/data/projects.json';
 
 export default async function WorkPage() {

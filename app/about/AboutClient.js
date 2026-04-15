@@ -3,14 +3,14 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { m, AnimatePresence, useSpring, useMotionValue, useTransform } from 'framer-motion';
 import Link from 'next/link';
-import GradientBackground from '../components/layout/GradientBackground';
-import Button from '../components/ui/Button';
-import { ArrowIcon } from '../components/ui/icons';
+import GradientBackground from '@/app/components/layout/GradientBackground';
+import Button from '@/app/components/ui/Button';
+import { ArrowIcon } from '@/app/components/ui/icons';
 
 import { WORK_ITEMS, SKILL_GROUPS, ARTICLES, ABOUT_SECTIONS, THINKING_ITEMS as THINKING_FALLBACK, OPINIONS, BEYOND_ITEMS } from '@/data/about';
-import CareerTimeline from '../components/sections/CareerTimeline';
+import CareerTimeline from '@/app/components/sections/CareerTimeline';
 import { fadeUp, stagger, vp } from '@/lib/motion';
-import W from '../components/ui/W';
+import W from '@/app/components/ui/W';
 import { SECTION_STYLES } from '@/lib/section-styles';
 
 /* ── Shared stroke ring — always inside the card div (borderRadius: inherit) ── */

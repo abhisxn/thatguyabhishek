@@ -3,15 +3,15 @@
 import { useState } from 'react';
 import { m, useSpring } from 'framer-motion';
 import { SECTION_STYLES } from '@/lib/section-styles';
-import Card from '../components/ui/Card';
-import Button, { BUTTON_VARIANTS } from '../components/ui/Button';
-import Badge, { BADGE_VARIANTS } from '../components/ui/Badge';
-import Tag, { TAG_PALETTE } from '../components/ui/Tag';
-import { Input, Textarea } from '../components/ui/Input';
-import Select from '../components/ui/Select';
-import { CARD_SIZES, CARD_STYLES } from '../components/ui/card-utils';
-import { LinkCalloutCardUI } from '../components/ui/LinkCalloutCard';
-import StyleNav from '../components/ui/StyleNav';
+import Card from '@/app/components/ui/Card';
+import Button, { BUTTON_VARIANTS } from '@/app/components/ui/Button';
+import Badge, { BADGE_VARIANTS } from '@/app/components/ui/Badge';
+import Tag, { TAG_PALETTE } from '@/app/components/ui/Tag';
+import { Input, Textarea } from '@/app/components/ui/Input';
+import Select from '@/app/components/ui/Select';
+import { CARD_SIZES, CARD_STYLES } from '@/app/components/ui/card-utils';
+import { LinkCalloutCardUI } from '@/app/components/ui/LinkCalloutCard';
+import StyleNav from '@/app/components/ui/StyleNav';
 
 /* ── Section wrapper ─────────────────────────────────────────── */
 function Section({ id, title, subtitle, children }) {
