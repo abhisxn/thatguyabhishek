@@ -1,0 +1,48 @@
+<h2>Mobile / tablet — what does the bottom bar show?</h2>
+<p class="subtitle">Sticky bar pinned to the bottom of the screen. Space is tight — pick what it communicates.</p>
+
+<div class="options">
+  <div class="option" data-choice="current-section" onclick="toggleSelect(this)">
+    <div class="letter">A</div>
+    <div class="content">
+      <h3>Current section only</h3>
+      <p>Shows just the active heading label + a subtle reading progress bar underneath. Tapping it opens a slide-up sheet with all sections listed — tap any to jump.</p>
+      <div style="margin-top: 12px; background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.1); border-radius: 10px; padding: 10px 14px; font-size: 12px; display: flex; align-items: center; justify-content: space-between;">
+        <span style="color: #818cf8; font-weight: 500;">◉ The Core Problem</span>
+        <span style="opacity: 0.4; font-size: 11px;">tap to navigate ↑</span>
+      </div>
+      <div style="height: 3px; background: rgba(255,255,255,0.08); border-radius: 2px; margin-top: 6px; overflow: hidden;">
+        <div style="width: 45%; height: 100%; background: #818cf8; border-radius: 2px;"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="option" data-choice="scrollable-strip" onclick="toggleSelect(this)">
+    <div class="letter">B</div>
+    <div class="content">
+      <h3>Scrollable strip of all sections</h3>
+      <p>All headings shown horizontally in the bar. Active one is highlighted and auto-scrolled into view. No tap-to-reveal — everything visible at once.</p>
+      <div style="margin-top: 12px; background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.1); border-radius: 10px; padding: 10px 14px; font-size: 11px; display: flex; gap: 12px; overflow: hidden; white-space: nowrap;">
+        <span style="opacity: 0.35;">Intro</span>
+        <span style="opacity: 0.35;">Background</span>
+        <span style="color: #818cf8; font-weight: 600; border-bottom: 2px solid #818cf8; padding-bottom: 2px;">Core Problem</span>
+        <span style="opacity: 0.35;">Approach</span>
+        <span style="opacity: 0.35;">Takeaways</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="option" data-choice="progress-only" onclick="toggleSelect(this)">
+    <div class="letter">C</div>
+    <div class="content">
+      <h3>Progress bar + section label only</h3>
+      <p>Minimal — a thin progress bar at top of the bar, current section name below it. No navigation affordance. Pure ambient reading indicator, no interaction.</p>
+      <div style="margin-top: 12px; background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.1); border-radius: 10px; overflow: hidden;">
+        <div style="height: 3px; background: rgba(255,255,255,0.08); overflow: hidden;">
+          <div style="width: 45%; height: 100%; background: #818cf8;"></div>
+        </div>
+        <div style="padding: 8px 14px; font-size: 12px; opacity: 0.5;">The Core Problem</div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,16 +1,66 @@
 {
-  "hooks": {
-    "PreToolUse": [
-      {
-        "matcher": "Grep|Glob|Regex",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "$CLAUDE_PROJECT_DIR/.claude/hooks/vexp-guard.sh",
-            "timeout": 3000
-          }
-        ]
-      }
+  "permissions": {
+    "allow": [
+      "Bash(lsof -iTCP -sTCP:LISTEN -n)",
+      "Bash(lsof -iTCP -sTCP:LISTEN -n -P)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" http://localhost:3001/api/reactions?slug=test)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" \"http://localhost:3001/api/reactions?slug=test\")",
+      "Bash(curl -s -X POST http://localhost:3001/api/reactions -H 'Content-Type: application/json' -d '{\"slug\":\"test-article\",\"reaction\":\"thoughtful\"}')",
+      "Bash(curl -s -w '\\\\nHTTP %{http_code}' -X POST http://localhost:3001/api/reactions -H 'Content-Type: application/json' -d '{\"slug\":\"test-article\",\"reaction\":\"badvalue\"}')",
+      "Bash(curl -s -X POST http://localhost:3001/api/reactions -H 'Content-Type: application/json' -d '{\"slug\":\"test-article\",\"reaction\":null}')",
+      "Bash(curl -s -w '\\\\nHTTP %{http_code}' -X POST http://localhost:3001/api/reactions -H 'Content-Type: application/json' -d '{\"reaction\":\"thoughtful\"}')",
+      "Bash(node -e ' *)",
+      "Bash(/usr/local/bin/node --version)",
+      "Bash(~/.nvm/versions/node/*/bin/node --version)",
+      "Bash('~/.nvm/versions/node/v24.14.0/bin/node' -e ' *)",
+      "Bash(grep -v \"^commit\\\\|^Author\\\\|^Date\\\\|^    \\\\|^$\\\\|^diff\\\\|^index\\\\|^---\\\\|^+++\")",
+      "Bash(node -e \"const pkg = require\\('/Users/abhishek/thatguyabhishek/package.json'\\); console.log\\('framer-motion:', pkg.dependencies['framer-motion']\\)\")",
+      "Bash(node -e \"const p = require\\('/Users/abhishek/thatguyabhishek/node_modules/lenis/package.json'\\); console.log\\('lenis version:', p.version\\)\")",
+      "Bash(ls /opt/homebrew/bin/npm /Users/abhishek/.nvm/versions/node/*/bin/npm)",
+      "Bash(SKIP_NOTION=true next build)",
+      "Bash(NOTION_API_KEY=skip npx next build)",
+      "Bash(NOTION_API_KEY=skip node_modules/.bin/next build)",
+      "Bash(next build *)",
+      "Bash(./node_modules/.bin/next build *)",
+      "Bash(awk -F: '{print $1}')",
+      "Bash(ls /Users/abhishek/thatguyabhishek/.worktrees/feat-article-reactions/*.css /Users/abhishek/thatguyabhishek/.worktrees/feat-article-reactions/postcss.config*)",
+      "Bash(./node_modules/.bin/eslint lib/reaction-types.js lib/reactions.js app/api/reactions/route.js app/components/sections/ArticleReactions.js --max-warnings=0)",
+      "Bash(/bin/zsh -i -c \"npx eslint lib/reaction-types.js lib/reactions.js app/api/reactions/route.js app/components/sections/ArticleReactions.js --max-warnings=0 2>&1\")",
+      "Bash(/bin/bash --login -c \"npx eslint lib/reaction-types.js lib/reactions.js app/api/reactions/route.js app/components/sections/ArticleReactions.js --max-warnings=0 2>&1\")",
+      "Bash(grep -rn \"<svg\\\\|ArrowIcon\" app/about/AboutClient.js app/writing/[slug]/ArticleClient.js app/work/[slug]/page.js)",
+      "Bash(ls /usr/local/bin/n*)",
+      "Bash(ls /opt/homebrew/bin/n*)",
+      "Bash(~/.nvm/versions/node/v24.14.0/bin/npm install *)",
+      "Bash(~/.nvm/versions/node/v24.14.0/bin/node ~/.nvm/versions/node/v24.14.0/bin/npm install @upstash/redis)",
+      "Bash(export PATH=\"$PATH:$HOME/.nvm/versions/node/v24.14.0/bin\")",
+      "Bash(~/.nvm/versions/node/v24.14.0/bin/node -e \"require\\('fs'\\).rmSync\\('/Users/abhishek/thatguyabhishek/.next', { recursive: true, force: true }\\); console.log\\('done'\\)\")",
+      "Bash(git branch *)",
+      "Bash(git rm *)",
+      "Bash(grep -n \"import.*_hooks\\\\|useArticleToc\\\\|estimateReadTime\" /Users/abhishek/thatguyabhishek/app/writing/[slug]/ArticleClient.js)",
+      "Bash(head -20 app/writing/[slug]/ArticleClient.js)",
+      "Bash(node -c \"/Users/abhishek/thatguyabhishek/app/writing/[slug]/ArticleClient.js\")",
+      "Bash(ls /Users/abhishek/thatguyabhishek/*.config.*)",
+      "Bash(git diff *)",
+      "Bash(brew list *)",
+      "Bash(curl -s --max-time 5 https://pypi.org/simple/graphifyy/)",
+      "Bash(pip3 install *)",
+      "Bash(ls /usr/local/bin/python*)",
+      "Bash(ls /opt/homebrew/bin/python*)",
+      "Bash(/opt/homebrew/bin/python3.12 -c \"import graphify\")",
+      "Bash(/opt/homebrew/bin/python3.12 -m pip install graphifyy -q)",
+      "Bash(/opt/homebrew/bin/python3.12 -c \"import sys; open\\('graphify-out/.graphify_python', 'w'\\).write\\(sys.executable\\)\")",
+      "Bash(npm test *)",
+      "Bash(base64 -D -i /Users/abhishek/thatguyabhishek/public/design-system/footer-correct.b64 -o /tmp/footer-correct-decoded.png)",
+      "Bash(~/.nvm/versions/node/v22.14.0/bin/npm test *)",
+      "Bash(npx vitest *)",
+      "Read(//usr/**)",
+      "Bash(/Users/abhishek/.nvm/versions/node/v24.14.0/bin/npx vitest *)",
+      "Bash(ls -la /Users/abhishek/thatguyabhishek/graphify-out/.graphify_chunk_*.json)",
+      "Bash(awk '{print $NF}')"
+    ],
+    "additionalDirectories": [
+      "/Users/abhishek/thatguyabhishek/.next",
+      "/Users/abhishek/thatguyabhishek/graphify-out"
     ]
   }
 }

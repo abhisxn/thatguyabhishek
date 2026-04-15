@@ -1,5 +1,27 @@
 [
   {
+    "id": "25a848f1-3d34-80b9-9b39-cb86d9d4c2e5",
+    "title": "Microsoft: Copilot Excel Wiki Agent",
+    "slug": "microsoft-copilot-excel-wiki-agent",
+    "desc": "Built an AI knowledge agent on SharePoint giving Excel designers instant, cited answers on craft, process, accessibility, and handoffs. Cut onboarding by 40%, saved 3hrs/week per designer, and hit 87% query resolution with 90% team adoption in a 4-week pilot.",
+    "summary": "AI knowledge assistant cutting designer onboarding by 40% and saving 3hrs/week per designer.",
+    "status": "",
+    "tags": [
+      "Product Design",
+      "UX",
+      "Case Studies",
+      "AI",
+      "Agentic AI",
+      "Copilot"
+    ],
+    "cover": "/api/notion-image?id=25a848f1-3d34-80b9-9b39-cb86d9d4c2e5",
+    "url": "",
+    "featured": true,
+    "order": 1,
+    "notionUrl": "https://www.notion.so/Microsoft-Copilot-Excel-Wiki-Agent-25a848f13d3480b99b39cb86d9d4c2e5",
+    "lastEdited": "2026-04-01T10:48:00.000Z"
+  },
+  {
     "id": "330848f1-3d34-813b-bb66-e61704fb86ba",
     "title": "Watchlyst — Founder's Case Study",
     "slug": "watchlyst-founder-s-case-study",
@@ -21,28 +43,6 @@
     "lastEdited": "2026-03-27T20:43:00.000Z"
   },
   {
-    "id": "25a848f1-3d34-80b9-9b39-cb86d9d4c2e5",
-    "title": "Microsoft: Copilot Excel Wiki Agent",
-    "slug": "microsoft-copilot-excel-wiki-agent",
-    "desc": "Built an AI knowledge agent on SharePoint giving Excel designers instant, cited answers on craft, process, accessibility, and handoffs. Cut onboarding by 40%, saved 3hrs/week per designer, and hit 87% query resolution with 90% team adoption in a 4-week pilot.",
-    "summary": "AI knowledge assistant cutting designer onboarding by 40% and saving 3hrs/week per designer.",
-    "status": "",
-    "tags": [
-      "Product Design",
-      "UX",
-      "Case Studies",
-      "AI",
-      "Agentic AI",
-      "Copilot"
-    ],
-    "cover": "/api/notion-image?id=25a848f1-3d34-80b9-9b39-cb86d9d4c2e5",
-    "url": "",
-    "featured": true,
-    "order": 1,
-    "notionUrl": "https://www.notion.so/Microsoft-Copilot-Excel-Wiki-Agent-25a848f13d3480b99b39cb86d9d4c2e5",
-    "lastEdited": "2026-03-25T16:53:00.000Z"
-  },
-  {
     "id": "2c6848f1-3d34-8081-a2dd-db89cb8103da",
     "title": "Excel Charting : AI-Powered Chart Design Recommendations",
     "slug": "excel-charting-ai-powered-chart-design-recommendations",
@@ -62,7 +62,7 @@
     "featured": true,
     "order": 2,
     "notionUrl": "https://www.notion.so/Excel-Charting-AI-Powered-Chart-Design-Recommendations-2c6848f13d348081a2dddb89cb8103da",
-    "lastEdited": "2026-03-25T18:35:00.000Z"
+    "lastEdited": "2026-04-01T08:55:00.000Z"
   },
   {
     "id": "2c6848f1-3d34-8066-8d7e-e8b2e7112910",
@@ -84,7 +84,7 @@
     "featured": true,
     "order": 3,
     "notionUrl": "https://www.notion.so/Excel-Charting-AI-Powered-Chart-Insights-2c6848f13d3480668d7ee8b2e7112910",
-    "lastEdited": "2026-03-27T06:52:00.000Z"
+    "lastEdited": "2026-04-01T10:48:00.000Z"
   },
   {
     "id": "2c6848f1-3d34-80ba-a3b8-db6bc3ecef5c",
@@ -104,7 +104,7 @@
     "featured": false,
     "order": 4,
     "notionUrl": "https://www.notion.so/Smarter-Chart-Defaults-The-Modern-Colors-Revolution-2c6848f13d3480baa3b8db6bc3ecef5c",
-    "lastEdited": "2026-03-27T06:44:00.000Z"
+    "lastEdited": "2026-04-01T10:28:00.000Z"
   },
   {
     "id": "306848f1-3d34-80e8-825b-da5a6536e891",
@@ -125,7 +125,7 @@
     "featured": true,
     "order": 5,
     "notionUrl": "https://www.notion.so/Excel-Data-Visualisation-The-Strategy-Behind-the-Roadmap-306848f13d3480e8825bda5a6536e891",
-    "lastEdited": "2026-03-22T20:47:00.000Z"
+    "lastEdited": "2026-04-01T10:48:00.000Z"
   },
   {
     "id": "ccd66a99-2348-4b8c-bc56-0b8943b272ed",

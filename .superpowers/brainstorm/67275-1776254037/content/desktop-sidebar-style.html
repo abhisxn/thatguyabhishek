@@ -1,0 +1,49 @@
+<h2>Desktop sidebar — how should it behave?</h2>
+<p class="subtitle">The article body is centered at 720px max-width. The sidebar sits to the left of it. Pick the interaction model that feels right.</p>
+
+<div class="options">
+  <div class="option" data-choice="always-visible" onclick="toggleSelect(this)">
+    <div class="letter">A</div>
+    <div class="content">
+      <h3>Always visible, fixed</h3>
+      <p>Sidebar is present from the moment the article loads. Fixed position, scrolls with you. Active section highlights as you read. Clean and persistent — like linear.app docs or Notion's page outline.</p>
+    </div>
+  </div>
+  <div class="option" data-choice="appears-on-scroll" onclick="toggleSelect(this)">
+    <div class="letter">B</div>
+    <div class="content">
+      <h3>Appears after scrolling past the header</h3>
+      <p>Hidden initially — fades in once you scroll past the article title. Keeps the hero clean, then guides you through the body. Disappears when you reach the footer.</p>
+    </div>
+  </div>
+  <div class="option" data-choice="hover-reveal" onclick="toggleSelect(this)">
+    <div class="letter">C</div>
+    <div class="content">
+      <h3>Minimal dots, expands on hover</h3>
+      <p>Shows only small progress dots by default. Hovering reveals the full sidebar with section labels. Very subtle — barely there unless you need it.</p>
+    </div>
+  </div>
+</div>
+
+<div style="margin-top: 32px; padding: 20px 24px; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px;">
+  <p style="margin: 0 0 16px; font-size: 13px; letter-spacing: 0.08em; text-transform: uppercase; opacity: 0.5;">Sidebar anatomy (all options)</p>
+  <div style="display: flex; gap: 32px; align-items: flex-start; font-size: 13px; line-height: 1.8;">
+    <div style="display: flex; flex-col; gap: 8px;">
+      <div style="display: flex; align-items: center; gap: 10px;">
+        <div style="width: 3px; height: 16px; background: #818cf8; border-radius: 2px;"></div>
+        <span style="color: #818cf8; font-weight: 600;">Active section</span>
+        <span style="opacity: 0.5; font-size: 12px;">— brand color, full opacity</span>
+      </div>
+      <div style="display: flex; align-items: center; gap: 10px;">
+        <div style="width: 3px; height: 16px; background: rgba(255,255,255,0.15); border-radius: 2px;"></div>
+        <span style="opacity: 0.4;">Inactive section</span>
+        <span style="opacity: 0.4; font-size: 12px;">— muted, lighter weight</span>
+      </div>
+      <div style="display: flex; align-items: center; gap: 10px; margin-top: 4px;">
+        <div style="width: 3px; height: 16px; background: rgba(255,255,255,0.08); border-radius: 2px;"></div>
+        <span style="opacity: 0.3;">Track line</span>
+        <span style="opacity: 0.3; font-size: 12px;">— subtle vertical rail connecting items</span>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,72 @@
+<h2>Design — Mobile / tablet bottom bar</h2>
+<p class="subtitle">Fixed to the bottom of the screen. Ambient reading indicator only — no tap interaction. Fades in after first scroll, fades out near the footer.</p>
+
+<div class="mockup" style="min-height: 520px; position: relative;">
+  <div class="mockup-header">Article page — mobile (390px)</div>
+  <div class="mockup-body" style="padding: 0; background: #0a0a0f; display: flex; justify-content: center;">
+
+    <!-- Phone frame -->
+    <div style="width: 280px; min-height: 480px; border: 1px solid rgba(255,255,255,0.1); border-radius: 24px; overflow: hidden; position: relative; margin: 24px 0;">
+
+      <!-- Article content area -->
+      <div style="padding: 24px 20px 80px; min-height: 420px;">
+        <div style="font-size: 9px; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(255,255,255,0.25); margin-bottom: 6px;">AI · 6 min read</div>
+        <div style="font-size: 16px; font-weight: 700; color: #fafafa; margin-bottom: 14px; line-height: 1.25;">Why AI tools still fail designers</div>
+        <div style="height: 1px; background: rgba(255,255,255,0.1); margin-bottom: 14px;"></div>
+
+        <div style="font-size: 11px; font-weight: 600; color: #818cf8; margin-bottom: 8px;">The Core Problem</div>
+        <div style="background: rgba(255,255,255,0.06); height: 5px; border-radius: 3px; margin-bottom: 5px; width: 95%;"></div>
+        <div style="background: rgba(255,255,255,0.06); height: 5px; border-radius: 3px; margin-bottom: 5px; width: 80%;"></div>
+        <div style="background: rgba(255,255,255,0.06); height: 5px; border-radius: 3px; margin-bottom: 5px; width: 88%;"></div>
+        <div style="background: rgba(255,255,255,0.06); height: 5px; border-radius: 3px; margin-bottom: 5px; width: 72%;"></div>
+        <div style="background: rgba(255,255,255,0.06); height: 5px; border-radius: 3px; width: 85%;"></div>
+      </div>
+
+      <!-- Bottom bar -->
+      <div style="position: absolute; bottom: 0; left: 0; right: 0; background: rgba(10,10,15,0.85); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border-top: 1px solid rgba(255,255,255,0.08);">
+        <!-- Progress bar -->
+        <div style="height: 2px; background: rgba(255,255,255,0.06); overflow: hidden;">
+          <div style="width: 47%; height: 100%; background: linear-gradient(90deg, #6366f1, #818cf8); border-radius: 0 2px 2px 0;"></div>
+        </div>
+        <!-- Label row -->
+        <div style="padding: 10px 16px 14px; display: flex; align-items: center; justify-content: space-between;">
+          <span style="font-size: 11px; font-weight: 500; color: rgba(255,255,255,0.5); letter-spacing: 0.01em;">The Core Problem</span>
+          <span style="font-size: 10px; color: rgba(255,255,255,0.2);">47%</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<div class="section">
+  <h3>Bottom bar specs</h3>
+  <table style="width:100%; font-size: 13px; border-collapse: collapse;">
+    <tr style="border-bottom: 1px solid rgba(255,255,255,0.06);">
+      <td style="padding: 8px 0; color: rgba(255,255,255,0.4); width: 40%;">Visibility</td>
+      <td style="padding: 8px 0;">Hidden on <code>lg+</code> (≥1024px). Fixed bottom on mobile/tablet.</td>
+    </tr>
+    <tr style="border-bottom: 1px solid rgba(255,255,255,0.06);">
+      <td style="padding: 8px 0; color: rgba(255,255,255,0.4);">Progress value</td>
+      <td style="padding: 8px 0;"><code>scrollY / (body height − viewport height)</code>, updated on scroll</td>
+    </tr>
+    <tr style="border-bottom: 1px solid rgba(255,255,255,0.06);">
+      <td style="padding: 8px 0; color: rgba(255,255,255,0.4);">Current section</td>
+      <td style="padding: 8px 0;">Same IntersectionObserver as desktop — shared state</td>
+    </tr>
+    <tr style="border-bottom: 1px solid rgba(255,255,255,0.06);">
+      <td style="padding: 8px 0; color: rgba(255,255,255,0.4);">Background</td>
+      <td style="padding: 8px 0;"><code>rgba(10,10,15,0.85)</code> + <code>backdrop-blur: 12px</code></td>
+    </tr>
+    <tr style="border-bottom: 1px solid rgba(255,255,255,0.06);">
+      <td style="padding: 8px 0; color: rgba(255,255,255,0.4);">Progress bar</td>
+      <td style="padding: 8px 0;">2px tall, brand gradient, sits flush at top of bar</td>
+    </tr>
+    <tr>
+      <td style="padding: 8px 0; color: rgba(255,255,255,0.4);">Fades in/out</td>
+      <td style="padding: 8px 0;">In after first 80px scroll. Out when footer enters view.</td>
+    </tr>
+  </table>
+</div>
+
+<p style="font-size: 13px; color: rgba(255,255,255,0.4); margin-top: 8px;">The percentage readout on the right — keep it or drop it?</p>

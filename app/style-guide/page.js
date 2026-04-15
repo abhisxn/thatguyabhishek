@@ -12,7 +12,11 @@ import Select from '@/app/components/ui/Select';
 import { CARD_SIZES, CARD_STYLES } from '@/app/components/ui/card-utils';
 import { LinkCalloutCardUI } from '@/app/components/ui/LinkCalloutCard';
 import StyleNav from '@/app/components/ui/StyleNav';
-import ArticleReactions from '@/app/components/sections/ArticleReactions';
+import ArticleReactions, {
+  ArticleReactionPills,
+  ArticleReactionCards,
+  TotalCount,
+} from '@/app/components/sections/ArticleReactions';
 import { ArrowIcon } from '@/app/components/ui/icons';
 
 /* ── Section wrapper ─────────────────────────────────────────── */
@@ -1312,11 +1316,45 @@ function Card() {
               <div className="flex flex-col gap-10">
 
                 <div>
-                  <Label>Live component — shared counts via Vercel KV (slug: style-guide-demo)</Label>
-                  <p className="t-caption text-fg-muted mb-4">Bar (pill strip) above, card grid below. Click any reaction to test selection, swap, and deselect.</p>
+                  <Label>Live card grid — end of article (slug: style-guide-demo)</Label>
+                  <p className="t-caption text-fg-muted mb-4">Card grid at end of article. Counts shared via Vercel KV. Floating pill bar appears while reading, auto-hides when cards are visible.</p>
                   <div style={{ border: '1px solid var(--border)', borderRadius: 'var(--radius-card)', padding: '0 24px', overflow: 'hidden' }}>
                     <ArticleReactions slug="style-guide-demo" />
                   </div>
+                </div>
+
+                <div>
+                  <Label>Floating pill bar — inverse (fixed, dark bg)</Label>
+                  <p className="t-caption text-fg-muted mb-4">
+                    Appears fixed at bottom of viewport while reading. Uses <Code>inverse</Code> prop — pills render on <Code>var(--fg)</Code> background.
+                  </p>
+                  <div
+                    style={{
+                      background: 'var(--fg)',
+                      border: '1px solid var(--border-strong)',
+                      borderRadius: 'var(--radius-card)',
+                      padding: '10px 14px',
+                      display: 'inline-flex',
+                    }}
+                  >
+                    <ArticleReactionPills
+                      counts={{ fire: 12, thinking: 4, clapping: 7, love: 3, bookmark: 9 }}
+                      userReaction={null}
+                      onReact={() => {}}
+                      loading={false}
+                      inverse
+                    />
+                  </div>
+                </div>
+
+                <div>
+                  <Label>Reaction cards — standalone (static counts)</Label>
+                  <ArticleReactionCards
+                    counts={{ fire: 12, thinking: 4, clapping: 7, love: 3, bookmark: 9 }}
+                    userReaction="fire"
+                    onReact={() => {}}
+                    loading={false}
+                  />
                 </div>
 
                 <div>

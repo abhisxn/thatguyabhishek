@@ -1,0 +1,99 @@
+<h2>Design — Desktop sidebar</h2>
+<p class="subtitle">Fixed left sidebar. Fades in after scrolling past the article header. Disappears before the "More writing" footer. Section labels are clickable — smooth scroll to target.</p>
+
+<div class="mockup" style="min-height: 480px; position: relative; overflow: hidden;">
+  <div class="mockup-header">Article page — desktop (~1280px wide)</div>
+  <div class="mockup-body" style="padding: 0; position: relative; min-height: 440px; background: #0a0a0f;">
+
+    <!-- Sidebar -->
+    <div style="position: absolute; left: 40px; top: 40px; width: 140px;">
+      <div style="font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(255,255,255,0.25); margin-bottom: 14px;">On this page</div>
+
+      <!-- Track + items -->
+      <div style="position: relative; padding-left: 16px;">
+        <!-- Vertical track line -->
+        <div style="position: absolute; left: 3px; top: 0; bottom: 0; width: 1px; background: rgba(255,255,255,0.08);"></div>
+
+        <!-- Active item -->
+        <div style="position: relative; margin-bottom: 12px;">
+          <div style="position: absolute; left: -16px; top: 4px; width: 3px; height: 14px; background: #818cf8; border-radius: 2px;"></div>
+          <span style="font-size: 12px; font-weight: 600; color: #818cf8; line-height: 1.4; display: block; cursor: pointer;">The Core Problem</span>
+        </div>
+
+        <!-- Inactive items -->
+        <div style="margin-bottom: 12px; position: relative;">
+          <div style="position: absolute; left: -16px; top: 4px; width: 2px; height: 10px; background: rgba(255,255,255,0.12); border-radius: 2px;"></div>
+          <span style="font-size: 12px; color: rgba(255,255,255,0.3); line-height: 1.4; display: block; cursor: pointer; transition: color 0.2s;">Introduction</span>
+        </div>
+        <div style="margin-bottom: 12px; position: relative;">
+          <div style="position: absolute; left: -16px; top: 4px; width: 2px; height: 10px; background: rgba(255,255,255,0.12); border-radius: 2px;"></div>
+          <span style="font-size: 12px; color: rgba(255,255,255,0.3); line-height: 1.4; display: block; cursor: pointer;">My Approach</span>
+        </div>
+        <div style="margin-bottom: 12px; position: relative;">
+          <div style="position: absolute; left: -16px; top: 4px; width: 2px; height: 10px; background: rgba(255,255,255,0.12); border-radius: 2px;"></div>
+          <span style="font-size: 12px; color: rgba(255,255,255,0.3); line-height: 1.4; display: block; cursor: pointer;">Takeaways</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Article body (centered) -->
+    <div style="margin: 0 auto; max-width: 360px; padding: 40px 0; position: relative; left: 60px;">
+      <div style="font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(255,255,255,0.25); margin-bottom: 8px;">AI · 6 min read</div>
+      <div style="font-size: 22px; font-weight: 700; color: #fafafa; margin-bottom: 20px; line-height: 1.2;">Why AI tools still fail designers</div>
+      <div style="height: 1px; background: rgba(255,255,255,0.1); margin-bottom: 20px;"></div>
+      <div style="font-size: 12px; color: rgba(255,255,255,0.35); line-height: 1.8;">
+        <div style="font-size: 14px; font-weight: 600; color: rgba(255,255,255,0.7); margin-bottom: 8px;">Introduction</div>
+        <div style="background: rgba(255,255,255,0.04); height: 6px; border-radius: 3px; margin-bottom: 6px; width: 95%;"></div>
+        <div style="background: rgba(255,255,255,0.04); height: 6px; border-radius: 3px; margin-bottom: 6px; width: 80%;"></div>
+        <div style="background: rgba(255,255,255,0.04); height: 6px; border-radius: 3px; margin-bottom: 20px; width: 88%;"></div>
+
+        <div style="font-size: 14px; font-weight: 600; color: #818cf8; margin-bottom: 8px;">The Core Problem</div>
+        <div style="background: rgba(255,255,255,0.06); height: 6px; border-radius: 3px; margin-bottom: 6px; width: 90%;"></div>
+        <div style="background: rgba(255,255,255,0.06); height: 6px; border-radius: 3px; margin-bottom: 6px; width: 75%;"></div>
+        <div style="background: rgba(255,255,255,0.06); height: 6px; border-radius: 3px; width: 82%;"></div>
+      </div>
+    </div>
+
+    <!-- Fade-in annotation -->
+    <div style="position: absolute; right: 16px; top: 40px; width: 130px; padding: 10px 12px; background: rgba(129,140,248,0.1); border: 1px solid rgba(129,140,248,0.3); border-radius: 8px; font-size: 11px; color: rgba(255,255,255,0.6); line-height: 1.5;">
+      ↳ fades in with <code style="font-size: 10px; color: #818cf8;">opacity 0→1</code> + <code style="font-size: 10px; color: #818cf8;">x -8→0</code> after header scrolls out of view
+    </div>
+
+    <!-- Breakpoint note -->
+    <div style="position: absolute; right: 16px; bottom: 16px; font-size: 11px; color: rgba(255,255,255,0.25);">
+      Only renders at ≥ 1100px viewport width
+    </div>
+  </div>
+</div>
+
+<div class="section">
+  <h3>Sidebar specs</h3>
+  <table style="width:100%; font-size: 13px; border-collapse: collapse;">
+    <tr style="border-bottom: 1px solid rgba(255,255,255,0.06);">
+      <td style="padding: 8px 0; color: rgba(255,255,255,0.4); width: 40%;">Position</td>
+      <td style="padding: 8px 0;">Fixed — <code>left: calc(50vw - 360px - 180px)</code></td>
+    </tr>
+    <tr style="border-bottom: 1px solid rgba(255,255,255,0.06);">
+      <td style="padding: 8px 0; color: rgba(255,255,255,0.4);">Width</td>
+      <td style="padding: 8px 0;">160px</td>
+    </tr>
+    <tr style="border-bottom: 1px solid rgba(255,255,255,0.06);">
+      <td style="padding: 8px 0; color: rgba(255,255,255,0.4);">Appears when</td>
+      <td style="padding: 8px 0;">Header divider scrolls out of view (IntersectionObserver)</td>
+    </tr>
+    <tr style="border-bottom: 1px solid rgba(255,255,255,0.06);">
+      <td style="padding: 8px 0; color: rgba(255,255,255,0.4);">Disappears when</td>
+      <td style="padding: 8px 0;">"More writing" footer enters view</td>
+    </tr>
+    <tr style="border-bottom: 1px solid rgba(255,255,255,0.06);">
+      <td style="padding: 8px 0; color: rgba(255,255,255,0.4);">Entry animation</td>
+      <td style="padding: 8px 0;">opacity 0→1, x −8→0, 300ms ease-out</td>
+    </tr>
+    <tr>
+      <td style="padding: 8px 0; color: rgba(255,255,255,0.4);">Active tracking</td>
+      <td style="padding: 8px 0;">IntersectionObserver on each <code>h2[data-toc]</code>, rootMargin "0px 0px -65% 0px"</td>
+    </tr>
+  </table>
+</div>
+
+<p style="font-size: 13px; color: rgba(255,255,255,0.4); margin-top: 8px;">Does this layout look right? Any changes to the sidebar anatomy?</p>

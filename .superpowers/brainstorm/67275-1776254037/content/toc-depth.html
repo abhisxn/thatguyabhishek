@@ -1,0 +1,41 @@
+<h2>Which heading levels should the ToC track?</h2>
+<p class="subtitle">Articles come from Notion. Headings map like this: heading_1 → H2 (major section), heading_2 → H3 (subsection), heading_3 → H4 (minor). How deep should the navigation go?</p>
+
+<div style="margin: 32px 0 24px; padding: 20px 24px; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px;">
+  <p style="margin: 0 0 12px; font-size: 13px; letter-spacing: 0.08em; text-transform: uppercase; opacity: 0.5;">Example article structure</p>
+  <div style="font-size: 14px; line-height: 2; font-family: monospace; opacity: 0.8;">
+    <div style="color: #818cf8; font-weight: 600;">◉ Introduction</div>
+    <div style="color: #a5b4fc; padding-left: 16px;">→ What is this about?</div>
+    <div style="color: #c4b5fd; padding-left: 32px; font-size: 12px; opacity: 0.6;">· Background context</div>
+    <div style="color: #818cf8; font-weight: 600; margin-top: 4px;">◉ The Core Problem</div>
+    <div style="color: #a5b4fc; padding-left: 16px;">→ Why it matters</div>
+    <div style="color: #818cf8; font-weight: 600; margin-top: 4px;">◉ My Approach</div>
+    <div style="color: #a5b4fc; padding-left: 16px;">→ Step 1</div>
+    <div style="color: #a5b4fc; padding-left: 16px;">→ Step 2</div>
+    <div style="color: #818cf8; font-weight: 600; margin-top: 4px;">◉ Takeaways</div>
+  </div>
+</div>
+
+<div class="options">
+  <div class="option" data-choice="h1-only" onclick="toggleSelect(this)">
+    <div class="letter">A</div>
+    <div class="content">
+      <h3>Top-level only (H2s)</h3>
+      <p>Just major sections — clean, minimal sidebar. Best for shorter articles. No nesting.</p>
+    </div>
+  </div>
+  <div class="option" data-choice="h1-h2" onclick="toggleSelect(this)">
+    <div class="letter">B</div>
+    <div class="content">
+      <h3>Two levels (H2 + H3)</h3>
+      <p>Major sections + subsections. Indented sub-items appear on hover or always visible. Sweet spot for most long-form articles.</p>
+    </div>
+  </div>
+  <div class="option" data-choice="h1-h2-h3" onclick="toggleSelect(this)">
+    <div class="letter">C</div>
+    <div class="content">
+      <h3>Three levels (H2 + H3 + H4)</h3>
+      <p>Full depth. Can get noisy on dense articles. Usually overkill unless writing a technical reference.</p>
+    </div>
+  </div>
+</div>
