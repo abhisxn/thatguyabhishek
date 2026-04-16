@@ -1,4 +1,5 @@
 import { Glory, Manrope } from 'next/font/google';
+import Script from 'next/script';
 import './globals.css';
 import Navbar from './components/layout/Navbar';
 import ConditionalFooter from './components/layout/ConditionalFooter';
@@ -121,6 +122,18 @@ export default function RootLayout({ children }) {
           dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteJsonLd) }}
         />
         {process.env.NODE_ENV === 'development' && <DevLiveReload />}
+        <Script
+          src="https://www.googletagmanager.com/gtag/js?id=G-QGV3CX0FRK"
+          strategy="afterInteractive"
+        />
+        <Script id="gtag-init" strategy="afterInteractive">
+          {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', 'G-QGV3CX0FRK');
+          `}
+        </Script>
       </body>
     </html>
   );
