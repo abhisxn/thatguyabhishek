@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import { WritingCard } from '@/components/ui/interaction-cards';
 
 export function BackArrow() {
   return (
@@ -19,33 +20,5 @@ export function ExternalArrow() {
 }
 
 export function MiniArticleCard({ article }) {
-  return (
-    <Link
-      href={article.href}
-      className="group flex flex-col gap-2 no-underline"
-      style={{
-        padding: '20px',
-        background: 'var(--surface-1)',
-        border: '1px solid var(--border)',
-        borderRadius: 'var(--radius-card)',
-        transition: 'border-color 0.2s ease, background 0.2s ease',
-      }}
-      onMouseEnter={(e) => {
-        e.currentTarget.style.borderColor = 'var(--border-strong)';
-        e.currentTarget.style.background = 'var(--surface-2)';
-      }}
-      onMouseLeave={(e) => {
-        e.currentTarget.style.borderColor = 'var(--border)';
-        e.currentTarget.style.background = 'var(--surface-1)';
-      }}
-    >
-      <span style={{ fontSize: 22 }}>{article.emoji}</span>
-      <p className="t-body3 font-semibold text-fg" style={{ margin: 0, lineHeight: 1.35 }}>
-        {article.title}
-      </p>
-      <span className="t-caption text-fg-muted inline-flex items-center gap-1 mt-auto">
-        Read <ExternalArrow />
-      </span>
-    </Link>
-  );
+  return <WritingCard article={article} showDesc={false} equalHeight />;
 }
