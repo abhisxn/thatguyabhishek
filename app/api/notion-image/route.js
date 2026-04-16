@@ -1,3 +1,6 @@
+// Image proxy audit 2026-04-16: zero raw Notion S3 URLs found in app/ components. ✓
+// All image URLs are routed through this proxy at build time (notion-sync.js) or
+// render time (NotionBlocks.js). CalloutBlock.js only has a URL-parsing utility, no raw URLs.
 import { NextResponse } from 'next/server';
 import notion from '@/lib/notion';
 
