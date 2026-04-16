@@ -9,27 +9,7 @@ import HelpSection from './components/sections/HelpSection';
 import FadeSection from './components/ui/FadeSection';
 import CalloutBlock from './components/blocks/CalloutBlock';
 import MoreWorkCard from './components/sections/MoreWorkCard';
-import { getHomePageData } from '@/lib/notion-work';
-import { getCalloutType } from './components/ui/card-utils';
-
-function collectCardCallouts(blocks, childrenMap) {
-  const cards = [];
-  for (const block of blocks) {
-    if (block.type === 'callout' && getCalloutType(block) === 'card') {
-      cards.push(block);
-    } else if (block.type === 'column_list') {
-      const columns = childrenMap[block.id] ?? [];
-      for (const col of columns) {
-        for (const b of (childrenMap[col.id] ?? [])) {
-          if (b.type === 'callout' && getCalloutType(b) === 'card') {
-            cards.push(b);
-          }
-        }
-      }
-    }
-  }
-  return cards;
-}
+import { getHomePageData, collectCardCallouts } from '@/lib/notion-work';
 
 export default async function Home() {
   let cardBlocks = [];
