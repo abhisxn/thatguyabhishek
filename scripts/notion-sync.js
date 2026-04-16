@@ -27,11 +27,6 @@ if (!NOTION_KEY) {
 
 const notion = new Client({ auth: NOTION_KEY });
 
-/* ── Slug ────────────────────────────────────────────────── */
-function slugify(title) {
-  return title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
-}
-
 /* ── Property helpers ────────────────────────────────────── */
 function getText(prop) {
   if (!prop) return '';
@@ -142,7 +137,7 @@ async function syncProjects() {
     return {
       id:         page.id,
       title,
-      slug:       slugify(title),
+      slug:       title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, ''),
       desc:       getText(p['Description'] ?? p['Desc']),
       summary:    getText(p['Summary'] ?? p['Tagline'] ?? p['Excerpt']),
       status:     getSelect(p['Status']),
