@@ -56,11 +56,50 @@
       "Read(//usr/**)",
       "Bash(/Users/abhishek/.nvm/versions/node/v24.14.0/bin/npx vitest *)",
       "Bash(ls -la /Users/abhishek/thatguyabhishek/graphify-out/.graphify_chunk_*.json)",
-      "Bash(awk '{print $NF}')"
+      "Bash(awk '{print $NF}')",
+      "Bash(/opt/homebrew/bin/node --version)",
+      "Bash(export PATH=\"/opt/homebrew/bin:$HOME/.nvm/versions/node/v24.14.0/bin:$PATH\")",
+      "Bash(zsh -i -c \"npx vitest run __tests__/lib/slugify.test.js\")",
+      "Bash(./node_modules/.bin/vitest run *)",
+      "Bash(/opt/homebrew/bin/node ./node_modules/.bin/vitest run __tests__/lib/slugify.test.js)",
+      "Bash(ls /opt/homebrew/opt/node*/bin/node)",
+      "Bash(~/.nvm/versions/node/v24.14.0/bin/node ./node_modules/.bin/vitest run __tests__/lib/slugify.test.js)",
+      "Bash(git stash *)",
+      "Bash(~/.nvm/versions/node/v24.14.0/bin/node ./node_modules/.bin/vitest run)",
+      "Bash(~/.nvm/versions/node/v24.14.0/bin/node ./node_modules/.bin/next build)",
+      "Bash(~/.nvm/versions/node/v24.14.0/bin/node -c /Users/abhishek/thatguyabhishek/lib/notion-work.js)",
+      "Bash(~/.nvm/versions/node/v24.14.0/bin/node -e \"console.log\\('✓ Import test starting'\\); const { slugifyTitle, slugifyArticle } = require\\('./lib/slugify.js'\\); console.log\\('✓ slugifyTitle exists:', typeof slugifyTitle === 'function'\\); console.log\\('✓ slugifyArticle exists:', typeof slugifyArticle === 'function'\\);\")",
+      "Bash(~/.nvm/versions/node/v24.14.0/bin/node -c /Users/abhishek/thatguyabhishek/app/page.js)",
+      "Bash(git -C /Users/abhishek/thatguyabhishek add components/ui/interaction-cards/ElasticGrid.js components/ui/interaction-cards/index.js)",
+      "Bash(git -C /Users/abhishek/thatguyabhishek commit -m \"feat: add ElasticGrid and index.js — interaction-cards library complete\")",
+      "Bash(grep \"^import\" /Users/abhishek/thatguyabhishek/lib/*.js)",
+      "Bash(grep -A5 \"alias\\\\|paths\\\\|@/\" /Users/abhishek/thatguyabhishek/vite.config.*)",
+      "Bash(grep -A5 \"alias\\\\|resolve\" /Users/abhishek/thatguyabhishek/vitest.config.*)",
+      "Bash(git show *)",
+      "Bash(ls -la /Users/abhishek/thatguyabhishek/components/ui/interaction-cards*)",
+      "Bash(rm /Users/abhishek/.claude/projects/-Users-abhishek-thatguyabhishek/memory/project_design_token_enforcement.md)",
+      "Bash(rm /Users/abhishek/.claude/commands/frontend-design.md)",
+      "Bash(rm /Users/abhishek/thatguyabhishek/.claude/commands/frontend-design.md)"
     ],
     "additionalDirectories": [
       "/Users/abhishek/thatguyabhishek/.next",
-      "/Users/abhishek/thatguyabhishek/graphify-out"
+      "/Users/abhishek/thatguyabhishek/graphify-out",
+      "/opt/homebrew/lib/python3.12/site-packages/graphify",
+      "/Users/abhishek/thatguyabhishek/.vexp",
+      "/Users/abhishek/thatguyabhishek/app/writing/[slug]"
+    ]
+  },
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Glob|Grep",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "[ -f graphify-out/graph.json ] && echo '{\"hookSpecificOutput\":{\"hookEventName\":\"PreToolUse\",\"additionalContext\":\"graphify: Knowledge graph exists. Read graphify-out/GRAPH_REPORT.md for god nodes and community structure before searching raw files.\"}}' || true"
+          }
+        ]
+      }
     ]
   }
 }
