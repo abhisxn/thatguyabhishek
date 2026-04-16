@@ -3,8 +3,17 @@
 import { useState } from 'react';
 import { m } from 'framer-motion';
 
-export function FlipCard({ num, title, body, titleSize = 'default', minHeight = 280, index = 0 }) {
+export function FlipCard({ num, title, body, titleSize = 'default', minHeight = 0, index = 0 }) {
   const [flipped, setFlipped] = useState(false);
+
+  const faceBase = {
+    gridArea: '1 / 1',
+    backfaceVisibility: 'hidden',
+    WebkitBackfaceVisibility: 'hidden',
+    borderRadius: 16,
+    padding: '32px 28px',
+    minHeight,
+  };
 
   return (
     <m.div
@@ -12,18 +21,17 @@ export function FlipCard({ num, title, body, titleSize = 'default', minHeight = 
       whileInView={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
       viewport={{ once: true, margin: '-40px' }}
       transition={{ duration: 0.7, delay: (index % 4) * 0.08, ease: [0.22, 1, 0.36, 1] }}
-      style={{ minHeight, height: '100%' }}
+      style={{ height: '100%' }}
     >
       <div
-        style={{ perspective: '1000px', height: '100%', minHeight, cursor: 'pointer' }}
+        style={{ perspective: '1000px', cursor: 'pointer', height: '100%' }}
         onMouseEnter={() => setFlipped(true)}
         onMouseLeave={() => setFlipped(false)}
         onClick={() => setFlipped((f) => !f)}
       >
         <div
           style={{
-            position: 'relative',
-            width: '100%',
+            display: 'grid',
             height: '100%',
             transformStyle: 'preserve-3d',
             transition: 'transform 0.55s cubic-bezier(0.22, 1, 0.36, 1)',
@@ -33,12 +41,7 @@ export function FlipCard({ num, title, body, titleSize = 'default', minHeight = 
           {/* Front face */}
           <div
             style={{
-              position: 'absolute',
-              inset: 0,
-              backfaceVisibility: 'hidden',
-              WebkitBackfaceVisibility: 'hidden',
-              borderRadius: 16,
-              padding: '32px 28px',
+              ...faceBase,
               background: 'var(--surface)',
               border: '1px solid color-mix(in srgb, var(--fg) 10%, transparent)',
               display: 'flex',
@@ -66,13 +69,8 @@ export function FlipCard({ num, title, body, titleSize = 'default', minHeight = 
           {/* Back face */}
           <div
             style={{
-              position: 'absolute',
-              inset: 0,
-              backfaceVisibility: 'hidden',
-              WebkitBackfaceVisibility: 'hidden',
+              ...faceBase,
               transform: 'rotateY(180deg)',
-              borderRadius: 16,
-              padding: '32px 28px',
               background: 'var(--bg-solid)',
               border: '1px solid color-mix(in srgb, var(--fg) 10%, transparent)',
               display: 'flex',
