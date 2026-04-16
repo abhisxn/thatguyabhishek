@@ -141,9 +141,6 @@
   --brand-muted:      rgba(72, 57, 202, 0.15);
   --brand-border:     rgba(72, 57, 202, 0.40);
 
-  /* Flip card back */
-  --flip-back-bg:            #19223d;
-
   /* Section callout surfaces */
   --section-solid-bg:        #161b2a;
   --section-solid-fg:        #ffffff;
@@ -207,9 +204,6 @@
   --brand:            #4839ca;
   --brand-muted:      rgba(72, 57, 202, 0.12);
   --brand-border:     rgba(72, 57, 202, 0.35);
-
-  /* Flip card back */
-  --flip-back-bg:            #f5f4f0;
 
   /* Section callout surfaces */
   --section-solid-bg:        #ffffff;
