@@ -1,0 +1,186 @@
+<style>
+  .flip-demo {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 24px;
+    margin-top: 24px;
+  }
+  .flip-card-wrap {
+    perspective: 1000px;
+    height: 260px;
+    cursor: pointer;
+    border-radius: 16px;
+  }
+  .flip-card-inner {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    transform-style: preserve-3d;
+    transition: transform 0.55s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  .flip-card-wrap:hover .flip-card-inner {
+    transform: rotateY(180deg);
+  }
+  .flip-face {
+    position: absolute;
+    inset: 0;
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+    border-radius: 16px;
+    padding: 28px 24px;
+    display: flex;
+    flex-direction: column;
+  }
+  .flip-back {
+    transform: rotateY(180deg);
+  }
+
+  /* Option A */
+  .opt-a .flip-front {
+    background: #1a1a24;
+    border: 1px solid rgba(255,255,255,0.1);
+    justify-content: space-between;
+  }
+  .opt-a .flip-back {
+    background: #111118;
+    border: 1px solid rgba(255,255,255,0.12);
+    justify-content: flex-start;
+    gap: 16px;
+  }
+
+  /* Option B */
+  .opt-b .flip-front {
+    background: #1a1a24;
+    border: 1px solid rgba(255,255,255,0.1);
+    justify-content: space-between;
+  }
+  .opt-b .flip-back {
+    background: #2b1d1a;
+    border: 1px solid rgba(234,133,117,0.25);
+    justify-content: flex-start;
+    gap: 16px;
+  }
+
+  /* Option C */
+  .opt-c .flip-front {
+    background: linear-gradient(135deg, #1a1a24 60%, #1e1b4b);
+    border: 1px solid rgba(255,255,255,0.1);
+    justify-content: space-between;
+  }
+  .opt-c .flip-back {
+    background: #1a1a24;
+    border: 1px solid rgba(129,140,248,0.25);
+    justify-content: flex-start;
+    gap: 16px;
+  }
+
+  .num { font-size: 11px; font-weight: 700; letter-spacing: 0.1em; color: #ea8575; }
+  .big-title { font-size: 20px; font-weight: 600; line-height: 1.3; color: #fafafa; margin: 0; }
+  .hint { font-size: 11px; color: rgba(255,255,255,0.35); margin: 0; }
+  .back-body { font-size: 13px; line-height: 1.7; color: rgba(255,255,255,0.7); margin: 0; }
+  .back-num { font-size: 11px; font-weight: 700; letter-spacing: 0.1em; color: #ea8575; }
+  .label-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    color: rgba(255,255,255,0.4);
+    text-transform: uppercase;
+  }
+  .col-label {
+    text-align: center;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.45);
+    margin-bottom: 12px;
+  }
+  .hint-row {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .hint-icon {
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    border: 1px solid rgba(255,255,255,0.25);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 8px;
+  }
+</style>
+
+<h2>Beyond the Work — Flip Card Front</h2>
+<p class="subtitle">Hover any card to preview the flip. All options: numbered label + heading on front, body text on back. Difference is the <strong>back face color treatment</strong>.</p>
+
+<div class="flip-demo">
+  <!-- Option A -->
+  <div>
+    <p class="col-label">A — Neutral dark</p>
+    <div class="flip-card-wrap opt-a">
+      <div class="flip-card-inner">
+        <div class="flip-face flip-front">
+          <span class="num">01</span>
+          <p class="big-title">Maker by instinct</p>
+          <div class="hint-row">
+            <div class="hint-icon">↻</div>
+            <span class="hint">hover to read</span>
+          </div>
+        </div>
+        <div class="flip-face flip-back">
+          <span class="back-num">01</span>
+          <p class="back-body">I've built apps, launched brands, sold plants online. The businesses that worked taught me about users. The ones that didn't taught me everything else.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Option B -->
+  <div>
+    <p class="col-label">B — Warm coral back</p>
+    <div class="flip-card-wrap opt-b">
+      <div class="flip-card-inner">
+        <div class="flip-face flip-front">
+          <span class="num">01</span>
+          <p class="big-title">Maker by instinct</p>
+          <div class="hint-row">
+            <div class="hint-icon">↻</div>
+            <span class="hint">hover to read</span>
+          </div>
+        </div>
+        <div class="flip-face flip-back">
+          <span class="back-num">01</span>
+          <p class="back-body" style="color: rgba(255,220,215,0.85);">I've built apps, launched brands, sold plants online. The businesses that worked taught me about users. The ones that didn't taught me everything else.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Option C -->
+  <div>
+    <p class="col-label">C — Brand indigo back</p>
+    <div class="flip-card-wrap opt-c">
+      <div class="flip-card-inner">
+        <div class="flip-face flip-front">
+          <span class="num">01</span>
+          <p class="big-title">Maker by instinct</p>
+          <div class="hint-row">
+            <div class="hint-icon">↻</div>
+            <span class="hint">hover to read</span>
+          </div>
+        </div>
+        <div class="flip-face flip-back">
+          <span class="back-num">01</span>
+          <p class="back-body" style="color: rgba(200,210,255,0.85);">I've built apps, launched brands, sold plants online. The businesses that worked taught me about users. The ones that didn't taught me everything else.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<p class="subtitle" style="margin-top:32px; font-size:12px; opacity:0.5;">These mockups are dark-mode previews. Note: "5 Things I Bring" flip will follow the same pattern — big title front, body back — just placed on the section's dark background. Hover to preview each option.</p>

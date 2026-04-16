@@ -1,0 +1,3 @@
+{"type":"server-started","port":54747,"host":"127.0.0.1","url_host":"localhost","url":"http://localhost:54747","screen_dir":"/Users/abhishek/thatguyabhishek/.superpowers/brainstorm/20736-1776336244/content","state_dir":"/Users/abhishek/thatguyabhishek/.superpowers/brainstorm/20736-1776336244/state"}
+{"type":"screen-added","file":"/Users/abhishek/thatguyabhishek/.superpowers/brainstorm/20736-1776336244/content/beyond-flip-options.html"}
+{"type":"server-stopped","reason":"idle timeout"}
