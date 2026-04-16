@@ -18,7 +18,6 @@ export function WritingCard({ article, showDesc = true, equalHeight = false }) {
         borderRadius: 16,
         padding: '20px 22px',
         background: 'var(--surface)',
-        display: 'flex',
         height: equalHeight ? '100%' : undefined,
         transform: isHov ? 'translateY(-4px)' : 'translateY(0)',
         boxShadow: isHov ? 'var(--shadow-md)' : 'none',
