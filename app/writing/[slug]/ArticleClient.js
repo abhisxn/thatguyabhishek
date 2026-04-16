@@ -5,7 +5,6 @@ import Link from 'next/link';
 import { m, LazyMotion, domAnimation, AnimatePresence } from 'framer-motion';
 import { RenderBlocks } from '@/app/components/blocks/NotionBlocks';
 import { fadeUp, stagger, vp } from '@/lib/motion';
-import ArticleSidebar from './ArticleSidebar';
 import ArticleProgressBar from './ArticleProgressBar';
 import {
   useReactions,
@@ -108,20 +107,6 @@ export default function ArticleClient({ article, blocks, childrenMap, otherArtic
               paddingTop: 'clamp(80px, 10vw, 120px)',
             }}
           >
-
-            {/* ── Left: fixed sidebar (xl+) — left of centered 700px column */}
-            <aside
-              className="hidden xl:block"
-              style={{
-                position: 'fixed',
-                top: 88,
-                left: 'calc(50vw - 602px)',
-                width: 220,
-                zIndex: 10,
-              }}
-            >
-              <ArticleSidebar headings={headings} activeSlug={activeSlug} />
-            </aside>
 
             {/* ── Right: article content ─────────────────────────── */}
             <div style={{ flex: 1, minWidth: 0, maxWidth: 700, marginLeft: 'auto', marginRight: 'auto' }}>
