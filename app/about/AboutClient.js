@@ -1,8 +1,7 @@
 'use client';
 
-import { useState, useEffect, useRef, useCallback } from 'react';
-import { m, AnimatePresence, useSpring, useMotionValue, useTransform } from 'framer-motion';
-import Link from 'next/link';
+import { useState, useEffect, useRef } from 'react';
+import { m, AnimatePresence } from 'framer-motion';
 import GradientBackground from '@/app/components/layout/GradientBackground';
 import Button from '@/app/components/ui/Button';
 import { ArrowIcon } from '@/app/components/ui/icons';
@@ -12,335 +11,11 @@ import CareerTimeline from '@/app/components/sections/CareerTimeline';
 import { fadeUp, stagger, vp } from '@/lib/motion';
 import W from '@/app/components/ui/W';
 import { SECTION_STYLES } from '@/lib/section-styles';
-
-/* ── Shared stroke ring — always inside the card div (borderRadius: inherit) ── */
-const STROKE_RING = {
-  position: 'absolute', inset: 0, borderRadius: 'inherit',
-  border: '1px solid color-mix(in srgb, var(--fg) 50%, transparent)',
-  pointerEvents: 'none',
-};
-
-/* ── Writing card ────────────────────────────────────────────────────── */
-function WritingCard({ article }) {
-  const [isHov, setIsHov] = useState(false);
-  const strokeOpacity = useSpring(0.2, { stiffness: 160, damping: 24 });
-
-  return (
-    <m.div variants={fadeUp}>
-      <Link
-        href={article.href}
-        className="no-underline flex flex-col gap-3"
-        style={{
-          position: 'relative',
-          borderRadius: 16,
-          padding: '20px 22px',
-          background: 'var(--surface)',
-          display: 'flex',
-          transform: isHov ? 'translateY(-4px)' : 'translateY(0)',
-          boxShadow: isHov ? 'var(--shadow-md)' : 'none',
-          transition: 'transform 0.3s cubic-bezier(0.22,1,0.36,1), box-shadow 0.3s ease',
-        }}
-        onMouseEnter={() => { setIsHov(true); strokeOpacity.set(0.7); }}
-        onMouseLeave={() => { setIsHov(false); strokeOpacity.set(0.2); }}
-      >
-        <m.div style={{ ...STROKE_RING, opacity: strokeOpacity }} />
-        <m.span
-          animate={{ scale: isHov ? 1.15 : 1 }}
-          transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
-          style={{ fontSize: 24, lineHeight: 1, display: 'inline-block', transformOrigin: 'left center' }}
-        >
-          {article.emoji}
-        </m.span>
-        <div className="flex flex-col gap-2" style={{ flex: 1 }}>
-          <p className="t-h5 text-fg" style={{ margin: 0 }}>
-            {article.title}
-          </p>
-          <p className="t-body2 text-fg-muted" style={{ margin: 0 }}>
-            {article.desc}
-          </p>
-        </div>
-        <div
-          className="flex items-center gap-1 t-caption font-semibold"
-          style={{ marginTop: 4, color: isHov ? 'var(--color-coral)' : 'var(--fg-muted)', transition: 'color 0.2s ease' }}
-        >
-          <span>Read</span>
-          <span style={{ opacity: isHov ? 1 : 0.45, transform: isHov ? 'translate(2px, -2px)' : 'translate(0,0)', transition: 'opacity 0.2s ease, transform 0.2s ease', display: 'inline-flex' }}>
-            <ArrowIcon size={11} />
-          </span>
-        </div>
-      </Link>
-    </m.div>
-  );
-}
-
-/* ── 3D Flip Card — What I'm Thinking About ─────────────────────── */
-const THINKING_INITIAL = 4;
-
-function ThinkingFlipCard({ heading, body, index }) {
-  const [flipped, setFlipped] = useState(false);
-
-  return (
-    <m.div
-      initial={{ opacity: 0, y: 24, filter: 'blur(12px)' }}
-      whileInView={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
-      viewport={{ once: true, margin: '-40px' }}
-      transition={{ duration: 0.7, delay: (index % 4) * 0.08, ease: [0.22, 1, 0.36, 1] }}
-      style={{ minHeight: 280 }}
-    >
-      <div
-        style={{ perspective: '1000px', height: '100%', minHeight: 280, cursor: 'pointer' }}
-        onMouseEnter={() => setFlipped(true)}
-        onMouseLeave={() => setFlipped(false)}
-        onClick={() => setFlipped(f => !f)}
-      >
-        <div
-          style={{
-            position: 'relative', width: '100%', height: '100%',
-            transformStyle: 'preserve-3d',
-            transition: 'transform 0.55s cubic-bezier(0.22, 1, 0.36, 1)',
-            transform: flipped ? 'rotateY(180deg)' : 'rotateY(0deg)',
-          }}
-        >
-          {/* Front */}
-          <div
-            style={{
-              position: 'absolute', inset: 0, backfaceVisibility: 'hidden', WebkitBackfaceVisibility: 'hidden',
-              borderRadius: 16, padding: '32px 28px',
-              background: 'var(--surface)',
-              border: '1px solid color-mix(in srgb, var(--fg) 10%, transparent)',
-              display: 'flex', flexDirection: 'column', gap: 20,
-            }}
-          >
-            <p className="t-caption tabular-nums font-bold" style={{ color: 'var(--color-coral)', letterSpacing: '0.08em', margin: 0 }}>
-              {String(index + 1).padStart(2, '0')}
-            </p>
-            <p className="t-h5 text-fg" style={{ margin: 0, flex: 1 }}>{heading}</p>
-            <p className="t-caption text-fg-muted" style={{ margin: 0, opacity: 0.5 }}>hover to read</p>
-          </div>
-          {/* Back */}
-          <div
-            style={{
-              position: 'absolute', inset: 0, backfaceVisibility: 'hidden', WebkitBackfaceVisibility: 'hidden',
-              transform: 'rotateY(180deg)',
-              borderRadius: 16, padding: '32px 28px',
-              background: 'var(--flip-back-bg)',
-              border: '1px solid color-mix(in srgb, var(--fg) 10%, transparent)',
-              display: 'flex', flexDirection: 'column', justifyContent: 'space-between', gap: 16,
-            }}
-          >
-            <p className="t-caption tabular-nums font-bold" style={{ color: 'var(--color-coral)', letterSpacing: '0.08em', margin: 0 }}>
-              {String(index + 1).padStart(2, '0')}
-            </p>
-            <p className="t-body2 text-fg" style={{ margin: 0, lineHeight: 1.65 }}>{body}</p>
-          </div>
-        </div>
-      </div>
-    </m.div>
-  );
-}
-
-/* ── Shared numbered card — used by Beyond the Work ─────────────── */
-function NumberedCard({ heading, body, index, style }) {
-  const strokeOpacity = useSpring(0.2, { stiffness: 160, damping: 24 });
-
-  return (
-    <m.div variants={fadeUp} style={{ height: '100%' }}>
-      <div
-        style={{
-          position: 'relative', borderRadius: 16, padding: '24px',
-          background: 'var(--surface)', cursor: 'default',
-          display: 'flex', flexDirection: 'column', gap: 16, height: '100%',
-          ...style,
-        }}
-        onMouseEnter={() => strokeOpacity.set(0.7)}
-        onMouseLeave={() => strokeOpacity.set(0.2)}
-      >
-        <m.div style={{ ...STROKE_RING, opacity: strokeOpacity }} />
-        <p className="t-caption tabular-nums font-bold" style={{ color: 'var(--color-coral)', letterSpacing: '0.08em', margin: 0 }}>
-          {String(index + 1).padStart(2, '0')}
-        </p>
-        <p className="t-h5 text-fg" style={{ margin: 0 }}>
-          {heading}
-        </p>
-        <p className="t-body2 text-fg-muted" style={{ margin: 0 }}>
-          {body}
-        </p>
-      </div>
-    </m.div>
-  );
-}
-
-/* ── Perimeter math — Glass Glare (F) ────────────────────────────── */
-const WIB_BLOB_R       = 80;
-const WIB_GLARE_OFFSET = 56;
-const WIB_PARALLAX     = 0.4;
-
-function wibPerimToXY(t, w, h) {
-  const P  = 2 * (w + h);
-  const tn = ((t % P) + P) % P;
-  if (tn <= w)         return { x: tn,               y: h };
-  if (tn <= w + h)     return { x: w,                y: h - (tn - w) };
-  if (tn <= 2 * w + h) return { x: w - (tn - w - h), y: 0 };
-  return                      { x: 0,                y: tn - 2 * w - h };
-}
-
-function wibCursorToPerimT(x, y, w, h) {
-  const cx = w / 2, cy = h / 2;
-  const dx = x - cx || 0.001;
-  const dy = y - cy || 0.001;
-  const ts = [
-    dx < 0 ? (0 - cx) / dx : Infinity,
-    dx > 0 ? (w - cx) / dx : Infinity,
-    dy < 0 ? (0 - cy) / dy : Infinity,
-    dy > 0 ? (h - cy) / dy : Infinity,
-  ].filter(s => s > 0 && isFinite(s));
-  const s  = Math.min(...ts);
-  const px = Math.max(0, Math.min(w, cx + s * dx));
-  const py = Math.max(0, Math.min(h, cy + s * dy));
-  const eps = 0.5;
-  if (px < eps)     return 2 * w + h + py;
-  if (px > w - eps) return w + (h - py);
-  if (py < eps)     return w + h + (w - px);
-  return px;
-}
-
-function wibOffsetPerimPoint(px, py, w, h) {
-  const cx = w / 2, cy = h / 2;
-  const dx = px - cx, dy = py - cy;
-  const len = Math.sqrt(dx * dx + dy * dy) || 1;
-  return { x: px + (dx / len) * WIB_GLARE_OFFSET, y: py + (dy / len) * WIB_GLARE_OFFSET };
-}
-
-/* ── What I Bring card — Style F (Glass Glare) + G (Border Sweep) ── */
-function WhatIBringCard({ item, index, textClr, mutedClr }) {
-  const cardRef    = useRef(null);
-  const cardDims   = useRef({ w: 0, h: 0 });
-  const perimCanon = useRef(0);
-
-  // F — Glass Glare: perimeter-locked blur blob
-  const perimBlob   = useMotionValue(0);
-  const glowOpacity = useSpring(0, { stiffness: 80, damping: 28 });
-  const glowX = useTransform(perimBlob, t => {
-    const { w, h } = cardDims.current;
-    if (!w || !h) return 0;
-    const { x: px, y: py } = wibPerimToXY(t, w, h);
-    return wibOffsetPerimPoint(px, py, w, h).x;
-  });
-  const glowY = useTransform(perimBlob, t => {
-    const { w, h } = cardDims.current;
-    if (!w || !h) return 0;
-    const { x: px, y: py } = wibPerimToXY(t, w, h);
-    return wibOffsetPerimPoint(px, py, w, h).y;
-  });
-  const glowLeft = useTransform(glowX, v => v - WIB_BLOB_R);
-  const glowTop  = useTransform(glowY, v => v - WIB_BLOB_R);
-
-  const updateGlare = useCallback((ex, ey) => {
-    const { w, h } = cardDims.current;
-    if (!w || !h) return;
-    const P       = 2 * (w + h);
-    const rawT    = wibCursorToPerimT(ex, ey, w, h);
-    const rawNorm = ((rawT % P) + P) % P;
-    const curNorm = ((perimCanon.current % P) + P) % P;
-    let delta = rawNorm - curNorm;
-    if (delta >  P / 2) delta -= P;
-    if (delta < -P / 2) delta += P;
-    perimCanon.current += delta;
-    perimBlob.set(perimBlob.get() + delta * WIB_PARALLAX);
-  }, [perimBlob]);
-
-  // H — Adaptive Outline: spring-animated stroke ring
-  const strokeOpacity = useSpring(0.2, { stiffness: 160, damping: 24 });
-
-  const handleMouseMove = useCallback((e) => {
-    const rect = cardRef.current.getBoundingClientRect();
-    cardDims.current = { w: rect.width, h: rect.height };
-    updateGlare(e.clientX - rect.left, e.clientY - rect.top);
-  }, [updateGlare]);
-
-  const handleMouseEnter = useCallback((e) => {
-    const rect = cardRef.current.getBoundingClientRect();
-    cardDims.current = { w: rect.width, h: rect.height };
-    const snapT = wibCursorToPerimT(
-      e.clientX - rect.left, e.clientY - rect.top,
-      cardDims.current.w, cardDims.current.h,
-    );
-    perimCanon.current = snapT;
-    perimBlob.set(snapT);
-    glowOpacity.set(1);
-    strokeOpacity.set(0.7);
-  }, [perimBlob, glowOpacity, strokeOpacity]);
-
-  const handleMouseLeave = useCallback(() => {
-    glowOpacity.set(0);
-    strokeOpacity.set(0.2);
-  }, [glowOpacity, strokeOpacity]);
-
-  const num = String(index + 1).padStart(2, '0');
-
-  return (
-    <m.div variants={fadeUp} style={{ height: '100%' }}>
-      {/* Outer wrapper holds the sweep ring (needs overflow:visible) */}
-      <div
-        style={{ position: 'relative', borderRadius: 17, height: '100%' }}
-        onMouseMove={handleMouseMove}
-        onMouseEnter={handleMouseEnter}
-        onMouseLeave={handleMouseLeave}
-      >
-        {/* H — adaptive outline */}
-        <m.div style={{ ...STROKE_RING, opacity: strokeOpacity }} />
-
-        {/* Card body — overflow:hidden clips the glare blob */}
-        <div
-          ref={cardRef}
-          style={{
-            borderRadius: 16,
-            padding: '24px',
-            background: 'var(--surface)',
-            border: '1px solid var(--border)',
-            display: 'flex',
-            flexDirection: 'column',
-            gap: 16,
-            height: '100%',
-            overflow: 'hidden',
-            position: 'relative',
-            cursor: 'default',
-          }}
-        >
-          {/* F — glare blob */}
-          <m.div
-            style={{
-              position: 'absolute',
-              top: 0,
-              left: 0,
-              width:  WIB_BLOB_R * 2,
-              height: WIB_BLOB_R * 2,
-              borderRadius: '50%',
-              background: 'rgba(255,255,255,0.45)',
-              filter: 'blur(52px)',
-              x: glowLeft,
-              y: glowTop,
-              opacity: glowOpacity,
-              pointerEvents: 'none',
-              zIndex: 0,
-            }}
-          />
-          <p className="t-caption tabular-nums font-bold" style={{ color: 'var(--color-coral)', letterSpacing: '0.08em', margin: 0, position: 'relative', zIndex: 1 }}>
-            {num}
-          </p>
-          <p className="t-body1 font-semibold" style={{ margin: 0, lineHeight: 1.4, color: textClr, position: 'relative', zIndex: 1 }}>
-            {item.title}
-          </p>
-          <p className="t-body2" style={{ margin: 0, lineHeight: 1.75, color: mutedClr, position: 'relative', zIndex: 1 }}>
-            {item.body}
-          </p>
-        </div>
-      </div>
-    </m.div>
-  );
-}
+import { FlipCard, WritingCard, SkillGroupCard } from '@/components/ui/interaction-cards';
 
 /* ── Constants ──────────────────────────────────────────────────────── */
+
+const THINKING_INITIAL = 4;
 const RESUME_URL        = 'https://drive.google.com/file/d/1QuxjEMB-PyVbgwsjjPpacY3xJ3j8eXMU/view?usp=drive_link';
 const NOTION_ABOUT      = 'https://thatguyabhishek.notion.site/About-fb861d61100943ee9356e50d28be3f03';
 const LINKEDIN_URL      = 'https://www.linkedin.com/in/thatguyabhishek/';
@@ -554,24 +229,13 @@ export default function AboutPage({ thinkingItems: thinkingProp = [], articles: 
         <div className="border-t border-theme">
           <W className="py-16">
             <m.div variants={stagger} initial="hidden" whileInView="visible" viewport={vp}>
-              <div className="flex items-end justify-between gap-4 mb-8 flex-wrap">
-                <m.p variants={fadeUp} className="t-overline text-fg-muted">Writing</m.p>
-                <m.div variants={fadeUp}>
-                  <Button
-                    href={NOTION_ABOUT}
-                    external
-                    variant="link"
-                    size="sm"
-                    icon={<ArrowIcon size={11} />}
-                  >
-                    All writing on Notion
-                  </Button>
-                </m.div>
-              </div>
+              <m.p variants={fadeUp} className="t-overline text-fg-muted mb-8">Writing</m.p>
 
-              <div className="grid gap-5 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
+              <div className="grid gap-5 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 items-stretch">
                 {displayArticles.map((article) => (
-                  <WritingCard key={article.title} article={article} />
+                  <m.div key={article.title} variants={fadeUp}>
+                    <WritingCard article={article} equalHeight />
+                  </m.div>
                 ))}
               </div>
             </m.div>
@@ -631,23 +295,27 @@ export default function AboutPage({ thinkingItems: thinkingProp = [], articles: 
               {/* 5 cards — 3 col first row, 2 col second row */}
               <div className="grid gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 mb-6">
                 {WHAT_I_BRING_ITEMS.slice(0, 3).map((item, i) => (
-                  <WhatIBringCard
+                  <FlipCard
                     key={item.title}
-                    item={item}
+                    num={String(i + 1).padStart(2, '0')}
+                    title={item.title}
+                    body={item.body}
+                    titleSize="lg"
+                    minHeight={280}
                     index={i}
-                    textClr={SECTION_STYLES[4].textClr}
-                    mutedClr={SECTION_STYLES[4].mutedClr}
                   />
                 ))}
               </div>
               <div className="grid gap-6 grid-cols-1 sm:grid-cols-2 mb-12">
                 {WHAT_I_BRING_ITEMS.slice(3).map((item, i) => (
-                  <WhatIBringCard
+                  <FlipCard
                     key={item.title}
-                    item={item}
+                    num={String(i + 4).padStart(2, '0')}
+                    title={item.title}
+                    body={item.body}
+                    titleSize="lg"
+                    minHeight={280}
                     index={i + 3}
-                    textClr={SECTION_STYLES[4].textClr}
-                    mutedClr={SECTION_STYLES[4].mutedClr}
                   />
                 ))}
               </div>
@@ -763,7 +431,7 @@ export default function AboutPage({ thinkingItems: thinkingProp = [], articles: 
                 </div>
 
                 {/* ── Desktop: side-by-side grid (1fr + 2fr) ── */}
-                <div className="hidden md:grid gap-8" style={{ gridTemplateColumns: '1fr 2fr' }}>
+                <div className="hidden md:grid gap-4" style={{ gridTemplateColumns: '1fr 2.5fr' }}>
                   {/* Left column — stacked border-left headings */}
                   <div className="flex flex-col">
                     {WORK_ITEMS.map((item, i) => (
@@ -861,7 +529,14 @@ export default function AboutPage({ thinkingItems: thinkingProp = [], articles: 
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 items-start">
                 {BEYOND_ITEMS.map((card, i) => (
-                  <NumberedCard key={card.heading} heading={card.heading} body={card.body} index={i} style={{ minHeight: 220 }} />
+                  <FlipCard
+                    key={card.heading}
+                    num={String(i + 1).padStart(2, '0')}
+                    title={card.heading}
+                    body={card.body}
+                    minHeight={220}
+                    index={i}
+                  />
                 ))}
               </div>
             </m.div>
@@ -1019,10 +694,12 @@ export default function AboutPage({ thinkingItems: thinkingProp = [], articles: 
               </m.div>
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                 {THINKING_ITEMS.slice(0, thinkingExpanded ? undefined : THINKING_INITIAL).map((item, i) => (
-                  <ThinkingFlipCard
+                  <FlipCard
                     key={item.id || item.label}
-                    heading={item.title || item.label}
+                    num={String(i + 1).padStart(2, '0')}
+                    title={item.title || item.label}
                     body={item.description || item.desc}
+                    minHeight={280}
                     index={i}
                   />
                 ))}
@@ -1103,31 +780,8 @@ export default function AboutPage({ thinkingItems: thinkingProp = [], articles: 
                 {/* Right 70% — 2×2 skill group grid */}
                 <div className="grid sm:grid-cols-2 gap-6">
                   {SKILL_GROUPS.map((group) => (
-                    <m.div
-                      key={group.label}
-                      variants={fadeUp}
-                      className="flex flex-col gap-4 rounded-2xl p-5"
-                      style={{ background: 'var(--surface)', border: '1px solid var(--border)' }}
-                    >
-                      <div className="flex items-center gap-2">
-                        <span className="text-xl leading-none">{group.icon}</span>
-                        <p className="t-body2 font-semibold text-fg" style={{ margin: 0 }}>{group.label}</p>
-                      </div>
-                      <div className="flex flex-wrap gap-2">
-                        {group.skills.map((skill) => (
-                          <span
-                            key={skill}
-                            className="ui-tag"
-                            style={{
-                              background: 'color-mix(in srgb, var(--fg) 7%, transparent)',
-                              color: 'var(--fg-muted)',
-                              border: '1px solid var(--border)',
-                            }}
-                          >
-                            {skill}
-                          </span>
-                        ))}
-                      </div>
+                    <m.div key={group.label} variants={fadeUp}>
+                      <SkillGroupCard icon={group.icon} label={group.label} skills={group.skills} />
                     </m.div>
                   ))}
                 </div>
