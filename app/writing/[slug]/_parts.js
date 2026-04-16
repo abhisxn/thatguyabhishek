@@ -1,6 +1,5 @@
 'use client';
 
-import Link from 'next/link';
 import { WritingCard } from '@/components/ui/interaction-cards';
 
 export function BackArrow() {
